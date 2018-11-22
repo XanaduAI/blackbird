@@ -8,8 +8,9 @@ start               : (NEWLINE | variable)* program NEWLINE* EOF;
 
 // Variable declaration
 
-variable            : vartype name ASSIGN (expression | nonnumeric)
-                    | vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval;
+variable            : vartype name ASSIGN (expression | nonnumeric)                            #ExpressionVariableLabel
+                    | vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval #ArrayVariableLabel
+                    ;
 
 name                : NAME;
 
@@ -21,28 +22,32 @@ shape               : INT (COMMA INT)*;
 
 arrayval            : (TAB row+=arrayrow NEWLINE)*;
 
-arrayrow            : ((INT|FLOAT|COMPLEX) (SPACE|TAB)*)*;
+arrayrow            : expression (COMMA expression)*;
 
 // Blackbird program
 
-program             : WITH device COLON NEWLINE (statement | NEWLINE | TAB NEWLINE)*;
+program             : WITH device arguments? COLON NEWLINE (statement | NEWLINE | TAB NEWLINE)*;
 
 device              : (NAME|DEVICE);
 
-statement           : TAB (operation | measure) (LBRAC parameter (COMMA parameter)* RBRAC)? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
+statement           : TAB (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
 
 operation           : OPERATION;
 
 measure             : MEASURE;
 
-parameter           : (nonnumeric | NAME | expression);
+arguments           : (LBRAC (val|kwarg) (COMMA (val|kwarg))* RBRAC);
+
+kwarg               : NAME ASSIGN val;
+
+val                 : (nonnumeric | NAME | expression);
 
 modes               : INT (COMMA INT)*;
 
 // Expressions
 
 expression          : LBRAC expression RBRAC                    #BracketsLabel
-                    | sign expression                           #SignLabel
+                    | (PLUS | MINUS) expression                 #SignLabel
                     | <assoc=right> expression PWR expression   #PowerLabel
                     | expression ( TIMES | DIVIDE ) expression  #MulLabel
                     | expression ( PLUS | MINUS ) expression    #AddLabel
@@ -55,11 +60,17 @@ number              : (INT|FLOAT|COMPLEX|PI);
 
 function            : (SIN | COS | SQRT | EXP);
 
-sign                : (PLUS | MINUS);
-
 /*
  * Lexer Rules
  */
+
+// Operators
+PLUS                : '+';
+MINUS               : '-';
+TIMES               : '*';
+DIVIDE              : '/';
+PWR                 : '**';
+ASSIGN              : '=';
 
 // Literals
 fragment DIGIT      : [0-9]+;
@@ -89,14 +100,6 @@ SIN                 : 'sin' ;
 COS                 : 'cos' ;
 EXP                 : 'exp' ;
 
-// Operators
-PLUS                : '+';
-MINUS               : '-';
-TIMES               : '*';
-DIVIDE              : '/';
-PWR                 : '**';
-ASSIGN              : '=';
-
 // Punctuation and delimeters
 PERIOD              : '.' ;
 COMMA               : ',' ;
@@ -122,7 +125,7 @@ OPERATION           : [A-Z][A-Za-z]+;
 
 // Variable names
 NAME                : [A-Za-z][0-9A-Za-z_]*;
-DEVICE              : [0-9A-Za-z._-]+;
+DEVICE              : [0-9A-Za-z._]+;
 
 // Comments
 COMMENT             : '#' ~[\r\n]* -> skip;

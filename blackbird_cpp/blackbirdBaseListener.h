@@ -19,8 +19,11 @@ public:
   virtual void enterStart(blackbirdParser::StartContext * /*ctx*/) override { }
   virtual void exitStart(blackbirdParser::StartContext * /*ctx*/) override { }
 
-  virtual void enterVariable(blackbirdParser::VariableContext * /*ctx*/) override { }
-  virtual void exitVariable(blackbirdParser::VariableContext * /*ctx*/) override { }
+  virtual void enterExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext * /*ctx*/) override { }
+  virtual void exitExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext * /*ctx*/) override { }
+
+  virtual void enterArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext * /*ctx*/) override { }
+  virtual void exitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext * /*ctx*/) override { }
 
   virtual void enterName(blackbirdParser::NameContext * /*ctx*/) override { }
   virtual void exitName(blackbirdParser::NameContext * /*ctx*/) override { }
@@ -55,8 +58,14 @@ public:
   virtual void enterMeasure(blackbirdParser::MeasureContext * /*ctx*/) override { }
   virtual void exitMeasure(blackbirdParser::MeasureContext * /*ctx*/) override { }
 
-  virtual void enterParameter(blackbirdParser::ParameterContext * /*ctx*/) override { }
-  virtual void exitParameter(blackbirdParser::ParameterContext * /*ctx*/) override { }
+  virtual void enterArguments(blackbirdParser::ArgumentsContext * /*ctx*/) override { }
+  virtual void exitArguments(blackbirdParser::ArgumentsContext * /*ctx*/) override { }
+
+  virtual void enterKwarg(blackbirdParser::KwargContext * /*ctx*/) override { }
+  virtual void exitKwarg(blackbirdParser::KwargContext * /*ctx*/) override { }
+
+  virtual void enterVal(blackbirdParser::ValContext * /*ctx*/) override { }
+  virtual void exitVal(blackbirdParser::ValContext * /*ctx*/) override { }
 
   virtual void enterModes(blackbirdParser::ModesContext * /*ctx*/) override { }
   virtual void exitModes(blackbirdParser::ModesContext * /*ctx*/) override { }
@@ -90,9 +99,6 @@ public:
 
   virtual void enterFunction(blackbirdParser::FunctionContext * /*ctx*/) override { }
   virtual void exitFunction(blackbirdParser::FunctionContext * /*ctx*/) override { }
-
-  virtual void enterSign(blackbirdParser::SignContext * /*ctx*/) override { }
-  virtual void exitSign(blackbirdParser::SignContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

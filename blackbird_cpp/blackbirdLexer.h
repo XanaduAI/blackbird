@@ -12,11 +12,11 @@
 class  blackbirdLexer : public antlr4::Lexer {
 public:
   enum {
-    INT = 1, FLOAT = 2, COMPLEX = 3, STR = 4, BOOL = 5, SEQUENCE = 6, PI = 7, 
-    NEWLINE = 8, TAB = 9, SPACE = 10, WITH = 11, SQRT = 12, SIN = 13, COS = 14, 
-    EXP = 15, PLUS = 16, MINUS = 17, TIMES = 18, DIVIDE = 19, PWR = 20, 
-    ASSIGN = 21, PERIOD = 22, COMMA = 23, COLON = 24, QUOTE = 25, LBRAC = 26, 
-    RBRAC = 27, LSQBRAC = 28, RSQBRAC = 29, APPLY = 30, TYPE_ARRAY = 31, 
+    PLUS = 1, MINUS = 2, TIMES = 3, DIVIDE = 4, PWR = 5, ASSIGN = 6, INT = 7, 
+    FLOAT = 8, COMPLEX = 9, STR = 10, BOOL = 11, SEQUENCE = 12, PI = 13, 
+    NEWLINE = 14, TAB = 15, SPACE = 16, WITH = 17, SQRT = 18, SIN = 19, 
+    COS = 20, EXP = 21, PERIOD = 22, COMMA = 23, COLON = 24, QUOTE = 25, 
+    LBRAC = 26, RBRAC = 27, LSQBRAC = 28, RSQBRAC = 29, APPLY = 30, TYPE_ARRAY = 31, 
     TYPE_FLOAT = 32, TYPE_COMPLEX = 33, TYPE_INT = 34, TYPE_STR = 35, TYPE_BOOL = 36, 
     MEASURE = 37, OPERATION = 38, NAME = 39, DEVICE = 40, COMMENT = 41, 
     ANY = 42

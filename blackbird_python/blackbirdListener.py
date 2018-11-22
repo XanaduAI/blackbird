@@ -17,12 +17,21 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#variable.
-    def enterVariable(self, ctx:blackbirdParser.VariableContext):
+    # Enter a parse tree produced by blackbirdParser#ExpressionVariableLabel.
+    def enterExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#variable.
-    def exitVariable(self, ctx:blackbirdParser.VariableContext):
+    # Exit a parse tree produced by blackbirdParser#ExpressionVariableLabel.
+    def exitExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#ArrayVariableLabel.
+    def enterArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#ArrayVariableLabel.
+    def exitArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
         pass
 
 
@@ -125,12 +134,30 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#parameter.
-    def enterParameter(self, ctx:blackbirdParser.ParameterContext):
+    # Enter a parse tree produced by blackbirdParser#arguments.
+    def enterArguments(self, ctx:blackbirdParser.ArgumentsContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#parameter.
-    def exitParameter(self, ctx:blackbirdParser.ParameterContext):
+    # Exit a parse tree produced by blackbirdParser#arguments.
+    def exitArguments(self, ctx:blackbirdParser.ArgumentsContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#kwarg.
+    def enterKwarg(self, ctx:blackbirdParser.KwargContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#kwarg.
+    def exitKwarg(self, ctx:blackbirdParser.KwargContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#val.
+    def enterVal(self, ctx:blackbirdParser.ValContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#val.
+    def exitVal(self, ctx:blackbirdParser.ValContext):
         pass
 
 
@@ -230,15 +257,6 @@ class blackbirdListener(ParseTreeListener):
 
     # Exit a parse tree produced by blackbirdParser#function.
     def exitFunction(self, ctx:blackbirdParser.FunctionContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#sign.
-    def enterSign(self, ctx:blackbirdParser.SignContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#sign.
-    def exitSign(self, ctx:blackbirdParser.SignContext):
         pass
 
 

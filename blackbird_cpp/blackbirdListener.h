@@ -17,8 +17,11 @@ public:
   virtual void enterStart(blackbirdParser::StartContext *ctx) = 0;
   virtual void exitStart(blackbirdParser::StartContext *ctx) = 0;
 
-  virtual void enterVariable(blackbirdParser::VariableContext *ctx) = 0;
-  virtual void exitVariable(blackbirdParser::VariableContext *ctx) = 0;
+  virtual void enterExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext *ctx) = 0;
+  virtual void exitExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext *ctx) = 0;
+
+  virtual void enterArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext *ctx) = 0;
+  virtual void exitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext *ctx) = 0;
 
   virtual void enterName(blackbirdParser::NameContext *ctx) = 0;
   virtual void exitName(blackbirdParser::NameContext *ctx) = 0;
@@ -53,8 +56,14 @@ public:
   virtual void enterMeasure(blackbirdParser::MeasureContext *ctx) = 0;
   virtual void exitMeasure(blackbirdParser::MeasureContext *ctx) = 0;
 
-  virtual void enterParameter(blackbirdParser::ParameterContext *ctx) = 0;
-  virtual void exitParameter(blackbirdParser::ParameterContext *ctx) = 0;
+  virtual void enterArguments(blackbirdParser::ArgumentsContext *ctx) = 0;
+  virtual void exitArguments(blackbirdParser::ArgumentsContext *ctx) = 0;
+
+  virtual void enterKwarg(blackbirdParser::KwargContext *ctx) = 0;
+  virtual void exitKwarg(blackbirdParser::KwargContext *ctx) = 0;
+
+  virtual void enterVal(blackbirdParser::ValContext *ctx) = 0;
+  virtual void exitVal(blackbirdParser::ValContext *ctx) = 0;
 
   virtual void enterModes(blackbirdParser::ModesContext *ctx) = 0;
   virtual void exitModes(blackbirdParser::ModesContext *ctx) = 0;
@@ -88,9 +97,6 @@ public:
 
   virtual void enterFunction(blackbirdParser::FunctionContext *ctx) = 0;
   virtual void exitFunction(blackbirdParser::FunctionContext *ctx) = 0;
-
-  virtual void enterSign(blackbirdParser::SignContext *ctx) = 0;
-  virtual void exitSign(blackbirdParser::SignContext *ctx) = 0;
 
 
 };

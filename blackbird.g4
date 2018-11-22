@@ -29,9 +29,11 @@ program             : WITH device COLON NEWLINE (statement | NEWLINE | TAB NEWLI
 
 device              : NAME;    
 
-statement           : TAB operation (LBRAC parameter* RBRAC)? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
+statement           : TAB (operation | measure) (LBRAC parameter* RBRAC)? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
 
-operation           : (COHERENT | GATE | INTERFEROMETER | MEASURE );
+operation           : OPERATION;
+
+measure             : MEASURE;
 
 parameter           : ((nonnumeric | NAME | expression) (COMMA)?);
 
@@ -82,10 +84,8 @@ SPACE               : [ \t]+ -> skip;
 WITH                : 'with';
 
 // Quantum operations
-COHERENT            : 'Coherent';
-GATE                : [A-Za-z]+'gate';
 MEASURE             : 'Measure'+[A-Za-z]+;
-INTERFEROMETER      : 'Interferometer';
+OPERATION           : [A-Z][A-Za-z]+;
 
 // Functions
 SQRT                : 'sqrt' ;

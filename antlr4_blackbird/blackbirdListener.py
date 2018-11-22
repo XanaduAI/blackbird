@@ -116,6 +116,15 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#measure.
+    def enterMeasure(self, ctx:blackbirdParser.MeasureContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#measure.
+    def exitMeasure(self, ctx:blackbirdParser.MeasureContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#parameter.
     def enterParameter(self, ctx:blackbirdParser.ParameterContext):
         pass

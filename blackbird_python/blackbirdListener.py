@@ -71,12 +71,12 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#row.
-    def enterRow(self, ctx:blackbirdParser.RowContext):
+    # Enter a parse tree produced by blackbirdParser#arrayrow.
+    def enterArrayrow(self, ctx:blackbirdParser.ArrayrowContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#row.
-    def exitRow(self, ctx:blackbirdParser.RowContext):
+    # Exit a parse tree produced by blackbirdParser#arrayrow.
+    def exitArrayrow(self, ctx:blackbirdParser.ArrayrowContext):
         pass
 
 

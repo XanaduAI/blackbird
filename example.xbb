@@ -20,6 +20,9 @@
 # the end of a statement.
 # Like Python, we use # for comments.
 
+# -------------------------------------------
+# Variable declarations
+# -------------------------------------------
 # Variable are defined at the top of the file. 
 
 # Format for defining variables:
@@ -58,11 +61,21 @@ complex array U4[4, 4] =
 	1.56+0.54j  1.31+0.21j  1.09+0.14j  0.58+1.74j
 	0.88+0.65j  0.87+0.58j  0.58+1.74j  1.52+0.59j
 
-# begin program execution
-# 'with' statement indicates
-with GBS:
-    # set the initial state
+# -------------------------------------------
+# Quantum program
+# -------------------------------------------
+
+# 'with' statement indicates the device to run the program on.
+# Inside the indented 'with' block, all operations are queued
+# to be executed on the device, in the order they appear
+with hardware.device1:
+	# Statements within the 'with' block have the following form:
+	#	Operation(parameters) | modes
+	# Depending on the operation, parameters may be optional
+	# Parameters can be variables of literals
+	Coherent(0, 0) | 0
+	# Parameters can be expressions
 	Coherent(alpha**2, sqrt(pi)) | 2
 
-    # set the Interferometer here
+	# Multiple modes are specified by comma separated integers
 	Interferometer(U4) | [0, 1, 2, 3]

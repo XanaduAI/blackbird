@@ -37,8 +37,8 @@ public:
   virtual void enterArrayval(blackbirdParser::ArrayvalContext * /*ctx*/) override { }
   virtual void exitArrayval(blackbirdParser::ArrayvalContext * /*ctx*/) override { }
 
-  virtual void enterRow(blackbirdParser::RowContext * /*ctx*/) override { }
-  virtual void exitRow(blackbirdParser::RowContext * /*ctx*/) override { }
+  virtual void enterArrayrow(blackbirdParser::ArrayrowContext * /*ctx*/) override { }
+  virtual void exitArrayrow(blackbirdParser::ArrayrowContext * /*ctx*/) override { }
 
   virtual void enterProgram(blackbirdParser::ProgramContext * /*ctx*/) override { }
   virtual void exitProgram(blackbirdParser::ProgramContext * /*ctx*/) override { }

@@ -35,8 +35,8 @@ public:
   virtual void enterArrayval(blackbirdParser::ArrayvalContext *ctx) = 0;
   virtual void exitArrayval(blackbirdParser::ArrayvalContext *ctx) = 0;
 
-  virtual void enterRow(blackbirdParser::RowContext *ctx) = 0;
-  virtual void exitRow(blackbirdParser::RowContext *ctx) = 0;
+  virtual void enterArrayrow(blackbirdParser::ArrayrowContext *ctx) = 0;
+  virtual void exitArrayrow(blackbirdParser::ArrayrowContext *ctx) = 0;
 
   virtual void enterProgram(blackbirdParser::ProgramContext *ctx) = 0;
   virtual void exitProgram(blackbirdParser::ProgramContext *ctx) = 0;

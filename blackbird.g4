@@ -19,23 +19,23 @@ nonnumeric          : (STR|BOOL);
 
 shape               : INT (COMMA INT)*;
 
-arrayval            : (TAB row NEWLINE)*;
+arrayval            : (TAB row+=arrayrow NEWLINE)*;
 
-row                 : ((INT|FLOAT|COMPLEX) (SPACE|TAB)*)*;
+arrayrow            : ((INT|FLOAT|COMPLEX) (SPACE|TAB)*)*;
 
 // Blackbird program
 
 program             : WITH device COLON NEWLINE (statement | NEWLINE | TAB NEWLINE)*;
 
-device              : NAME;    
+device              : (NAME|DEVICE);
 
-statement           : TAB (operation | measure) (LBRAC parameter* RBRAC)? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
+statement           : TAB (operation | measure) (LBRAC parameter (COMMA parameter)* RBRAC)? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
 
 operation           : OPERATION;
 
 measure             : MEASURE;
 
-parameter           : ((nonnumeric | NAME | expression) (COMMA)?);
+parameter           : (nonnumeric | NAME | expression);
 
 modes               : INT (COMMA INT)*;
 
@@ -83,10 +83,6 @@ SPACE               : [ \t]+ -> skip;
 // Keywords
 WITH                : 'with';
 
-// Quantum operations
-MEASURE             : 'Measure'+[A-Za-z]+;
-OPERATION           : [A-Z][A-Za-z]+;
-
 // Functions
 SQRT                : 'sqrt' ;
 SIN                 : 'sin' ;
@@ -120,11 +116,16 @@ TYPE_INT            : 'int';
 TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
 
-// Comments
-COMMENT             : '#' ~[\r\n]* -> skip;
+// Quantum operations
+MEASURE             : 'Measure'+[A-Za-z]+;
+OPERATION           : [A-Z][A-Za-z]+;
 
 // Variable names
 NAME                : [A-Za-z][0-9A-Za-z_]*;
+DEVICE              : [0-9A-Za-z._-]+;
+
+// Comments
+COMMENT             : '#' ~[\r\n]* -> skip;
 
 // Invalid characters
 ANY                 : . ;

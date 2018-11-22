@@ -13,20 +13,21 @@ class  blackbirdParser : public antlr4::Parser {
 public:
   enum {
     INT = 1, FLOAT = 2, COMPLEX = 3, STR = 4, BOOL = 5, SEQUENCE = 6, PI = 7, 
-    NEWLINE = 8, TAB = 9, SPACE = 10, WITH = 11, MEASURE = 12, OPERATION = 13, 
-    SQRT = 14, SIN = 15, COS = 16, EXP = 17, PLUS = 18, MINUS = 19, TIMES = 20, 
-    DIVIDE = 21, PWR = 22, ASSIGN = 23, PERIOD = 24, COMMA = 25, COLON = 26, 
-    QUOTE = 27, LBRAC = 28, RBRAC = 29, LSQBRAC = 30, RSQBRAC = 31, APPLY = 32, 
-    TYPE_ARRAY = 33, TYPE_FLOAT = 34, TYPE_COMPLEX = 35, TYPE_INT = 36, 
-    TYPE_STR = 37, TYPE_BOOL = 38, COMMENT = 39, NAME = 40, ANY = 41
+    NEWLINE = 8, TAB = 9, SPACE = 10, WITH = 11, SQRT = 12, SIN = 13, COS = 14, 
+    EXP = 15, PLUS = 16, MINUS = 17, TIMES = 18, DIVIDE = 19, PWR = 20, 
+    ASSIGN = 21, PERIOD = 22, COMMA = 23, COLON = 24, QUOTE = 25, LBRAC = 26, 
+    RBRAC = 27, LSQBRAC = 28, RSQBRAC = 29, APPLY = 30, TYPE_ARRAY = 31, 
+    TYPE_FLOAT = 32, TYPE_COMPLEX = 33, TYPE_INT = 34, TYPE_STR = 35, TYPE_BOOL = 36, 
+    MEASURE = 37, OPERATION = 38, NAME = 39, DEVICE = 40, COMMENT = 41, 
+    ANY = 42
   };
 
   enum {
     RuleStart = 0, RuleVariable = 1, RuleName = 2, RuleVartype = 3, RuleNonnumeric = 4, 
-    RuleShape = 5, RuleArrayval = 6, RuleRow = 7, RuleProgram = 8, RuleDevice = 9, 
-    RuleStatement = 10, RuleOperation = 11, RuleMeasure = 12, RuleParameter = 13, 
-    RuleModes = 14, RuleExpression = 15, RuleNumber = 16, RuleFunction = 17, 
-    RuleSign = 18
+    RuleShape = 5, RuleArrayval = 6, RuleArrayrow = 7, RuleProgram = 8, 
+    RuleDevice = 9, RuleStatement = 10, RuleOperation = 11, RuleMeasure = 12, 
+    RuleParameter = 13, RuleModes = 14, RuleExpression = 15, RuleNumber = 16, 
+    RuleFunction = 17, RuleSign = 18
   };
 
   blackbirdParser(antlr4::TokenStream *input);
@@ -46,7 +47,7 @@ public:
   class NonnumericContext;
   class ShapeContext;
   class ArrayvalContext;
-  class RowContext;
+  class ArrayrowContext;
   class ProgramContext;
   class DeviceContext;
   class StatementContext;
@@ -163,14 +164,16 @@ public:
 
   class  ArrayvalContext : public antlr4::ParserRuleContext {
   public:
+    blackbirdParser::ArrayrowContext *arrayrowContext = nullptr;;
+    std::vector<ArrayrowContext *> row;;
     ArrayvalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> TAB();
     antlr4::tree::TerminalNode* TAB(size_t i);
-    std::vector<RowContext *> row();
-    RowContext* row(size_t i);
     std::vector<antlr4::tree::TerminalNode *> NEWLINE();
     antlr4::tree::TerminalNode* NEWLINE(size_t i);
+    std::vector<ArrayrowContext *> arrayrow();
+    ArrayrowContext* arrayrow(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -179,9 +182,9 @@ public:
 
   ArrayvalContext* arrayval();
 
-  class  RowContext : public antlr4::ParserRuleContext {
+  class  ArrayrowContext : public antlr4::ParserRuleContext {
   public:
-    RowContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ArrayrowContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> INT();
     antlr4::tree::TerminalNode* INT(size_t i);
@@ -199,7 +202,7 @@ public:
    
   };
 
-  RowContext* row();
+  ArrayrowContext* arrayrow();
 
   class  ProgramContext : public antlr4::ParserRuleContext {
   public:
@@ -227,6 +230,7 @@ public:
     DeviceContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NAME();
+    antlr4::tree::TerminalNode *DEVICE();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -247,12 +251,14 @@ public:
     MeasureContext *measure();
     std::vector<antlr4::tree::TerminalNode *> LBRAC();
     antlr4::tree::TerminalNode* LBRAC(size_t i);
+    std::vector<ParameterContext *> parameter();
+    ParameterContext* parameter(size_t i);
     std::vector<antlr4::tree::TerminalNode *> RBRAC();
     antlr4::tree::TerminalNode* RBRAC(size_t i);
     antlr4::tree::TerminalNode *LSQBRAC();
     antlr4::tree::TerminalNode *RSQBRAC();
-    std::vector<ParameterContext *> parameter();
-    ParameterContext* parameter(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> COMMA();
+    antlr4::tree::TerminalNode* COMMA(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -294,7 +300,6 @@ public:
     NonnumericContext *nonnumeric();
     antlr4::tree::TerminalNode *NAME();
     ExpressionContext *expression();
-    antlr4::tree::TerminalNode *COMMA();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

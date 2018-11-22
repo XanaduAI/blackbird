@@ -4,7 +4,7 @@ grammar blackbird;
  * Parser Rules
  */
 
-file                : (NEWLINE | variable)* program NEWLINE* EOF;
+start               : (NEWLINE | variable)* program NEWLINE* EOF;
 
 // Variable declaration
 

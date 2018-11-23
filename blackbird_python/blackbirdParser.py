@@ -7,8 +7,8 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3,")
-        buf.write("\u00dc\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+")
+        buf.write("\u00e1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
         buf.write("\4\24\t\24\4\25\t\25\3\2\3\2\7\2-\n\2\f\2\16\2\60\13\2")
@@ -20,24 +20,25 @@ def serializedATN():
         buf.write("\t\3\n\3\n\3\n\5\ns\n\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n{\n")
         buf.write("\n\f\n\16\n~\13\n\3\13\3\13\3\f\3\f\3\f\5\f\u0085\n\f")
         buf.write("\3\f\5\f\u0088\n\f\3\f\3\f\5\f\u008c\n\f\3\f\3\f\5\f\u0090")
-        buf.write("\n\f\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17\3\17\5\17\u009b")
-        buf.write("\n\17\3\17\3\17\3\17\5\17\u00a0\n\17\7\17\u00a2\n\17\f")
-        buf.write("\17\16\17\u00a5\13\17\3\17\3\17\3\20\3\20\3\20\3\20\3")
-        buf.write("\21\3\21\3\21\5\21\u00b0\n\21\3\22\3\22\3\22\7\22\u00b5")
-        buf.write("\n\22\f\22\16\22\u00b8\13\22\3\23\3\23\3\23\3\23\3\23")
-        buf.write("\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u00c8")
-        buf.write("\n\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\7\23")
-        buf.write("\u00d3\n\23\f\23\16\23\u00d6\13\23\3\24\3\24\3\25\3\25")
-        buf.write("\3\25\2\3$\26\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 ")
-        buf.write("\"$&(\2\13\3\2!&\3\2\f\r\3\2)*\4\2\34\34\36\36\4\2\35")
-        buf.write("\35\37\37\3\2\3\4\3\2\5\6\4\2\t\13\17\17\3\2\24\27\2\u00e5")
-        buf.write("\2.\3\2\2\2\4N\3\2\2\2\6P\3\2\2\2\bR\3\2\2\2\nT\3\2\2")
-        buf.write("\2\fV\3\2\2\2\16d\3\2\2\2\20g\3\2\2\2\22o\3\2\2\2\24\177")
-        buf.write("\3\2\2\2\26\u0081\3\2\2\2\30\u0093\3\2\2\2\32\u0095\3")
-        buf.write("\2\2\2\34\u0097\3\2\2\2\36\u00a8\3\2\2\2 \u00af\3\2\2")
-        buf.write("\2\"\u00b1\3\2\2\2$\u00c7\3\2\2\2&\u00d7\3\2\2\2(\u00d9")
-        buf.write("\3\2\2\2*-\7\20\2\2+-\5\4\3\2,*\3\2\2\2,+\3\2\2\2-\60")
-        buf.write("\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60.\3\2\2\2\61")
+        buf.write("\n\f\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17\3\17\3\17\7\17")
+        buf.write("\u009c\n\17\f\17\16\17\u009f\13\17\5\17\u00a1\n\17\3\17")
+        buf.write("\3\17\3\17\7\17\u00a6\n\17\f\17\16\17\u00a9\13\17\5\17")
+        buf.write("\u00ab\n\17\3\17\3\17\3\20\3\20\3\20\3\20\3\21\3\21\5")
+        buf.write("\21\u00b5\n\21\3\22\3\22\3\22\7\22\u00ba\n\22\f\22\16")
+        buf.write("\22\u00bd\13\22\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23")
+        buf.write("\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u00cd\n\23\3\23\3")
+        buf.write("\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\7\23\u00d8\n\23")
+        buf.write("\f\23\16\23\u00db\13\23\3\24\3\24\3\25\3\25\3\25\2\3$")
+        buf.write("\26\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(\2\13")
+        buf.write("\3\2!&\3\2\f\r\3\2()\4\2\34\34\36\36\4\2\35\35\37\37\3")
+        buf.write("\2\3\4\3\2\5\6\4\2\t\13\17\17\3\2\24\27\2\u00ea\2.\3\2")
+        buf.write("\2\2\4N\3\2\2\2\6P\3\2\2\2\bR\3\2\2\2\nT\3\2\2\2\fV\3")
+        buf.write("\2\2\2\16d\3\2\2\2\20g\3\2\2\2\22o\3\2\2\2\24\177\3\2")
+        buf.write("\2\2\26\u0081\3\2\2\2\30\u0093\3\2\2\2\32\u0095\3\2\2")
+        buf.write("\2\34\u0097\3\2\2\2\36\u00ae\3\2\2\2 \u00b4\3\2\2\2\"")
+        buf.write("\u00b6\3\2\2\2$\u00cc\3\2\2\2&\u00dc\3\2\2\2(\u00de\3")
+        buf.write("\2\2\2*-\7\20\2\2+-\5\4\3\2,*\3\2\2\2,+\3\2\2\2-\60\3")
+        buf.write("\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60.\3\2\2\2\61")
         buf.write("\65\5\22\n\2\62\64\7\20\2\2\63\62\3\2\2\2\64\67\3\2\2")
         buf.write("\2\65\63\3\2\2\2\65\66\3\2\2\2\668\3\2\2\2\67\65\3\2\2")
         buf.write("\289\7\2\2\39\3\3\2\2\2:;\5\b\5\2;<\5\6\4\2<?\7\b\2\2")
@@ -45,7 +46,7 @@ def serializedATN():
         buf.write("\b\5\2BC\7!\2\2CH\5\6\4\2DE\7\36\2\2EF\5\f\7\2FG\7\37")
         buf.write("\2\2GI\3\2\2\2HD\3\2\2\2HI\3\2\2\2IJ\3\2\2\2JK\7\b\2\2")
         buf.write("KL\7\20\2\2LM\5\16\b\2MO\3\2\2\2N:\3\2\2\2NA\3\2\2\2O")
-        buf.write("\5\3\2\2\2PQ\7)\2\2Q\7\3\2\2\2RS\t\2\2\2S\t\3\2\2\2TU")
+        buf.write("\5\3\2\2\2PQ\7(\2\2Q\7\3\2\2\2RS\t\2\2\2S\t\3\2\2\2TU")
         buf.write("\t\3\2\2U\13\3\2\2\2V[\7\t\2\2WX\7\31\2\2XZ\7\t\2\2YW")
         buf.write("\3\2\2\2Z]\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\\r\3\2\2\2][")
         buf.write("\3\2\2\2^_\7\21\2\2_`\5\20\t\2`a\7\20\2\2ac\3\2\2\2b^")
@@ -66,37 +67,39 @@ def serializedATN():
         buf.write("\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0091\3\2\2\2\u0091")
         buf.write("\u0092\7\20\2\2\u0092\27\3\2\2\2\u0093\u0094\7(\2\2\u0094")
         buf.write("\31\3\2\2\2\u0095\u0096\7\'\2\2\u0096\33\3\2\2\2\u0097")
-        buf.write("\u009a\7\34\2\2\u0098\u009b\5 \21\2\u0099\u009b\5\36\20")
-        buf.write("\2\u009a\u0098\3\2\2\2\u009a\u0099\3\2\2\2\u009b\u00a3")
-        buf.write("\3\2\2\2\u009c\u009f\7\31\2\2\u009d\u00a0\5 \21\2\u009e")
-        buf.write("\u00a0\5\36\20\2\u009f\u009d\3\2\2\2\u009f\u009e\3\2\2")
-        buf.write("\2\u00a0\u00a2\3\2\2\2\u00a1\u009c\3\2\2\2\u00a2\u00a5")
-        buf.write("\3\2\2\2\u00a3\u00a1\3\2\2\2\u00a3\u00a4\3\2\2\2\u00a4")
-        buf.write("\u00a6\3\2\2\2\u00a5\u00a3\3\2\2\2\u00a6\u00a7\7\35\2")
-        buf.write("\2\u00a7\35\3\2\2\2\u00a8\u00a9\7)\2\2\u00a9\u00aa\7\b")
-        buf.write("\2\2\u00aa\u00ab\5 \21\2\u00ab\37\3\2\2\2\u00ac\u00b0")
-        buf.write("\5\n\6\2\u00ad\u00b0\7)\2\2\u00ae\u00b0\5$\23\2\u00af")
-        buf.write("\u00ac\3\2\2\2\u00af\u00ad\3\2\2\2\u00af\u00ae\3\2\2\2")
-        buf.write("\u00b0!\3\2\2\2\u00b1\u00b6\7\t\2\2\u00b2\u00b3\7\31\2")
-        buf.write("\2\u00b3\u00b5\7\t\2\2\u00b4\u00b2\3\2\2\2\u00b5\u00b8")
-        buf.write("\3\2\2\2\u00b6\u00b4\3\2\2\2\u00b6\u00b7\3\2\2\2\u00b7")
-        buf.write("#\3\2\2\2\u00b8\u00b6\3\2\2\2\u00b9\u00ba\b\23\1\2\u00ba")
-        buf.write("\u00bb\7\34\2\2\u00bb\u00bc\5$\23\2\u00bc\u00bd\7\35\2")
-        buf.write("\2\u00bd\u00c8\3\2\2\2\u00be\u00bf\t\7\2\2\u00bf\u00c8")
-        buf.write("\5$\23\t\u00c0\u00c1\5(\25\2\u00c1\u00c2\7\34\2\2\u00c2")
-        buf.write("\u00c3\5$\23\2\u00c3\u00c4\7\35\2\2\u00c4\u00c8\3\2\2")
-        buf.write("\2\u00c5\u00c8\5&\24\2\u00c6\u00c8\7)\2\2\u00c7\u00b9")
-        buf.write("\3\2\2\2\u00c7\u00be\3\2\2\2\u00c7\u00c0\3\2\2\2\u00c7")
-        buf.write("\u00c5\3\2\2\2\u00c7\u00c6\3\2\2\2\u00c8\u00d4\3\2\2\2")
-        buf.write("\u00c9\u00ca\f\b\2\2\u00ca\u00cb\7\7\2\2\u00cb\u00d3\5")
-        buf.write("$\23\b\u00cc\u00cd\f\7\2\2\u00cd\u00ce\t\b\2\2\u00ce\u00d3")
-        buf.write("\5$\23\b\u00cf\u00d0\f\6\2\2\u00d0\u00d1\t\7\2\2\u00d1")
-        buf.write("\u00d3\5$\23\7\u00d2\u00c9\3\2\2\2\u00d2\u00cc\3\2\2\2")
-        buf.write("\u00d2\u00cf\3\2\2\2\u00d3\u00d6\3\2\2\2\u00d4\u00d2\3")
-        buf.write("\2\2\2\u00d4\u00d5\3\2\2\2\u00d5%\3\2\2\2\u00d6\u00d4")
-        buf.write("\3\2\2\2\u00d7\u00d8\t\t\2\2\u00d8\'\3\2\2\2\u00d9\u00da")
-        buf.write("\t\n\2\2\u00da)\3\2\2\2\32,.\65?HN[dlrz|\u0084\u0087\u008b")
-        buf.write("\u008f\u009a\u009f\u00a3\u00af\u00b6\u00c7\u00d2\u00d4")
+        buf.write("\u00a0\7\34\2\2\u0098\u009d\5 \21\2\u0099\u009a\7\31\2")
+        buf.write("\2\u009a\u009c\5 \21\2\u009b\u0099\3\2\2\2\u009c\u009f")
+        buf.write("\3\2\2\2\u009d\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e")
+        buf.write("\u00a1\3\2\2\2\u009f\u009d\3\2\2\2\u00a0\u0098\3\2\2\2")
+        buf.write("\u00a0\u00a1\3\2\2\2\u00a1\u00aa\3\2\2\2\u00a2\u00a7\5")
+        buf.write("\36\20\2\u00a3\u00a4\7\31\2\2\u00a4\u00a6\5\36\20\2\u00a5")
+        buf.write("\u00a3\3\2\2\2\u00a6\u00a9\3\2\2\2\u00a7\u00a5\3\2\2\2")
+        buf.write("\u00a7\u00a8\3\2\2\2\u00a8\u00ab\3\2\2\2\u00a9\u00a7\3")
+        buf.write("\2\2\2\u00aa\u00a2\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ac")
+        buf.write("\3\2\2\2\u00ac\u00ad\7\35\2\2\u00ad\35\3\2\2\2\u00ae\u00af")
+        buf.write("\7(\2\2\u00af\u00b0\7\b\2\2\u00b0\u00b1\5 \21\2\u00b1")
+        buf.write("\37\3\2\2\2\u00b2\u00b5\5\n\6\2\u00b3\u00b5\5$\23\2\u00b4")
+        buf.write("\u00b2\3\2\2\2\u00b4\u00b3\3\2\2\2\u00b5!\3\2\2\2\u00b6")
+        buf.write("\u00bb\7\t\2\2\u00b7\u00b8\7\31\2\2\u00b8\u00ba\7\t\2")
+        buf.write("\2\u00b9\u00b7\3\2\2\2\u00ba\u00bd\3\2\2\2\u00bb\u00b9")
+        buf.write("\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc#\3\2\2\2\u00bd\u00bb")
+        buf.write("\3\2\2\2\u00be\u00bf\b\23\1\2\u00bf\u00c0\7\34\2\2\u00c0")
+        buf.write("\u00c1\5$\23\2\u00c1\u00c2\7\35\2\2\u00c2\u00cd\3\2\2")
+        buf.write("\2\u00c3\u00c4\t\7\2\2\u00c4\u00cd\5$\23\t\u00c5\u00c6")
+        buf.write("\5(\25\2\u00c6\u00c7\7\34\2\2\u00c7\u00c8\5$\23\2\u00c8")
+        buf.write("\u00c9\7\35\2\2\u00c9\u00cd\3\2\2\2\u00ca\u00cd\5&\24")
+        buf.write("\2\u00cb\u00cd\7(\2\2\u00cc\u00be\3\2\2\2\u00cc\u00c3")
+        buf.write("\3\2\2\2\u00cc\u00c5\3\2\2\2\u00cc\u00ca\3\2\2\2\u00cc")
+        buf.write("\u00cb\3\2\2\2\u00cd\u00d9\3\2\2\2\u00ce\u00cf\f\b\2\2")
+        buf.write("\u00cf\u00d0\7\7\2\2\u00d0\u00d8\5$\23\b\u00d1\u00d2\f")
+        buf.write("\7\2\2\u00d2\u00d3\t\b\2\2\u00d3\u00d8\5$\23\b\u00d4\u00d5")
+        buf.write("\f\6\2\2\u00d5\u00d6\t\7\2\2\u00d6\u00d8\5$\23\7\u00d7")
+        buf.write("\u00ce\3\2\2\2\u00d7\u00d1\3\2\2\2\u00d7\u00d4\3\2\2\2")
+        buf.write("\u00d8\u00db\3\2\2\2\u00d9\u00d7\3\2\2\2\u00d9\u00da\3")
+        buf.write("\2\2\2\u00da%\3\2\2\2\u00db\u00d9\3\2\2\2\u00dc\u00dd")
+        buf.write("\t\t\2\2\u00dd\'\3\2\2\2\u00de\u00df\t\n\2\2\u00df)\3")
+        buf.write("\2\2\2\33,.\65?HN[dlrz|\u0084\u0087\u008b\u008f\u009d")
+        buf.write("\u00a0\u00a7\u00aa\u00b4\u00bb\u00cc\u00d7\u00d9")
         return buf.getvalue()
 
 
@@ -124,8 +127,8 @@ class blackbirdParser ( Parser ):
                       "SQRT", "SIN", "COS", "EXP", "PERIOD", "COMMA", "COLON", 
                       "QUOTE", "LBRAC", "RBRAC", "LSQBRAC", "RSQBRAC", "APPLY", 
                       "TYPE_ARRAY", "TYPE_FLOAT", "TYPE_COMPLEX", "TYPE_INT", 
-                      "TYPE_STR", "TYPE_BOOL", "MEASURE", "OPERATION", "NAME", 
-                      "DEVICE", "COMMENT", "ANY" ]
+                      "TYPE_STR", "TYPE_BOOL", "MEASURE", "NAME", "DEVICE", 
+                      "COMMENT", "ANY" ]
 
     RULE_start = 0
     RULE_variable = 1
@@ -191,11 +194,10 @@ class blackbirdParser ( Parser ):
     TYPE_STR=35
     TYPE_BOOL=36
     MEASURE=37
-    OPERATION=38
-    NAME=39
-    DEVICE=40
-    COMMENT=41
-    ANY=42
+    NAME=38
+    DEVICE=39
+    COMMENT=40
+    ANY=41
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -1025,7 +1027,7 @@ class blackbirdParser ( Parser ):
             self.state = 130
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.OPERATION]:
+            if token in [blackbirdParser.NAME]:
                 self.state = 128
                 self.operation()
                 pass
@@ -1090,8 +1092,8 @@ class blackbirdParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def OPERATION(self):
-            return self.getToken(blackbirdParser.OPERATION, 0)
+        def NAME(self):
+            return self.getToken(blackbirdParser.NAME, 0)
 
         def getRuleIndex(self):
             return blackbirdParser.RULE_operation
@@ -1114,7 +1116,7 @@ class blackbirdParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 145
-            self.match(blackbirdParser.OPERATION)
+            self.match(blackbirdParser.NAME)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1217,45 +1219,47 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 149
             self.match(blackbirdParser.LBRAC)
-            self.state = 152
+            self.state = 158
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,16,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
             if la_ == 1:
                 self.state = 150
                 self.val()
-                pass
-
-            elif la_ == 2:
-                self.state = 151
-                self.kwarg()
-                pass
-
-
-            self.state = 161
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while _la==blackbirdParser.COMMA:
-                self.state = 154
-                self.match(blackbirdParser.COMMA)
-                self.state = 157
-                self._errHandler.sync(self)
-                la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
-                if la_ == 1:
-                    self.state = 155
-                    self.val()
-                    pass
-
-                elif la_ == 2:
-                    self.state = 156
-                    self.kwarg()
-                    pass
-
-
-                self.state = 163
+                self.state = 155
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
+                while _la==blackbirdParser.COMMA:
+                    self.state = 151
+                    self.match(blackbirdParser.COMMA)
+                    self.state = 152
+                    self.val()
+                    self.state = 157
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
 
-            self.state = 164
+
+
+            self.state = 168
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            if _la==blackbirdParser.NAME:
+                self.state = 160
+                self.kwarg()
+                self.state = 165
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                while _la==blackbirdParser.COMMA:
+                    self.state = 161
+                    self.match(blackbirdParser.COMMA)
+                    self.state = 162
+                    self.kwarg()
+                    self.state = 167
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
+
+
+
+            self.state = 170
             self.match(blackbirdParser.RBRAC)
         except RecognitionException as re:
             localctx.exception = re
@@ -1301,11 +1305,11 @@ class blackbirdParser ( Parser ):
         self.enterRule(localctx, 28, self.RULE_kwarg)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 166
+            self.state = 172
             self.match(blackbirdParser.NAME)
-            self.state = 167
+            self.state = 173
             self.match(blackbirdParser.ASSIGN)
-            self.state = 168
+            self.state = 174
             self.val()
         except RecognitionException as re:
             localctx.exception = re
@@ -1324,9 +1328,6 @@ class blackbirdParser ( Parser ):
         def nonnumeric(self):
             return self.getTypedRuleContext(blackbirdParser.NonnumericContext,0)
 
-
-        def NAME(self):
-            return self.getToken(blackbirdParser.NAME, 0)
 
         def expression(self):
             return self.getTypedRuleContext(blackbirdParser.ExpressionContext,0)
@@ -1352,24 +1353,19 @@ class blackbirdParser ( Parser ):
         self.enterRule(localctx, 30, self.RULE_val)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 173
+            self.state = 178
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,19,self._ctx)
-            if la_ == 1:
-                self.state = 170
+            token = self._input.LA(1)
+            if token in [blackbirdParser.STR, blackbirdParser.BOOL]:
+                self.state = 176
                 self.nonnumeric()
                 pass
-
-            elif la_ == 2:
-                self.state = 171
-                self.match(blackbirdParser.NAME)
-                pass
-
-            elif la_ == 3:
-                self.state = 172
+            elif token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP, blackbirdParser.LBRAC, blackbirdParser.NAME]:
+                self.state = 177
                 self.expression(0)
                 pass
-
+            else:
+                raise NoViableAltException(self)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1418,17 +1414,17 @@ class blackbirdParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 175
-            self.match(blackbirdParser.INT)
             self.state = 180
+            self.match(blackbirdParser.INT)
+            self.state = 185
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==blackbirdParser.COMMA:
-                self.state = 176
+                self.state = 181
                 self.match(blackbirdParser.COMMA)
-                self.state = 177
-                self.match(blackbirdParser.INT)
                 self.state = 182
+                self.match(blackbirdParser.INT)
+                self.state = 187
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -1651,7 +1647,7 @@ class blackbirdParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 197
+            self.state = 202
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [blackbirdParser.LBRAC]:
@@ -1659,122 +1655,122 @@ class blackbirdParser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
 
-                self.state = 184
+                self.state = 189
                 self.match(blackbirdParser.LBRAC)
-                self.state = 185
+                self.state = 190
                 self.expression(0)
-                self.state = 186
+                self.state = 191
                 self.match(blackbirdParser.RBRAC)
                 pass
             elif token in [blackbirdParser.PLUS, blackbirdParser.MINUS]:
                 localctx = blackbirdParser.SignLabelContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 188
+                self.state = 193
                 _la = self._input.LA(1)
                 if not(_la==blackbirdParser.PLUS or _la==blackbirdParser.MINUS):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 189
+                self.state = 194
                 self.expression(7)
                 pass
             elif token in [blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP]:
                 localctx = blackbirdParser.FunctionLabelContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 190
+                self.state = 195
                 self.function()
-                self.state = 191
+                self.state = 196
                 self.match(blackbirdParser.LBRAC)
-                self.state = 192
+                self.state = 197
                 self.expression(0)
-                self.state = 193
+                self.state = 198
                 self.match(blackbirdParser.RBRAC)
                 pass
             elif token in [blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI]:
                 localctx = blackbirdParser.NumberLabelContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 195
+                self.state = 200
                 self.number()
                 pass
             elif token in [blackbirdParser.NAME]:
                 localctx = blackbirdParser.VariableLabelContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 196
+                self.state = 201
                 self.match(blackbirdParser.NAME)
                 pass
             else:
                 raise NoViableAltException(self)
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 210
+            self.state = 215
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,23,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,24,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 208
+                    self.state = 213
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input,22,self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,23,self._ctx)
                     if la_ == 1:
                         localctx = blackbirdParser.PowerLabelContext(self, blackbirdParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 199
+                        self.state = 204
                         if not self.precpred(self._ctx, 6):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
-                        self.state = 200
+                        self.state = 205
                         self.match(blackbirdParser.PWR)
-                        self.state = 201
+                        self.state = 206
                         self.expression(6)
                         pass
 
                     elif la_ == 2:
                         localctx = blackbirdParser.MulLabelContext(self, blackbirdParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 202
+                        self.state = 207
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 203
+                        self.state = 208
                         _la = self._input.LA(1)
                         if not(_la==blackbirdParser.TIMES or _la==blackbirdParser.DIVIDE):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 204
+                        self.state = 209
                         self.expression(6)
                         pass
 
                     elif la_ == 3:
                         localctx = blackbirdParser.AddLabelContext(self, blackbirdParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 205
+                        self.state = 210
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 206
+                        self.state = 211
                         _la = self._input.LA(1)
                         if not(_la==blackbirdParser.PLUS or _la==blackbirdParser.MINUS):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 207
+                        self.state = 212
                         self.expression(5)
                         pass
 
              
-                self.state = 212
+                self.state = 217
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,23,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,24,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1823,7 +1819,7 @@ class blackbirdParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 213
+            self.state = 218
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.INT) | (1 << blackbirdParser.FLOAT) | (1 << blackbirdParser.COMPLEX) | (1 << blackbirdParser.PI))) != 0)):
                 self._errHandler.recoverInline(self)
@@ -1877,7 +1873,7 @@ class blackbirdParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 215
+            self.state = 220
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.SQRT) | (1 << blackbirdParser.SIN) | (1 << blackbirdParser.COS) | (1 << blackbirdParser.EXP))) != 0)):
                 self._errHandler.recoverInline(self)

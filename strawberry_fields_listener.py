@@ -265,6 +265,25 @@ class StrawberryFieldsListener(blackbirdListener):
 
         _VAR[name] = final_value
 
+    def exitStatement(self, ctx: blackbirdParser.StatementContext):
+        """Run after exiting a quantum statement.
+
+        Args:
+            ctx: statement context
+        """
+        if ctx.operation():
+            op = getattr(sfo, ctx.operation().getText())
+        elif ctx.measure():
+            op = getattr(sfo, ctx.measure().getText())
+
+        modes = [int(i) for i in ctx.modes().getText().split(',')]
+
+        if ctx.arguments():
+            op_args, op_kwargs = _get_arguments(ctx.arguments())
+            self.queue.append([op(*op_args, **op_kwargs), modes])
+        else:
+            self.queue.append([op, modes])
+
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
 
@@ -292,30 +311,24 @@ class StrawberryFieldsListener(blackbirdListener):
             for op, modes in self.queue:
                 op | [self.q[i] for i in modes] #pylint:disable=pointless-statement
 
+    def run(self):
         shots = self.device_kwargs.get('shots', 1)
         for _ in range(shots):
             self.eng.reset(keep_history=True)
             self.state = self.eng.run(self.device, *self.device_args, **self.device_kwargs)
             self.result.append([q.val for q in self.q])
 
-    def exitStatement(self, ctx: blackbirdParser.StatementContext):
-        """Run after exiting a quantum statement.
+    def print_results(self):
+        """Print the results of the blackbird program execution"""
+        print('Program')
+        print('-------')
+        self.eng.print_applied()
+        print()
 
-        Args:
-            ctx: statement context
-        """
-        if ctx.operation():
-            op = getattr(sfo, ctx.operation().getText())
-        elif ctx.measure():
-            op = getattr(sfo, ctx.measure().getText())
-
-        if ctx.arguments():
-            op_args, op_kwargs = _get_arguments(ctx.arguments())
-
-        modes = [int(i) for i in ctx.modes().getText().split(',')]
-
-        self.queue.append([op(*op_args, **op_kwargs), modes])
-
+        print('Results')
+        print('-------')
+        for row in self.result:
+            print(row)
 
 def run(file):
     """Parse and run a blackbird program using Strawberry Fields.
@@ -336,20 +349,9 @@ def run(file):
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 
-    print('Variables')
-    print('---------')
-    print(blackbird.var)
-    print()
+    blackbird.run()
+    blackbird.print_results()
 
-    print('Program')
-    print('-------')
-    blackbird.eng.print_applied()
-    print()
-
-    print('Results')
-    print('-------')
-    print(np.abs(_VAR['alpha'])**2)
-    print(np.mean(blackbird.result))
 
 if __name__ == '__main__':
     run(sys.argv[1])

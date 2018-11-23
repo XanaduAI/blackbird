@@ -18,8 +18,7 @@ public:
     COS = 20, EXP = 21, PERIOD = 22, COMMA = 23, COLON = 24, QUOTE = 25, 
     LBRAC = 26, RBRAC = 27, LSQBRAC = 28, RSQBRAC = 29, APPLY = 30, TYPE_ARRAY = 31, 
     TYPE_FLOAT = 32, TYPE_COMPLEX = 33, TYPE_INT = 34, TYPE_STR = 35, TYPE_BOOL = 36, 
-    MEASURE = 37, OPERATION = 38, NAME = 39, DEVICE = 40, COMMENT = 41, 
-    ANY = 42
+    MEASURE = 37, NAME = 38, DEVICE = 39, COMMENT = 40, ANY = 41
   };
 
   enum {
@@ -284,7 +283,7 @@ public:
   public:
     OperationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *OPERATION();
+    antlr4::tree::TerminalNode *NAME();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -346,7 +345,6 @@ public:
     ValContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     NonnumericContext *nonnumeric();
-    antlr4::tree::TerminalNode *NAME();
     ExpressionContext *expression();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

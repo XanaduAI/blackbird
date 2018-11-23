@@ -18,8 +18,7 @@ public:
     COS = 20, EXP = 21, PERIOD = 22, COMMA = 23, COLON = 24, QUOTE = 25, 
     LBRAC = 26, RBRAC = 27, LSQBRAC = 28, RSQBRAC = 29, APPLY = 30, TYPE_ARRAY = 31, 
     TYPE_FLOAT = 32, TYPE_COMPLEX = 33, TYPE_INT = 34, TYPE_STR = 35, TYPE_BOOL = 36, 
-    MEASURE = 37, OPERATION = 38, NAME = 39, DEVICE = 40, COMMENT = 41, 
-    ANY = 42
+    MEASURE = 37, NAME = 38, DEVICE = 39, COMMENT = 40, ANY = 41
   };
 
   blackbirdLexer(antlr4::CharStream *input);

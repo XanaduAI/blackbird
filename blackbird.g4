@@ -32,7 +32,7 @@ device              : (NAME|DEVICE);
 
 statement           : TAB (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
 
-operation           : OPERATION;
+operation           : NAME;
 
 measure             : MEASURE;
 
@@ -121,12 +121,9 @@ TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
 
 // Variable names
+MEASURE             : 'Measure'[A-Za-z];
 NAME                : [A-Za-z][0-9A-Za-z_]*;
 DEVICE              : [0-9A-Za-z._]+;
-
-// Quantum operations
-MEASURE             : 'Measure'+[A-Za-z]+;
-OPERATION           : [A-Z][A-Za-z]+;
 
 // Comments
 COMMENT             : '#' ~[\r\n]* -> skip;

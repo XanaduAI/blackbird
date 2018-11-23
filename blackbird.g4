@@ -120,13 +120,13 @@ TYPE_INT            : 'int';
 TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
 
-// Quantum operations
-MEASURE             : 'Measure'+[A-Za-z]+;
-OPERATION           : [A-Z][A-Za-z]+;
-
 // Variable names
 NAME                : [A-Za-z][0-9A-Za-z_]*;
 DEVICE              : [0-9A-Za-z._]+;
+
+// Quantum operations
+MEASURE             : 'Measure'+[A-Za-z]+;
+OPERATION           : [A-Z][A-Za-z]+;
 
 // Comments
 COMMENT             : '#' ~[\r\n]* -> skip;

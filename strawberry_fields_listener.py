@@ -1,3 +1,17 @@
+# Copyright 2018 Xanadu Quantum Technologies Inc.
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# pylint: disable=too-many-return-statements,too-many-branches,too-many-instance-attributes
 """Strawberry Fields Blackbird parser"""
 import sys
 import antlr4
@@ -11,10 +25,10 @@ from blackbird_python.blackbirdLexer import blackbirdLexer
 from blackbird_python.blackbirdParser import blackbirdParser
 from blackbird_python.blackbirdListener import blackbirdListener
 
-_var = {}
+_VAR = {}
 
 
-python_types = {
+PYTHON_TYPES = {
     'array': np.ndarray,
     'float': float,
     'complex': complex,
@@ -24,7 +38,7 @@ python_types = {
 }
 
 
-numpy_types = {
+NUMPY_TYPES = {
     'float': np.float64,
     'complex': np.complex128,
     'int': np.int64,
@@ -34,6 +48,13 @@ numpy_types = {
 
 
 def _literal(nonnumeric):
+    """Convert a non-numeric blackbird literal to a Python literal.
+
+    Args:
+        nonnumeric (blackbirdParser.NonnumericContext): nonnumeric context
+    Returns:
+        str or bool
+    """
     if nonnumeric.STR():
         return str(nonnumeric.getText())
     elif nonnumeric.BOOL():
@@ -43,6 +64,13 @@ def _literal(nonnumeric):
 
 
 def _number(number):
+    """Convert a blackbird number to a Python number.
+
+    Args:
+        number (blackbirdParser.NumberContext): number context
+    Returns:
+        int or float or complex
+    """
     if number.INT():
         return int(number.getText())
     elif number.FLOAT():
@@ -56,6 +84,14 @@ def _number(number):
 
 
 def _func(function, arg):
+    """Apply a blackbird function to an Python argument.
+
+    Args:
+        function (blackbirdParser.FunctionContext): function context
+        arg: expression
+    Returns:
+        int or float or complex
+    """
     if function.EXP():
         return np.exp(_expression(arg))
     elif function.SIN():
@@ -69,17 +105,27 @@ def _func(function, arg):
 
 
 def _expression(expr):
+    """Evaluate a blackbird expression.
+
+    This is a recursive function, that continually calls itself
+    until the full expression has been evaluated.
+
+    Args:
+        expr: expression
+    Returns:
+        int or float or complex or str or bool
+    """
     if isinstance(expr, blackbirdParser.NumberLabelContext):
         return _number(expr.number())
 
     elif isinstance(expr, blackbirdParser.VariableLabelContext):
-        if expr.getText() not in _var:
+        if expr.getText() not in _VAR:
             raise NameError("name '{}' is not defined".format(expr.getText()))
 
-        return _var[expr.getText()]
+        return _VAR[expr.getText()]
 
     elif isinstance(expr, blackbirdParser.BracketsLabelContext):
-        return _expression(exp.expression())
+        return _expression(expr.expression())
 
     elif isinstance(expr, blackbirdParser.SignLabelContext):
         a = expr.expression()
@@ -111,6 +157,18 @@ def _expression(expr):
 
 
 def _get_arguments(arguments):
+    """Parse blackbird positional and keyword arguments.
+
+    In blackbird, all arguments occur between brackets (),
+    and separated by commas. Positional arguments always come first,
+    followed by keyword arguments of the form ``name=value``.
+
+    Args:
+        arguments (blackbirdParser.ArgumentsContext): arguments
+    Returns:
+        tuple[list, dict]: tuple containing the list of positional
+        arguments, followed by the dictionary of keyword arguments
+    """
     args = []
     kwargs = {}
 
@@ -121,7 +179,11 @@ def _get_arguments(arguments):
             elif arg.nonnumeric():
                 args.append(_literal(arg.nonnumeric()))
             elif arg.NAME():
-                args.append(_var[arg.NAME().getText()])
+                name = arg.NAME().getText()
+                if name in _VAR:
+                    args.append(_VAR[name])
+                else:
+                    raise NameError("name '{}' is not defined".format(name))
 
         elif isinstance(arg, blackbirdParser.KwargContext):
             name = arg.NAME().getText()
@@ -146,9 +208,15 @@ class StrawberryFieldsListener(blackbirdListener):
 
         self.q = None
         self.eng = None
+        self.state = None
         self.result = []
 
-    def exitExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
+    def exitExpressionVariableLabel(self, ctx: blackbirdParser.ExpressionVariableLabelContext):
+        """Run after exiting an expression variable.
+
+        Args:
+            ctx: variable context
+        """
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
 
@@ -158,13 +226,18 @@ class StrawberryFieldsListener(blackbirdListener):
             value = _literal(ctx.nonnumeric())
 
         try:
-            final_value = python_types[vartype](value)
+            final_value = PYTHON_TYPES[vartype](value)
         except:
             raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
 
-        _var[name] = final_value
+        _VAR[name] = final_value
 
-    def exitArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
+    def exitArrayVariableLabel(self, ctx: blackbirdParser.ArrayVariableLabelContext):
+        """Run after exiting an array variable.
+
+        Args:
+            ctx: array variable context
+        """
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
 
@@ -181,19 +254,24 @@ class StrawberryFieldsListener(blackbirdListener):
                         value[-1].append(_expression(j))
 
         try:
-            final_value = np.array(value, dtype=numpy_types[vartype])
+            final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
         except:
             raise TypeError("Array var {} is not of declared type {}".format(name, vartype)) from None
 
         if shape is not None:
             actual_shape = final_value.shape
             if actual_shape != shape:
-                raise TypeError("Array var {} has declared shape {} but actual shape".format(name, shape, actual_shape)) from None
+                raise TypeError("Array var {} has declared shape {} but actual shape {}".format(name, shape, actual_shape)) from None
 
-        _var[name] = final_value
+        _VAR[name] = final_value
 
-    def exitProgram(self, ctx:blackbirdParser.ProgramContext):
-        self.var.update(_var)
+    def exitProgram(self, ctx: blackbirdParser.ProgramContext):
+        """Run after exiting the program block.
+
+        Args:
+            ctx: program context
+        """
+        self.var.update(_VAR)
         self.device = ctx.device().getText()
 
         if ctx.arguments():
@@ -212,15 +290,20 @@ class StrawberryFieldsListener(blackbirdListener):
 
         with self.eng:
             for op, modes in self.queue:
-                op | [self.q[i] for i in modes]
+                op | [self.q[i] for i in modes] #pylint:disable=pointless-statement
 
         shots = self.device_kwargs.get('shots', 1)
-        for i in range(shots):
+        for _ in range(shots):
+            self.eng.reset(keep_history=True)
             self.state = self.eng.run(self.device, *self.device_args, **self.device_kwargs)
             self.result.append([q.val for q in self.q])
-            self.eng.reset(keep_history=True)
 
-    def exitStatement(self, ctx:blackbirdParser.StatementContext):
+    def exitStatement(self, ctx: blackbirdParser.StatementContext):
+        """Run after exiting a quantum statement.
+
+        Args:
+            ctx: statement context
+        """
         if ctx.operation():
             op = getattr(sfo, ctx.operation().getText())
         elif ctx.measure():
@@ -234,9 +317,17 @@ class StrawberryFieldsListener(blackbirdListener):
         self.queue.append([op(*op_args, **op_kwargs), modes])
 
 
-def main(argv):
-    file = antlr4.FileStream(argv[1])
-    lexer = blackbirdLexer(file)
+def run(file):
+    """Parse and run a blackbird program using Strawberry Fields.
+
+    Args:
+        file (str): location of the .xbb blackbird file to run
+    Returns:
+        list: list of size ``[shots, num_subsystems]``, representing
+        the measured qumode values for each shot
+    """
+    data = antlr4.FileStream(file)
+    lexer = blackbirdLexer(data)
     stream = antlr4.CommonTokenStream(lexer)
     parser = blackbirdParser(stream)
     tree = parser.start()
@@ -245,8 +336,20 @@ def main(argv):
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 
-    print(np.abs(_var['alpha']**2)**2)
+    print('Variables')
+    print('---------')
+    print(blackbird.var)
+    print()
+
+    print('Program')
+    print('-------')
+    blackbird.eng.print_applied()
+    print()
+
+    print('Results')
+    print('-------')
+    print(np.abs(_VAR['alpha'])**2)
     print(np.mean(blackbird.result))
 
 if __name__ == '__main__':
-    main(sys.argv)
+    run(sys.argv[1])

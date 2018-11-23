@@ -5,13 +5,14 @@ import antlr4
 import numpy as np
 
 import strawberryfields as sf
-from strawberryfields.ops import *
+import strawberryfields.ops as sfo
 
 from blackbird_python.blackbirdLexer import blackbirdLexer
 from blackbird_python.blackbirdParser import blackbirdParser
 from blackbird_python.blackbirdListener import blackbirdListener
 
 _var = {}
+
 
 python_types = {
     'array': np.ndarray,
@@ -22,6 +23,7 @@ python_types = {
     'bool': bool
 }
 
+
 numpy_types = {
     'float': np.float64,
     'complex': np.complex128,
@@ -29,6 +31,7 @@ numpy_types = {
     'str': np.str,
     'bool': np.bool
 }
+
 
 def _literal(nonnumeric):
     if nonnumeric.STR():
@@ -72,6 +75,7 @@ def _expression(expr):
     elif isinstance(expr, blackbirdParser.VariableLabelContext):
         if expr.getText() not in _var:
             raise NameError("name '{}' is not defined".format(expr.getText()))
+
         return _var[expr.getText()]
 
     elif isinstance(expr, blackbirdParser.BracketsLabelContext):
@@ -106,24 +110,60 @@ def _expression(expr):
         return _func(expr.function(), expr.expression())
 
 
+def _get_arguments(arguments):
+    args = []
+    kwargs = {}
+
+    for arg in arguments.getChildren():
+        if isinstance(arg, blackbirdParser.ValContext):
+            if arg.expression():
+                args.append(_expression(arg.expression()))
+            elif arg.nonnumeric():
+                args.append(_literal(arg.nonnumeric()))
+            elif arg.NAME():
+                args.append(_var[arg.NAME().getText()])
+
+        elif isinstance(arg, blackbirdParser.KwargContext):
+            name = arg.NAME().getText()
+            if arg.val().expression():
+                kwargs[name] = _expression(arg.val().expression())
+            elif arg.val().nonnumeric():
+                kwargs[name] = _literal(arg.val().nonnumeric())
+
+    return args, kwargs
+
+
 class StrawberryFieldsListener(blackbirdListener):
     """Listener to run a Blackbird program using Strawberry Fields"""
+    def __init__(self):
+        self.var = {}
+
+        self.device = None
+        self.device_args = []
+        self.device_kwargs = {}
+
+        self.queue = []
+
+        self.q = None
+        self.eng = None
+        self.result = []
+
     def exitExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
-        
+
         if ctx.expression():
             value = _expression(ctx.expression())
         elif ctx.nonnumeric():
             value = _literal(ctx.nonnumeric())
- 
+
         try:
             final_value = python_types[vartype](value)
         except:
-            raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype))
-        
+            raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
+
         _var[name] = final_value
-    
+
     def exitArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
@@ -143,18 +183,55 @@ class StrawberryFieldsListener(blackbirdListener):
         try:
             final_value = np.array(value, dtype=numpy_types[vartype])
         except:
-            raise TypeError("Array var {} is not of declared type {}".format(name, vartype))
+            raise TypeError("Array var {} is not of declared type {}".format(name, vartype)) from None
 
         if shape is not None:
             actual_shape = final_value.shape
             if actual_shape != shape:
-                raise TypeError("Array var {} has declared shape {} but actual shape".format(name, shape, actual_shape))
+                raise TypeError("Array var {} has declared shape {} but actual shape".format(name, shape, actual_shape)) from None
 
         _var[name] = final_value
 
     def exitProgram(self, ctx:blackbirdParser.ProgramContext):
-        device = ctx.device().getText()
+        self.var.update(_var)
+        self.device = ctx.device().getText()
 
+        if ctx.arguments():
+            self.device_args, self.device_kwargs = _get_arguments(ctx.arguments())
+
+        if 'num_subsystems' not in self.device_kwargs:
+            raise ValueError("Must specify the number of subsystems")
+
+        self.eng, self.q = sf.Engine(
+            self.device_kwargs['num_subsystems'],
+            hbar=self.device_kwargs.get('hbar', 2)
+        )
+
+        self.device_kwargs.pop('num_subsystems')
+        self.device_kwargs.pop('hbar', None)
+
+        with self.eng:
+            for op, modes in self.queue:
+                op | [self.q[i] for i in modes]
+
+        shots = self.device_kwargs.get('shots', 1)
+        for i in range(shots):
+            self.state = self.eng.run(self.device, *self.device_args, **self.device_kwargs)
+            self.result.append([q.val for q in self.q])
+            self.eng.reset(keep_history=True)
+
+    def exitStatement(self, ctx:blackbirdParser.StatementContext):
+        if ctx.operation():
+            op = getattr(sfo, ctx.operation().getText())
+        elif ctx.measure():
+            op = getattr(sfo, ctx.measure().getText())
+
+        if ctx.arguments():
+            op_args, op_kwargs = _get_arguments(ctx.arguments())
+
+        modes = [int(i) for i in ctx.modes().getText().split(',')]
+
+        self.queue.append([op(*op_args, **op_kwargs), modes])
 
 
 def main(argv):
@@ -163,12 +240,13 @@ def main(argv):
     stream = antlr4.CommonTokenStream(lexer)
     parser = blackbirdParser(stream)
     tree = parser.start()
-    
+
     blackbird = StrawberryFieldsListener()
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 
-    print(_var)
+    print(np.abs(_var['alpha']**2)**2)
+    print(np.mean(blackbird.result))
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -23,7 +23,7 @@
 # -------------------------------------------
 # Variable declarations
 # -------------------------------------------
-# Variable are defined at the top of the file. 
+# Variable are defined at the top of the file.
 
 # Format for defining variables:
 #   type name = expression
@@ -35,12 +35,16 @@
 #   bool: True, False
 #   str: any ASCII string surrounded by quotes, "sdfds"
 int n = +5
+int k = n
+
 float m = -0.5432
 float alpha = 0.5432
 float x = 0.5+0.1
-complex beta = 0.43e-4-0.912j
+
+complex beta = 5.21
 complex y = -0.43e-4+0.912j
 complex z = +0.43e-4-0.912j
+
 bool flag = True
 str name = "program1"
 
@@ -61,10 +65,10 @@ float test = n**2
 # but this is optional.
 
 complex array U4[4, 4] =
-	2.00+1.81j,  1.39+0.15j,  1.56+0.54j,  0.88+0.65j
-	1.39+0.15j,  0.69+0.91j,  1.31+0.21j,  0.87+0.58j
-	1.56+0.54j,  1.31+0.21j,  1.09+0.14j,  0.58+1.74j
-	0.88+0.65j,  0.87+0.58j,  0.58+1.74j,  1.52+0.59j
+    -0.23191638+0.17828953j,  0.58457815+0.41415933j, -0.05795454-0.46965132j,  0.37146591+0.19811629j
+    +0.42259383+0.56368926j, -0.42219920+0.04735544j, -0.18902308-0.01590913j,  0.33017685+0.42210731j
+    -0.02396850+0.64301446j,  0.09918161+0.36797446j,  0.26993055+0.30341975j, -0.20673325-0.4827536j
+    -0.03456721+0.05347453j, -0.01895343-0.40080457j,  0.75577423-0.06297101j,  0.50490422-0.06966875j
 
 # -------------------------------------------
 # Quantum program
@@ -73,14 +77,15 @@ complex array U4[4, 4] =
 # 'with' statement indicates the device to run the program on.
 # Inside the indented 'with' block, all operations are queued
 # to be executed on the device, in the order they appear
-with strawberryfields.fock(modes=5, cutoff=6):
-	# Statements within the 'with' block have the following form:
-	#	Operation(parameters) | modes
-	# Depending on the operation, parameters may be optional
-	# Parameters can be variables of literals
-	Coherent(0, 0) | 0
-	# Parameters can be expressions
-	Coherent(alpha**2, sqrt(pi)) | 2
+with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
+    # Statements within the 'with' block have the following form:
+    #   Operation(parameters) | modes
+    # Depending on the operation, parameters may be optional
+    # Parameters can be variables of literals or expressions
+    Coherent(alpha**2, sqrt(pi)) | 0
 
-	# Multiple modes are specified by comma separated integers
-	Interferometer(U4) | [0, 1, 2, 3]
+    # Multiple modes are specified by comma separated integers
+    # Interferometer(U4) | [0, 1, 2, 3]
+
+    # Finish with measurements
+    MeasureFock() | 0

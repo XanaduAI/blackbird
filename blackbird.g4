@@ -36,11 +36,12 @@ operation           : OPERATION;
 
 measure             : MEASURE;
 
-arguments           : (LBRAC (val|kwarg) (COMMA (val|kwarg))* RBRAC);
+// arguments           : (LBRAC (val|kwarg) (COMMA (val|kwarg))* RBRAC);
+arguments           : (LBRAC (val (COMMA val)*)? (kwarg (COMMA kwarg)*)? RBRAC);
 
 kwarg               : NAME ASSIGN val;
 
-val                 : (nonnumeric | NAME | expression);
+val                 : (nonnumeric | expression);
 
 modes               : INT (COMMA INT)*;
 
@@ -80,7 +81,7 @@ fragment IMAG       : NUMBER [jJ];
 
 INT                 : DIGIT;
 FLOAT               : REAL;
-COMPLEX             : (NUMBER('+'|'-'))? IMAG;
+COMPLEX             : ('+'|'-')?(NUMBER('+'|'-'))? IMAG;
 STR                 : '"' (~["\n\r])* '"';
 BOOL                : ('True'|'False');
 SEQUENCE            : NUMBER (','NUMBER)*;

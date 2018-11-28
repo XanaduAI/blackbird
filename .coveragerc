@@ -1,6 +1,6 @@
 # .coveragerc to control coverage.py
 [run]
-source = blackbird_python
+source = blackbird_python/blackbird
 
 [report]
 # Regexes for lines to exclude from consideration

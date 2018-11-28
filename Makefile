@@ -4,7 +4,7 @@ GRUN := java org.antlr.v4.gui.TestRig
 PYTHON3 := $(shell which python3 2>/dev/null)
 
 PYTHON := python3
-COVERAGE := --cov=pennylane --cov-report term-missing --cov-report=html:coverage_html_report
+COVERAGE := --cov=blackbird_python/blackbird --cov-report term-missing --cov-report=html:coverage_html_report
 TESTRUNNER := -m pytest tests
 
 GRAMMAR := blackbird.g4
@@ -12,18 +12,19 @@ GRAMMAR := blackbird.g4
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  install            to install PennyLane"
-	@echo "  wheel              to build the PennyLane wheel"
+	@echo "  install            to install Blackbird"
+	@echo "  wheel              to build the Blackbird wheel"
 	@echo "  dist               to package the source distribution"
 	@echo "  clean              to delete all temporary, cache, and build files"
 	@echo "  clean-docs         to delete all built documentation"
-	@echo "  test               to run the test suite"
+	@echo "  test               to run the Python test suite"
+	@echo "  test-grammar       to run the grammar test suite"
 	@echo "  coverage           to generate a coverage report"
 
 .PHONY: install
 install:
 ifndef PYTHON3
-	@echo "To install PennyLane you need to have Python 3 installed"
+	@echo "To install Blackbird you need to have Python 3 installed"
 endif
 	$(PYTHON) setup.py install
 
@@ -37,12 +38,8 @@ dist:
 
 .PHONY : clean
 clean:
-	rm -rf pennylane/__pycache__
-	rm -rf pennylane/optimize/__pycache__
-	rm -rf pennylane/expectation/__pycache__
-	rm -rf pennylane/ops/__pycache__
-	rm -rf pennylane/plugins/__pycache__
-	rm -rf tests/__pycache__
+	rm -rf blackbird_python/blackbird/__pycache__
+	rm -rf blackbird_python/blackbird/tests/__pycache__
 	rm -rf dist
 	rm -rf build
 	rm -rf .coverage coverage_html_report/
@@ -54,17 +51,17 @@ docs:
 clean-docs:
 	make -C doc clean
 
-python: $(GRAMMAR)
-	$(ANTLR4) -Dlanguage=Python3 blackbird.g4 -o blackbird_python/blackbird
+python: src/$(GRAMMAR)
+	cd src && $(ANTLR4) -Dlanguage=Python3 $(GRAMMAR) -o ../blackbird_python/blackbird
 
-cpp: $(GRAMMAR)
-	$(ANTLR4) -Dlanguage=Cpp blackbird.g4 -o blackbird_cpp
+cpp: src/$(GRAMMAR)
+	cd src && $(ANTLR4) -Dlanguage=Cpp -visitor $(GRAMMAR) -o ../blackbird_cpp
 
-test: $(GRAMMAR)
+test-grammar: src/$(GRAMMAR)
 	mkdir -p _test
-	$(ANTLR4) blackbird.g4 -o _test
+	cd src && $(ANTLR4) $(GRAMMAR) -o ../_test
 	cd _test && javac *.java
-	cd _test && $(GRUN) blackbird start ../example.xbb -gui
+	cd _test && $(GRUN) blackbird start ../examples/example.xbb -gui
 	rm -rf _test
 
 coverage:

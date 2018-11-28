@@ -39,11 +39,11 @@ Format for defining variables:
 
 Allowed literals:
 
-* int: 0, 1, 5
-* float: 0.43, -0.123, 89.23e-10
-* complex: 5j, 8-1j, 0.54+0.21j
-* bool: True, False
-* str: any ASCII string surrounded by quotes, "sdfds"
+* ``int``: ``0``, ``1``, ``5``
+* ``float``: ``0.43``, ``-0.123``, ``89.23e-10``
+* ``complex``: ``5j``, ``8-1j``, ``0.54+0.21j``
+* ``bool``: ``True``, ``False``
+* ``str``: any ASCII string surrounded by quotes, ``"hello world"``
 
 Examples:
 
@@ -68,11 +68,14 @@ Blackbird allows expressions using the operators
 
 * ``+, -, *, /, **``
 
-(``**`` indicates right-associative exponentiation), and the intrinsic functions:
+where ``**`` indicates right-associative exponentiation, and the intrinsic functions:
 
-* ``exp()``, ``sin()``, ``cos()``, ``sqrt()``
+* ``exp()``
+* ``sin()``
+* ``cos()``
+* ``sqrt()``
 
-You can also use PI and previous variable names in your
+You can also use ``pi`` and previous variable names in your
 expressions.
 
 .. code-block:: python
@@ -80,12 +83,8 @@ expressions.
     float gamma = 2*cos(alpha*pi)
     float test = n**2
 
-We can also define arrays, by specifying 'array' after
+We can also define arrays, by specifying ``'array'`` after
 the variable type.
-
-Note: you can specify the *shape* of the array using square
-brackets directly after the variable name (i.e. ``U4[4, 4]``))
-but this is optional.
 
 .. code-block:: python
 
@@ -99,6 +98,10 @@ but this is optional.
         -0.02396850+0.64301446j,  0.09918161+0.36797446j,  0.26993055+0.30341975j, -0.20673325-0.4827536j
         -0.03456721+0.05347453j, -0.01895343-0.40080457j,  0.75577423-0.06297101j,  0.50490422-0.06966875j
 
+
+Note: you can specify the *shape* of the array using square
+brackets directly after the variable name (i.e. ``U4[4, 4]``)
+but this is optional.
 
 Quantum program
 ---------------

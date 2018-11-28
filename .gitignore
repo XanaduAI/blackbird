@@ -1,8 +1,9 @@
 *~
 *.pyc
-antlr
-vscode
+.antlr
+.vscode
 doc/_build
+_test
 build
 dist
 *.ipynb

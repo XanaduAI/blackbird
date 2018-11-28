@@ -81,19 +81,20 @@ Blackbird also supports the intrinsic functions
 * ``cos()``
 * ``sqrt()``
 
-and the intrinic variable
+and the intrinsic variable
 
 * ``pi``
 
-You can also use previously defined variable names in your expressions.
+You can also use previously defined variable names in your expressions:
 
 .. code-block:: python
 
     float gamma = 2*cos(alpha*pi)
     float test = n**2
 
-We can also define arrays, by specifying ``'array'`` after
-the variable type.
+To define arrays, specify ``'array'`` after the variable type.
+Each row of the array is then defined on an indented line, with
+columns separated by columns.
 
 .. code-block:: python
 

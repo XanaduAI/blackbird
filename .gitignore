@@ -1,0 +1,14 @@
+*~
+*.pyc
+antlr
+vscode
+doc/_build
+build
+dist
+*.ipynb
+*.ipynb_checkpoints
+*.egg-info*
+.coverage
+coverage_html_report/*
+notebooks/*
+.pytest_cache/*

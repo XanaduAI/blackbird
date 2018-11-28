@@ -14,6 +14,6 @@
 
 float alpha = 0.3423
 
-with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
+with fock(num_subsystems=1, cutoff_dim=7, shots=10):
     Coherent(alpha, sqrt(pi)) | 0
     MeasureFock() | 0

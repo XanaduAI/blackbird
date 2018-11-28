@@ -94,7 +94,7 @@ You can also use previously defined variable names in your expressions:
 
 To define arrays, specify ``'array'`` after the variable type.
 Each row of the array is then defined on an indented line, with
-columns separated by columns.
+columns separated by commas.
 
 .. code-block:: python
 
@@ -102,7 +102,7 @@ columns separated by columns.
         -1+2j, 2+1j
         -0.1-0.1j, 0.2-2j
 
-    complex array U4[4, 4] =
+    complex array U[4, 4] =
         -0.23191638+0.17828953j,  0.58457815+0.41415933j, -0.05795454-0.46965132j,  0.37146591+0.19811629j
         +0.42259383+0.56368926j, -0.42219920+0.04735544j, -0.18902308-0.01590913j,  0.33017685+0.42210731j
         -0.02396850+0.64301446j,  0.09918161+0.36797446j,  0.26993055+0.30341975j, -0.20673325-0.4827536j
@@ -110,7 +110,7 @@ columns separated by columns.
 
 
 Note: you can specify the *shape* of the array using square
-brackets directly after the variable name (i.e. ``U4[4, 4]``)
+brackets directly after the variable name (i.e. ``U[4, 4]``)
 but this is optional.
 
 Quantum program
@@ -135,7 +135,7 @@ For example:
         Coherent(alpha**2, Delta*sqrt(pi)) | 0
 
         # Multiple modes are specified by comma separated integers
-        Interferometer(U4) | [0, 1, 2, 3]
+        Interferometer(U) | [0, 1, 2, 3]
 
         # Finish with measurements
         MeasureFock() | 0

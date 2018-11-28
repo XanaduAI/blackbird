@@ -21,7 +21,7 @@ import numpy as np
 import strawberryfields as sf
 import strawberryfields.ops as sfo
 
-from blackbird_python import BlackbirdListener, parse_blackbird
+from blackbird import BlackbirdListener, parse_blackbird
 
 
 class StrawberryFieldsListener(BlackbirdListener):

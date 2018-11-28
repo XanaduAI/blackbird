@@ -85,7 +85,7 @@ and the intrinic variable
 
 * ``pi``
 
-You can also previously defined variable names in your expressions.
+You can also use previously defined variable names in your expressions.
 
 .. code-block:: python
 

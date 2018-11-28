@@ -55,7 +55,7 @@ clean-docs:
 	make -C doc clean
 
 python: $(GRAMMAR)
-	$(ANTLR4) -Dlanguage=Python3 blackbird.g4 -o blackbird_python
+	$(ANTLR4) -Dlanguage=Python3 blackbird.g4 -o blackbird_python/blackbird
 
 cpp: $(GRAMMAR)
 	$(ANTLR4) -Dlanguage=Cpp blackbird.g4 -o blackbird_cpp

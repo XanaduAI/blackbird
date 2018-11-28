@@ -3,6 +3,7 @@
 
 
 #include "blackbirdListener.h"
+#include "blackbirdVisitor.h"
 
 #include "blackbirdParser.h"
 
@@ -76,6 +77,14 @@ void blackbirdParser::StartContext::exitRule(tree::ParseTreeListener *listener) 
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitStart(this);
+}
+
+
+antlrcpp::Any blackbirdParser::StartContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitStart(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::StartContext* blackbirdParser::start() {
@@ -200,6 +209,13 @@ void blackbirdParser::ExpressionVariableLabelContext::exitRule(tree::ParseTreeLi
   if (parserListener != nullptr)
     parserListener->exitExpressionVariableLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::ExpressionVariableLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitExpressionVariableLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- ArrayVariableLabelContext ------------------------------------------------------------------
 
 blackbirdParser::VartypeContext* blackbirdParser::ArrayVariableLabelContext::vartype() {
@@ -249,6 +265,13 @@ void blackbirdParser::ArrayVariableLabelContext::exitRule(tree::ParseTreeListene
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArrayVariableLabel(this);
+}
+
+antlrcpp::Any blackbirdParser::ArrayVariableLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitArrayVariableLabel(this);
+  else
+    return visitor->visitChildren(this);
 }
 blackbirdParser::VariableContext* blackbirdParser::variable() {
   VariableContext *_localctx = _tracker.createInstance<VariableContext>(_ctx, getState());
@@ -373,6 +396,14 @@ void blackbirdParser::NameContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitName(this);
 }
 
+
+antlrcpp::Any blackbirdParser::NameContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitName(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::NameContext* blackbirdParser::name() {
   NameContext *_localctx = _tracker.createInstance<NameContext>(_ctx, getState());
   enterRule(_localctx, 4, blackbirdParser::RuleName);
@@ -442,6 +473,14 @@ void blackbirdParser::VartypeContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitVartype(this);
 }
 
+
+antlrcpp::Any blackbirdParser::VartypeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitVartype(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::VartypeContext* blackbirdParser::vartype() {
   VartypeContext *_localctx = _tracker.createInstance<VartypeContext>(_ctx, getState());
   enterRule(_localctx, 6, blackbirdParser::RuleVartype);
@@ -507,6 +546,14 @@ void blackbirdParser::NonnumericContext::exitRule(tree::ParseTreeListener *liste
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNonnumeric(this);
+}
+
+
+antlrcpp::Any blackbirdParser::NonnumericContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitNonnumeric(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::NonnumericContext* blackbirdParser::nonnumeric() {
@@ -578,6 +625,14 @@ void blackbirdParser::ShapeContext::exitRule(tree::ParseTreeListener *listener) 
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitShape(this);
+}
+
+
+antlrcpp::Any blackbirdParser::ShapeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitShape(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ShapeContext* blackbirdParser::shape() {
@@ -662,6 +717,14 @@ void blackbirdParser::ArrayvalContext::exitRule(tree::ParseTreeListener *listene
     parserListener->exitArrayval(this);
 }
 
+
+antlrcpp::Any blackbirdParser::ArrayvalContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitArrayval(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::ArrayvalContext* blackbirdParser::arrayval() {
   ArrayvalContext *_localctx = _tracker.createInstance<ArrayvalContext>(_ctx, getState());
   enterRule(_localctx, 12, blackbirdParser::RuleArrayval);
@@ -735,6 +798,14 @@ void blackbirdParser::ArrayrowContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArrayrow(this);
+}
+
+
+antlrcpp::Any blackbirdParser::ArrayrowContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitArrayrow(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ArrayrowContext* blackbirdParser::arrayrow() {
@@ -833,6 +904,14 @@ void blackbirdParser::ProgramContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitProgram(this);
+}
+
+
+antlrcpp::Any blackbirdParser::ProgramContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitProgram(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ProgramContext* blackbirdParser::program() {
@@ -938,6 +1017,14 @@ void blackbirdParser::DeviceContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitDevice(this);
 }
 
+
+antlrcpp::Any blackbirdParser::DeviceContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitDevice(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::DeviceContext* blackbirdParser::device() {
   DeviceContext *_localctx = _tracker.createInstance<DeviceContext>(_ctx, getState());
   enterRule(_localctx, 18, blackbirdParser::RuleDevice);
@@ -1035,6 +1122,14 @@ void blackbirdParser::StatementContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitStatement(this);
+}
+
+
+antlrcpp::Any blackbirdParser::StatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitStatement(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::StatementContext* blackbirdParser::statement() {
@@ -1157,6 +1252,14 @@ void blackbirdParser::OperationContext::exitRule(tree::ParseTreeListener *listen
     parserListener->exitOperation(this);
 }
 
+
+antlrcpp::Any blackbirdParser::OperationContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitOperation(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::OperationContext* blackbirdParser::operation() {
   OperationContext *_localctx = _tracker.createInstance<OperationContext>(_ctx, getState());
   enterRule(_localctx, 22, blackbirdParser::RuleOperation);
@@ -1204,6 +1307,14 @@ void blackbirdParser::MeasureContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitMeasure(this);
+}
+
+
+antlrcpp::Any blackbirdParser::MeasureContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitMeasure(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::MeasureContext* blackbirdParser::measure() {
@@ -1281,6 +1392,14 @@ void blackbirdParser::ArgumentsContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArguments(this);
+}
+
+
+antlrcpp::Any blackbirdParser::ArgumentsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitArguments(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ArgumentsContext* blackbirdParser::arguments() {
@@ -1386,6 +1505,14 @@ void blackbirdParser::KwargContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitKwarg(this);
 }
 
+
+antlrcpp::Any blackbirdParser::KwargContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitKwarg(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::KwargContext* blackbirdParser::kwarg() {
   KwargContext *_localctx = _tracker.createInstance<KwargContext>(_ctx, getState());
   enterRule(_localctx, 28, blackbirdParser::RuleKwarg);
@@ -1441,6 +1568,14 @@ void blackbirdParser::ValContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitVal(this);
+}
+
+
+antlrcpp::Any blackbirdParser::ValContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitVal(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ValContext* blackbirdParser::val() {
@@ -1532,6 +1667,14 @@ void blackbirdParser::ModesContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitModes(this);
 }
 
+
+antlrcpp::Any blackbirdParser::ModesContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitModes(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::ModesContext* blackbirdParser::modes() {
   ModesContext *_localctx = _tracker.createInstance<ModesContext>(_ctx, getState());
   enterRule(_localctx, 32, blackbirdParser::RuleModes);
@@ -1608,6 +1751,13 @@ void blackbirdParser::BracketsLabelContext::exitRule(tree::ParseTreeListener *li
   if (parserListener != nullptr)
     parserListener->exitBracketsLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::BracketsLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitBracketsLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- SignLabelContext ------------------------------------------------------------------
 
 blackbirdParser::ExpressionContext* blackbirdParser::SignLabelContext::expression() {
@@ -1633,6 +1783,13 @@ void blackbirdParser::SignLabelContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSignLabel(this);
+}
+
+antlrcpp::Any blackbirdParser::SignLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitSignLabel(this);
+  else
+    return visitor->visitChildren(this);
 }
 //----------------- PowerLabelContext ------------------------------------------------------------------
 
@@ -1660,6 +1817,13 @@ void blackbirdParser::PowerLabelContext::exitRule(tree::ParseTreeListener *liste
   if (parserListener != nullptr)
     parserListener->exitPowerLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::PowerLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitPowerLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- NumberLabelContext ------------------------------------------------------------------
 
 blackbirdParser::NumberContext* blackbirdParser::NumberLabelContext::number() {
@@ -1678,6 +1842,13 @@ void blackbirdParser::NumberLabelContext::exitRule(tree::ParseTreeListener *list
   if (parserListener != nullptr)
     parserListener->exitNumberLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::NumberLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitNumberLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- VariableLabelContext ------------------------------------------------------------------
 
 tree::TerminalNode* blackbirdParser::VariableLabelContext::NAME() {
@@ -1695,6 +1866,13 @@ void blackbirdParser::VariableLabelContext::exitRule(tree::ParseTreeListener *li
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitVariableLabel(this);
+}
+
+antlrcpp::Any blackbirdParser::VariableLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitVariableLabel(this);
+  else
+    return visitor->visitChildren(this);
 }
 //----------------- MulLabelContext ------------------------------------------------------------------
 
@@ -1726,6 +1904,13 @@ void blackbirdParser::MulLabelContext::exitRule(tree::ParseTreeListener *listene
   if (parserListener != nullptr)
     parserListener->exitMulLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::MulLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitMulLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- FunctionLabelContext ------------------------------------------------------------------
 
 blackbirdParser::FunctionContext* blackbirdParser::FunctionLabelContext::function() {
@@ -1756,6 +1941,13 @@ void blackbirdParser::FunctionLabelContext::exitRule(tree::ParseTreeListener *li
   if (parserListener != nullptr)
     parserListener->exitFunctionLabel(this);
 }
+
+antlrcpp::Any blackbirdParser::FunctionLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitFunctionLabel(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- AddLabelContext ------------------------------------------------------------------
 
 std::vector<blackbirdParser::ExpressionContext *> blackbirdParser::AddLabelContext::expression() {
@@ -1785,6 +1977,13 @@ void blackbirdParser::AddLabelContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAddLabel(this);
+}
+
+antlrcpp::Any blackbirdParser::AddLabelContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitAddLabel(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::ExpressionContext* blackbirdParser::expression() {
@@ -2013,6 +2212,14 @@ void blackbirdParser::NumberContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitNumber(this);
 }
 
+
+antlrcpp::Any blackbirdParser::NumberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitNumber(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 blackbirdParser::NumberContext* blackbirdParser::number() {
   NumberContext *_localctx = _tracker.createInstance<NumberContext>(_ctx, getState());
   enterRule(_localctx, 36, blackbirdParser::RuleNumber);
@@ -2084,6 +2291,14 @@ void blackbirdParser::FunctionContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<blackbirdListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFunction(this);
+}
+
+
+antlrcpp::Any blackbirdParser::FunctionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<blackbirdVisitor*>(visitor))
+    return parserVisitor->visitFunction(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 blackbirdParser::FunctionContext* blackbirdParser::function() {

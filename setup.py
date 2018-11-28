@@ -18,7 +18,7 @@ import os
 from setuptools import setup
 # from sphinx.setup_command import BuildDoc
 
-with open("blackbird_python/_version.py") as f:
+with open("blackbird_python/blackbird/_version.py") as f:
 	version = f.readlines()[-1].split()[-1].strip("\"'")
 
 requirements = [
@@ -36,6 +36,7 @@ info = {
     'packages': [
                     'blackbird'
                 ],
+    'package_dir': {'': 'blackbird_python'},
     'description': 'Blackbird is a quantum assembly language for continuous-variable quantum computation by Xanadu Inc.',
     'long_description': open('README.rst').read(),
     'provides': ["blackbird"],

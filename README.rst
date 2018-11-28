@@ -66,17 +66,26 @@ Examples:
 
 Blackbird allows expressions using the operators
 
-* ``+, -, *, /, **``
+* ``+``: addition
+* ``-``: subtraction, unary negation
+* ``*``: multiplication
+* ``/``: division
+* ``**``: right-associative exponentiation.
 
-where ``**`` indicates right-associative exponentiation, and the intrinsic functions:
+Note that no matrix operations are defined; if the expression includes arrays, these operators will act in an elementwise manner.
+
+Blackbird also supports the intrinsic functions
 
 * ``exp()``
 * ``sin()``
 * ``cos()``
 * ``sqrt()``
 
-You can also use ``pi`` and previous variable names in your
-expressions.
+and the intrinic variable
+
+* ``pi``
+
+You can also previously defined variable names in your expressions.
 
 .. code-block:: python
 

@@ -65,7 +65,7 @@ float test = n**2
 # brackets directly after the variable name (i.e. U4[4, 4]))
 # but this is optional.
 
-complex array A =
+complex array A[2, 2] =
     -1+2j, 2+1j
     -0.1-0.1j, 0.2-2j
 

@@ -57,6 +57,10 @@ python: src/$(GRAMMAR)
 cpp: src/$(GRAMMAR)
 	cd src && $(ANTLR4) -Dlanguage=Cpp -visitor $(GRAMMAR) -o ../blackbird_cpp
 
+cpp-build:
+	mkdir -p build
+	cd build && cmake ../blackbird_cpp && make -j4
+
 test-grammar: src/$(GRAMMAR)
 	mkdir -p _test
 	cd src && $(ANTLR4) $(GRAMMAR) -o ../_test

@@ -234,10 +234,14 @@ class BlackbirdListener(blackbirdListener):
             shape = tuple([int(i) for i in ctx.shape().getText().split(',')])
 
         value = []
+        # loop through all children of the 'arrayval' branch
         for i in ctx.arrayval().getChildren():
+            # Check if the child is an array row (this is to
+            # avoid the '\n' row delimiter)
             if isinstance(i, blackbirdParser.ArrayrowContext):
                 value.append([])
                 for j in i.getChildren():
+                    # Check if the child is not the column delimiter ','
                     if j.getText() != ',':
                         value[-1].append(_expression(j))
 

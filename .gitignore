@@ -5,6 +5,7 @@
 doc/_build
 _test
 build
+bin
 dist
 *.ipynb
 *.ipynb_checkpoints

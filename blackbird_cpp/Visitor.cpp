@@ -2,6 +2,55 @@
 
 #include "Visitor.h"
 
+
+std::complex<double> _complex(std::string num_string) {
+    // Convert a string containing a Blackbird-style complex
+    // number to a C++ complex double.
+    std::regex num_regex("((\\+|-)?[0-9\\.]+)(e((\\+|-)?\\d))?((\\+|-)[0-9\\.]+)(e((\\+|-)?\\d))?j");
+    std::smatch match;
+
+    double real;
+    double imag;
+    std::complex<double> number;
+
+    if (regex_search(num_string, match, num_regex)) {
+        real = std::atof(match[1].str().c_str());
+        if(match[4] != ""){
+            int pwr = std::stoi(match[4].str().c_str());
+            real *= pow(10, pwr);
+        }
+        imag = atof(match[6].str().c_str());
+        if(match[9] != ""){
+            int pwr = std::stoi(match[9].str().c_str());
+            imag *= pow(10, pwr);
+        }
+    }
+
+    number = std::complex<double>(real, imag);
+    return number;
+}
+
+
+double _float(std::string num_string) {
+    // Convert a string containing a Blackbird-style real
+    // number to a C++ complex double.
+    std::regex num_regex("((\\+|-)?[0-9\\.]+)(e((\\+|-)?\\d))?");
+    std::smatch match;
+
+    double real;
+
+    if (regex_search(num_string, match, num_regex)) {
+        real = std::atof(match[1].str().c_str());
+        if(match[4] != ""){
+            int pwr = std::stoi(match[4].str().c_str());
+            real *= pow(10, pwr);
+        }
+    }
+
+    return real;
+}
+
+
 antlrcpp::Any Visitor::visitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext *ctx) {
     // get array name
     std::string array_name = ctx->name()->getText();
@@ -73,21 +122,23 @@ antlrcpp::Any Visitor::visitNumber(blackbirdParser::NumberContext *ctx) {
     visitChildren(ctx);
 
     std::string num_string = ctx->getText();
-    std::regex num_regex("((\\+|-)?[0-9\\.]+)((\\+|-)[0-9\\.]+)j");
-    std::smatch match;
 
-    double real;
-    double imag;
-    std::complex<double> number;
-
-    if (regex_search(num_string, match, num_regex)) {
-        // std::cout << "real:"  << match[1].str()<< "\t complex:" << match[3] << std::endl;
-        real = std::atof(match[1].str().c_str());
-        imag = atof(match[3].str().c_str());
+    if (ctx->COMPLEX()) {
+        std::complex<double> number = _complex(num_string);
+        return number;
     }
-
-    number = std::complex<double>(real, imag);
-    // std::cout<<number<<std::endl;
-
-    return number;
+    else if (ctx->FLOAT()){
+        double number = _float(num_string);
+        return number;
+    }
+    else if (ctx->INT()){
+        int number = std::stoi(num_string);
+        return number;
+    }
+    else if (ctx->PI()){
+        return M_PI;
+    }
+    else {
+        return 0;
+    }
 }

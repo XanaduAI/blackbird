@@ -4,13 +4,15 @@ grammar blackbird;
  * Parser Rules
  */
 
-start               : (NEWLINE | variable)* program NEWLINE* EOF;
+start               : varblock program NEWLINE* EOF;
 
 // Variable declaration
 
-variable            : vartype name ASSIGN (expression | nonnumeric)                            #ExpressionVariableLabel
-                    | vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval #ArrayVariableLabel
-                    ;
+varblock            : (NEWLINE | var_list+=expressionvar | array_list+=arrayvar)*;
+
+expressionvar       : vartype name ASSIGN (expression | nonnumeric);
+
+arrayvar            : vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval;
 
 name                : NAME;
 
@@ -20,13 +22,13 @@ nonnumeric          : (STR|BOOL);
 
 shape               : INT (COMMA INT)*;
 
-arrayval            : (TAB row+=arrayrow NEWLINE)*;
+arrayval            : (TAB row_list+=arrayrow NEWLINE)*;
 
 arrayrow            : expression (COMMA expression)*;
 
 // Blackbird program
 
-program             : WITH device arguments? COLON NEWLINE (statement | NEWLINE | TAB NEWLINE)*;
+program             : WITH device arguments? COLON NEWLINE (statement_list+=statement | NEWLINE | TAB NEWLINE)*;
 
 device              : (NAME|DEVICE);
 
@@ -37,7 +39,7 @@ operation           : NAME;
 measure             : MEASURE;
 
 // arguments           : (LBRAC (val|kwarg) (COMMA (val|kwarg))* RBRAC);
-arguments           : (LBRAC (val (COMMA val)*)? (kwarg (COMMA kwarg)*)? RBRAC);
+arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
 kwarg               : NAME ASSIGN val;
 

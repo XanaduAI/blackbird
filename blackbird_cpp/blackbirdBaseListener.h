@@ -19,11 +19,14 @@ public:
   virtual void enterStart(blackbirdParser::StartContext * /*ctx*/) override { }
   virtual void exitStart(blackbirdParser::StartContext * /*ctx*/) override { }
 
-  virtual void enterExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext * /*ctx*/) override { }
-  virtual void exitExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext * /*ctx*/) override { }
+  virtual void enterVarblock(blackbirdParser::VarblockContext * /*ctx*/) override { }
+  virtual void exitVarblock(blackbirdParser::VarblockContext * /*ctx*/) override { }
 
-  virtual void enterArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext * /*ctx*/) override { }
-  virtual void exitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext * /*ctx*/) override { }
+  virtual void enterExpressionvar(blackbirdParser::ExpressionvarContext * /*ctx*/) override { }
+  virtual void exitExpressionvar(blackbirdParser::ExpressionvarContext * /*ctx*/) override { }
+
+  virtual void enterArrayvar(blackbirdParser::ArrayvarContext * /*ctx*/) override { }
+  virtual void exitArrayvar(blackbirdParser::ArrayvarContext * /*ctx*/) override { }
 
   virtual void enterName(blackbirdParser::NameContext * /*ctx*/) override { }
   virtual void exitName(blackbirdParser::NameContext * /*ctx*/) override { }

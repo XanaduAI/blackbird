@@ -17,21 +17,30 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#ExpressionVariableLabel.
-    def enterExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
+    # Enter a parse tree produced by blackbirdParser#variable.
+    def enterVariable(self, ctx:blackbirdParser.VariableContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#ExpressionVariableLabel.
-    def exitExpressionVariableLabel(self, ctx:blackbirdParser.ExpressionVariableLabelContext):
+    # Exit a parse tree produced by blackbirdParser#variable.
+    def exitVariable(self, ctx:blackbirdParser.VariableContext):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#ArrayVariableLabel.
-    def enterArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
+    # Enter a parse tree produced by blackbirdParser#expressionvar.
+    def enterExpressionvar(self, ctx:blackbirdParser.ExpressionvarContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#ArrayVariableLabel.
-    def exitArrayVariableLabel(self, ctx:blackbirdParser.ArrayVariableLabelContext):
+    # Exit a parse tree produced by blackbirdParser#expressionvar.
+    def exitExpressionvar(self, ctx:blackbirdParser.ExpressionvarContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#arrayvar.
+    def enterArrayvar(self, ctx:blackbirdParser.ArrayvarContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#arrayvar.
+    def exitArrayvar(self, ctx:blackbirdParser.ArrayvarContext):
         pass
 
 

@@ -19,11 +19,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext *ctx) override {
+  virtual antlrcpp::Any visitVarblock(blackbirdParser::VarblockContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext *ctx) override {
+  virtual antlrcpp::Any visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitArrayvar(blackbirdParser::ArrayvarContext *ctx) override {
     return visitChildren(ctx);
   }
 

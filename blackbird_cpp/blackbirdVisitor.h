@@ -21,9 +21,11 @@ public:
    */
     virtual antlrcpp::Any visitStart(blackbirdParser::StartContext *context) = 0;
 
-    virtual antlrcpp::Any visitExpressionVariableLabel(blackbirdParser::ExpressionVariableLabelContext *context) = 0;
+    virtual antlrcpp::Any visitVarblock(blackbirdParser::VarblockContext *context) = 0;
 
-    virtual antlrcpp::Any visitArrayVariableLabel(blackbirdParser::ArrayVariableLabelContext *context) = 0;
+    virtual antlrcpp::Any visitExpressionvar(blackbirdParser::ExpressionvarContext *context) = 0;
+
+    virtual antlrcpp::Any visitArrayvar(blackbirdParser::ArrayvarContext *context) = 0;
 
     virtual antlrcpp::Any visitName(blackbirdParser::NameContext *context) = 0;
 

@@ -199,7 +199,7 @@ class BlackbirdListener(blackbirdListener):
         self.device = None
         self.queue = []
 
-    def exitExpressionVariableLabel(self, ctx: blackbirdParser.ExpressionVariableLabelContext):
+    def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
 
         Args:
@@ -220,7 +220,7 @@ class BlackbirdListener(blackbirdListener):
 
         _VAR[name] = final_value
 
-    def exitArrayVariableLabel(self, ctx: blackbirdParser.ArrayVariableLabelContext):
+    def exitArrayvar(self, ctx: blackbirdParser.ArrayvarContext):
         """Run after exiting an array variable.
 
         Args:

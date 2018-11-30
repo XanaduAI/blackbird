@@ -22,11 +22,12 @@ public:
   };
 
   enum {
-    RuleStart = 0, RuleVariable = 1, RuleName = 2, RuleVartype = 3, RuleNonnumeric = 4, 
-    RuleShape = 5, RuleArrayval = 6, RuleArrayrow = 7, RuleProgram = 8, 
-    RuleDevice = 9, RuleStatement = 10, RuleOperation = 11, RuleMeasure = 12, 
-    RuleArguments = 13, RuleKwarg = 14, RuleVal = 15, RuleModes = 16, RuleExpression = 17, 
-    RuleNumber = 18, RuleFunction = 19
+    RuleStart = 0, RuleVarblock = 1, RuleExpressionvar = 2, RuleArrayvar = 3, 
+    RuleName = 4, RuleVartype = 5, RuleNonnumeric = 6, RuleShape = 7, RuleArrayval = 8, 
+    RuleArrayrow = 9, RuleProgram = 10, RuleDevice = 11, RuleStatement = 12, 
+    RuleOperation = 13, RuleMeasure = 14, RuleArguments = 15, RuleKwarg = 16, 
+    RuleVal = 17, RuleModes = 18, RuleExpression = 19, RuleNumber = 20, 
+    RuleFunction = 21
   };
 
   blackbirdParser(antlr4::TokenStream *input);
@@ -40,7 +41,9 @@ public:
 
 
   class StartContext;
-  class VariableContext;
+  class VarblockContext;
+  class ExpressionvarContext;
+  class ArrayvarContext;
   class NameContext;
   class VartypeContext;
   class NonnumericContext;
@@ -64,12 +67,11 @@ public:
   public:
     StartContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    VarblockContext *varblock();
     ProgramContext *program();
     antlr4::tree::TerminalNode *EOF();
     std::vector<antlr4::tree::TerminalNode *> NEWLINE();
     antlr4::tree::TerminalNode* NEWLINE(size_t i);
-    std::vector<VariableContext *> variable();
-    VariableContext* variable(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -80,38 +82,53 @@ public:
 
   StartContext* start();
 
-  class  VariableContext : public antlr4::ParserRuleContext {
+  class  VarblockContext : public antlr4::ParserRuleContext {
   public:
-    VariableContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-   
-    VariableContext() : antlr4::ParserRuleContext() { }
-    void copyFrom(VariableContext *context);
-    using antlr4::ParserRuleContext::copyFrom;
-
+    blackbirdParser::ExpressionvarContext *expressionvarContext = nullptr;;
+    std::vector<ExpressionvarContext *> var_list;;
+    blackbirdParser::ArrayvarContext *arrayvarContext = nullptr;;
+    std::vector<ArrayvarContext *> array_list;;
+    VarblockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NEWLINE();
+    antlr4::tree::TerminalNode* NEWLINE(size_t i);
+    std::vector<ExpressionvarContext *> expressionvar();
+    ExpressionvarContext* expressionvar(size_t i);
+    std::vector<ArrayvarContext *> arrayvar();
+    ArrayvarContext* arrayvar(size_t i);
 
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
-  class  ExpressionVariableLabelContext : public VariableContext {
-  public:
-    ExpressionVariableLabelContext(VariableContext *ctx);
+  VarblockContext* varblock();
 
+  class  ExpressionvarContext : public antlr4::ParserRuleContext {
+  public:
+    ExpressionvarContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
     VartypeContext *vartype();
     NameContext *name();
     antlr4::tree::TerminalNode *ASSIGN();
     ExpressionContext *expression();
     NonnumericContext *nonnumeric();
+
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
   };
 
-  class  ArrayVariableLabelContext : public VariableContext {
-  public:
-    ArrayVariableLabelContext(VariableContext *ctx);
+  ExpressionvarContext* expressionvar();
 
+  class  ArrayvarContext : public antlr4::ParserRuleContext {
+  public:
+    ArrayvarContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
     VartypeContext *vartype();
     antlr4::tree::TerminalNode *TYPE_ARRAY();
     NameContext *name();
@@ -121,13 +138,15 @@ public:
     antlr4::tree::TerminalNode *LSQBRAC();
     ShapeContext *shape();
     antlr4::tree::TerminalNode *RSQBRAC();
+
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
   };
 
-  VariableContext* variable();
+  ArrayvarContext* arrayvar();
 
   class  NameContext : public antlr4::ParserRuleContext {
   public:
@@ -201,7 +220,7 @@ public:
   class  ArrayvalContext : public antlr4::ParserRuleContext {
   public:
     blackbirdParser::ArrayrowContext *arrayrowContext = nullptr;;
-    std::vector<ArrayrowContext *> row;;
+    std::vector<ArrayrowContext *> row_list;;
     ArrayvalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> TAB();
@@ -240,6 +259,8 @@ public:
 
   class  ProgramContext : public antlr4::ParserRuleContext {
   public:
+    blackbirdParser::StatementContext *statementContext = nullptr;;
+    std::vector<StatementContext *> statement_list;;
     ProgramContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *WITH();
@@ -248,10 +269,10 @@ public:
     std::vector<antlr4::tree::TerminalNode *> NEWLINE();
     antlr4::tree::TerminalNode* NEWLINE(size_t i);
     ArgumentsContext *arguments();
-    std::vector<StatementContext *> statement();
-    StatementContext* statement(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TAB();
     antlr4::tree::TerminalNode* TAB(size_t i);
+    std::vector<StatementContext *> statement();
+    StatementContext* statement(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -335,6 +356,10 @@ public:
 
   class  ArgumentsContext : public antlr4::ParserRuleContext {
   public:
+    blackbirdParser::ValContext *valContext = nullptr;;
+    std::vector<ValContext *> val_list;;
+    blackbirdParser::KwargContext *kwargContext = nullptr;;
+    std::vector<KwargContext *> kwarg_list;;
     ArgumentsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *LBRAC();

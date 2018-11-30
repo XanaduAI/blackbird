@@ -86,7 +86,7 @@ complex array U4[4, 4] =
 # 'with' statement indicates the device to run the program on.
 # Inside the indented 'with' block, all operations are queued
 # to be executed on the device, in the order they appear
-with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
+with fock(num_subsystems=1, cutoff_dim=7, shots=10):
     # Statements within the 'with' block have the following form:
     #   Operation(parameters) | modes
     # Depending on the operation, parameters may be optional

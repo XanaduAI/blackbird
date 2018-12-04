@@ -51,6 +51,8 @@ docs:
 clean-docs:
 	make -C doc clean
 
+grammar: grammar-python grammar-cpp
+
 grammar-python: src/$(GRAMMAR)
 	cd src && $(ANTLR4) -Dlanguage=Python3 $(GRAMMAR) -o ../blackbird_python/blackbird
 

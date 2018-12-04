@@ -17,8 +17,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
 
 #Bring the headers
-include_directories(/home/josh/.local/include)
-include_directories(/home/josh/.local/include/antlr4-runtime)
+include_directories(~/.local/include)
+include_directories(~/.local/include/antlr4-runtime)
 
 
 #GDB debug flag
@@ -34,14 +34,14 @@ set(SOURCES main.cpp Visitor.cpp blackbirdBaseVisitor.cpp blackbirdLexer.cpp bla
 add_executable(blackbird ${SOURCES})
 
 
-find_library(ANTLR4_RUNTIME antlr4-runtime HINTS /home/josh/.local/lib)
+find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
 #add_subdirectory(Chat_Client)
 
 ## Boost Link libraries
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.54.0 COMPONENTS variant)
+# set(Boost_USE_STATIC_LIBS OFF)
+# set(Boost_USE_MULTITHREADED ON)
+# set(Boost_USE_STATIC_RUNTIME OFF)
+# find_package(Boost 1.54.0 COMPONENTS variant)
 # target_link_libraries(antlr_cpp boost)
 
 ##set(BOOST_LIBS thread date_time system)

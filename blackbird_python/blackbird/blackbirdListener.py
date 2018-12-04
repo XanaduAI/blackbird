@@ -17,12 +17,12 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#variable.
-    def enterVariable(self, ctx:blackbirdParser.VariableContext):
+    # Enter a parse tree produced by blackbirdParser#varblock.
+    def enterVarblock(self, ctx:blackbirdParser.VarblockContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#variable.
-    def exitVariable(self, ctx:blackbirdParser.VariableContext):
+    # Exit a parse tree produced by blackbirdParser#varblock.
+    def exitVarblock(self, ctx:blackbirdParser.VarblockContext):
         pass
 
 

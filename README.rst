@@ -18,6 +18,14 @@ This repository contains:
 In addition, it currently also contains the file ``strawberry_fields_listener.py``, which sub-classes ``blackbird_python.BlackbirdListener``, and extends it to also *run* the Blackbird program using the Strawberry Fields listeners, as a proof of concept.
 
 
+Table of contents
+=================
+
+1. Blackbird structure and syntax
+2. Installation
+3. Strawberry Fields Listener
+
+
 Blackbird structure and syntax
 ==============================
 
@@ -40,10 +48,18 @@ Format for defining variables:
 Allowed literals:
 
 * ``int``: ``0``, ``1``, ``5``
-* ``float``: ``0.43``, ``-0.123``, ``89.23e-10``
-* ``complex``: ``5j``, ``8-1j``, ``0.54+0.21j``
+* ``float``: ``8.0``, ``0.43``, ``-0.123``, ``89.23e-10``
+* ``complex``: ``0+5j``, ``8-1j``, ``0.54+0.21j``
 * ``bool``: ``True``, ``False``
 * ``str``: any ASCII string surrounded by quotes, ``"hello world"``
+
+**Important notes:**
+
+* When using a float, you must provide the full decimal. I.e., ``8`` and ``8.``
+  are not valid floats, but ``8.0`` is.
+
+* When using a complex, you must provide both real and imaginary parts.
+  I.e., ``8`` and ``2j`` are not valid complex literals, but ``8+0j`` is.
 
 Examples:
 
@@ -72,7 +88,21 @@ Blackbird allows expressions using the operators
 * ``/``: division
 * ``**``: right-associative exponentiation.
 
-Note that no matrix operations are defined; if the expression includes arrays, these operators will act in an elementwise manner.
+**Important notes:**
+
+* Blackbird will attempt to dynamically cast variables where it makes sense.
+  For example, consider the following:
+
+  .. code-block:: python
+
+    int n = 2
+    float x = 5.0**n
+
+  Blackbird will automatically cast variable ``n`` to a float to perform the calculation.
+  However, note that literals will not be automatically cast - ``float x = 5**n`` would
+  return an error, as ``5`` is an ``int`` and not a float.
+
+* No matrix operations are defined; if the expression includes arrays, these operators will act in an elementwise manner.
 
 Blackbird also supports the intrinsic functions
 
@@ -89,8 +119,8 @@ You can also use previously defined variable names in your expressions:
 
 .. code-block:: python
 
-    float gamma = 2*cos(alpha*pi)
-    float test = n**2
+    float gamma = 2.0*cos(alpha*pi)
+    float test = n**2.0
 
 To define arrays, specify ``'array'`` after the variable type.
 Each row of the array is then defined on an indented line, with
@@ -140,11 +170,79 @@ For example:
         # Finish with measurements
         MeasureFock() | 0
 
+Currently, the device always accepts keyword arguments, and operations always accept
+positional arguments.
+
 After running a Blackbird program, the user should expect to receive the results
 as an array:
 
 * each column is a measurement result, corresponding to the measurements in the order they appear in the blackbird program,
 * each row represents a shot/run.
+
+
+Installation
+============
+
+Compiling the grammar
+---------------------
+
+To compile the grammar, you will need to install ANTLR 4.7.1:
+
+.. code-block:: console
+
+    $ cd $HOME/.loca/.lib
+    $ wget https://www.antlr.org/download/antlr-4.7.1-complete.jar
+    $ export CLASSPATH=".:/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH"
+    $ alias antlr4='java -jar /usr/local/lib/antlr-4.7.1-complete.jar'
+    $ alias grun='java org.antlr.v4.gui.TestRig'
+
+You can then compile the Python and C++ base listeners and visitors by navigating to the
+Blackbird root directory, and running ``make grammar``.
+
+Compiling the C++ Blackbird Visitor
+-----------------------------------
+
+To compile the Blackbird visitor, you will need to have a C++ compiler that supports
+C++11 (i.e. ``g++`` version 5 and above), and cmake version 2.8 or above,
+as well as the UUID library (``sudo apt install uuid-dev`` on Ubuntu).
+
+In addition, you will need to install the ANTLR C++ Runtime:
+
+.. code-block:: console:
+
+    $ git clone https://github.com/antlr/antlr4.git
+    $ cd antlr4/runtime/Cpp
+    $ cmake -DCMAKE_INSTALL_PREFIX:PATH=$HOME/.local ..
+    $ make
+    $ make install
+
+Once this is done, you can compile the Blackbird C++ visitor by simply running
+``make blackbird-cpp`` from the Blackbird root directory.
+
+**Note:** as the C++ visitor is intended to directly target our photonics hardware,
+at the moment it only support the device ``Chip0``, with optional integer kwarg ``shots``,
+as well as the operations:
+
+* ``Coherent`` (accepts two float parameters)
+* ``Interferometer`` (accepts one complex array parameter)
+* ``MeasureIntensity`` (accepts no parameters)
+
+
+Installing the Python Blackbird Listener
+----------------------------------------
+
+The Python Blackbird listener requires NumPy and the Python antlr4 runtime, which can be
+installed via pip:
+
+.. code-block:: console
+
+    $ pip install numpy antlr4-python3-runtime>=4.7.1
+
+Once this is installed, the Blackbird listener can be installed via
+
+.. code-block:: console
+
+    $ pip install -e .
 
 
 Strawberry Fields Listener

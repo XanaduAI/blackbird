@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(blackbird_cpp)
-
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -26,13 +25,14 @@ include_directories(/home/josh/.local/include/antlr4-runtime)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 #Can manually add the sources using the set command as follows:
-set(SOURCES main_antlr.cpp Visitor.cpp blackbirdBaseVisitor.cpp blackbirdLexer.cpp blackbirdParser.cpp)
+set(SOURCES main.cpp Visitor.cpp blackbirdBaseVisitor.cpp blackbirdLexer.cpp blackbirdParser.cpp)
 ##set(SOURCES main_antlr.cpp)
 
 #However, the file(GLOB...) allows for wildcard additions:
 #file(GLOB SOURCES "AsyncSerial/MeComAPI/*.cpp")
 
-add_executable(antlr_cpp ${SOURCES})
+add_executable(blackbird ${SOURCES})
+
 
 find_library(ANTLR4_RUNTIME antlr4-runtime HINTS /home/josh/.local/lib)
 #add_subdirectory(Chat_Client)
@@ -49,4 +49,4 @@ find_package(Boost 1.54.0 COMPONENTS variant)
 
 ##target_link_libraries(chipcontrol ${Boost_LIBRARIES})
 #find_package(Threads REQUIRED)
-target_link_libraries(antlr_cpp -O ${ANTLR4_RUNTIME})
+target_link_libraries(blackbird -O ${ANTLR4_RUNTIME})

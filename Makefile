@@ -51,13 +51,13 @@ docs:
 clean-docs:
 	make -C doc clean
 
-python: src/$(GRAMMAR)
+grammar-python: src/$(GRAMMAR)
 	cd src && $(ANTLR4) -Dlanguage=Python3 $(GRAMMAR) -o ../blackbird_python/blackbird
 
-cpp: src/$(GRAMMAR)
-	cd src && $(ANTLR4) -Dlanguage=Cpp -visitor $(GRAMMAR) -o ../blackbird_cpp
+grammar-cpp: src/$(GRAMMAR)
+	cd src && $(ANTLR4) -Dlanguage=Cpp -visitor -no-listener $(GRAMMAR) -o ../blackbird_cpp
 
-cpp-build:
+blackbird-cpp:
 	mkdir -p build
 	cd build && cmake ../blackbird_cpp && make -j4
 

@@ -9,16 +9,8 @@
 
 #include "antlr4-runtime/antlr4-runtime.h"
 #include "blackbirdBaseVisitor.h"
-#include "Operations.h"
 
-typedef std::vector<std::vector<std::complex<double>>> complexmat;
-typedef std::vector<std::complex<double>> complexvec;
-
-typedef std::vector<std::vector<double>> floatmat;
-typedef std::vector<double> floatvec;
-
-typedef std::vector<std::vector<int>> intmat;
-typedef std::vector<int> intvec;
+#include "Program.h"
 
 
 template <class DstType, class SrcType>
@@ -43,18 +35,16 @@ public:
     std::unordered_map<std::string, floatmat> floatmat_vars;
     std::unordered_map<std::string, intmat> intmat_vars;
 
-    std::vector<Operation> operations;
+    Program* program;
 
     antlrcpp::Any visitNumber(blackbirdParser::NumberContext *ctx);
     antlrcpp::Any visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx);
 
     antlrcpp::Any visitArrayvar(blackbirdParser::ArrayvarContext *ctx);
     antlrcpp::Any visitArrayrow(blackbirdParser::ArrayrowContext*);
-    antlrcpp::Any visitArrayval(blackbirdParser::ArrayvalContext*);
 
     antlrcpp::Any visitStatement(blackbirdParser::StatementContext *ctx);
-
-    antlrcpp::Any visitVarblock(blackbirdParser::VarblockContext *ctx);
     antlrcpp::Any visitProgram(blackbirdParser::ProgramContext *ctx);
+
     antlrcpp::Any visitStart(blackbirdParser::StartContext *ctx);
 };

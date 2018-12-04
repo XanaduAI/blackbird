@@ -322,40 +322,23 @@ antlrcpp::Any Visitor::visitArrayrow(blackbirdParser::ArrayrowContext *ctx) {
     }
 }
 
-
-antlrcpp::Any Visitor::visitArrayval(blackbirdParser::ArrayvalContext *ctx) {
-    return visitChildren(ctx);
-}
-
 // =======================
 // Quantum program parsing
 // =======================
 
 
 template <typename T, typename S>
-T _get_arguments(Visitor *V, blackbirdParser::ArgumentsContext *ctx, T array, S type) {
+T _get_mult_expr_args(Visitor *V, blackbirdParser::ArgumentsContext *ctx, T array, S type) {
     std::vector<blackbirdParser::ValContext*> vals = ctx->val();
     for (auto i : vals) {
         if (i->expression()){
             S val;
             array.push_back(_expression(V, i->expression(), val));
         }
-        // else if (i->nonnumeric()) {
-        //     if (V->var_type == "str" and i->nonnumeric()->STR()){
-        //         array.push_back(i->nonnumeric()->getText());
-        //     }
-        //     else if (V->var_type == "bool" and i->nonnumeric()->BOOL()){
-        //         std::string value = i->nonnumeric()->getText();
-        //         if (value == "True") {
-        //             array.push_back(1);
-        //         } else if (value == "False") {
-        //             array.push_back(0);
-        //         }
-        //     }
-        // }
     }
     return array;
 }
+
 
 antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
     intvec modes = split_string_to_ints(ctx->modes()->getText());
@@ -364,26 +347,14 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
         var_name = ctx->operation()->NAME()->getText();
         if (var_name == "Coherent") {
             var_type = "float";
-            double s;
 
             floatvec args;
-            args = _get_arguments(this, ctx->arguments(), args, s);
+            double s;
 
-            std::cout << var_name << "(";
-            for (auto i : args) {
-                std::cout << i << ',' << ' ';
-            }
-            std::cout << ") | ";
-            for (auto i : modes) {
-                std::cout << i << ',' << ' ';
-            }
-            std::cout << std::endl;
+            args = _get_mult_expr_args(this, ctx->arguments(), args, s);
 
-            Coherent op;
-            op.alpha_mag = args[0];
-            op.alpha_phase = args[1];
-            operations.push_back(op);
-            return 0;
+            Coherent* op = new Coherent(args[0], args[1], modes);
+            program->operations.push_back(op);
         }
         else if (var_name == "Interferometer") {
             var_type = "complex";
@@ -394,24 +365,12 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
 
             complexmat U = complexmat_vars[var->NAME()->getText()];
 
-            std::cout << var_name << "(";
-            for (auto i : U) {
-                for (auto j : i) {
-                    std::cout << j << ',' << ' ';
-                }
-                std::cout << std::endl;
-            }
-            std::cout << ") | ";
-            for (auto i : modes) {
-                std::cout << i << ',' << ' ';
-            }
-            std::cout << std::endl;
-
-            Interferometer op;
-            op.U = U;
-            op.name = "Interferometer";
-            operations.push_back(op);
-            return 0;
+            Interferometer* op = new Interferometer(U, modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "MeasureIntensity") {
+            MeasureIntensity* op = new MeasureIntensity(modes);
+            program->operations.push_back(op);
         }
         else {
             throw std::invalid_argument("Unknown operation "+var_name);
@@ -421,19 +380,41 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
 }
 
 
-antlrcpp::Any Visitor::visitVarblock(blackbirdParser::VarblockContext *ctx) {
-    // Visit the variable block
-    return visitChildren(ctx);
-}
-
-
 antlrcpp::Any Visitor::visitProgram(blackbirdParser::ProgramContext *ctx) {
     // Visit the quantum program
+
+    // get the device name
+    std::string dev_name = ctx->device()->getText();
+
+    if (dev_name == "Chip0") {
+        static Chip0 prog;
+
+        // get options
+        std::vector<blackbirdParser::KwargContext*> kwargs = ctx->arguments()->kwarg();
+
+        for (auto i : kwargs) {
+            var_name = i->NAME()->getText();
+            if (var_name == "shots") {
+                var_type = "int";
+                int s;
+                prog.shots = _expression(this, i->val()->expression(), s);
+            }
+            else {
+                throw std::invalid_argument("Unknown keyword argument "+var_name);
+            }
+        }
+
+        program = &prog;
+    }
+    else {
+        throw std::invalid_argument("Unknown device "+dev_name);
+    }
+
     return visitChildren(ctx);
 }
 
 
 antlrcpp::Any Visitor::visitStart(blackbirdParser::StartContext *ctx) {
     visitChildren(ctx);
-    return operations;
+    return program;
 }

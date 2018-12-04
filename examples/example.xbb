@@ -86,15 +86,18 @@ complex array U4[4, 4] =
 # 'with' statement indicates the device to run the program on.
 # Inside the indented 'with' block, all operations are queued
 # to be executed on the device, in the order they appear
-with fock:#(num_subsystems=1, cutoff_dim=7, shots=10):
+with Chip0(shots=10):
     # Statements within the 'with' block have the following form:
     #   Operation(parameters) | modes
     # Depending on the operation, parameters may be optional
     # Parameters can be variables of literals or expressions
-    Coherent(alpha**2.0, Delta*sqrt(pi)) | 0
+    Coherent(alpha**2.0, Delta*sqrt(pi)) | 2
 
     # Multiple modes are specified by comma separated integers
     Interferometer(U4) | [0, 1, 2, 3]
 
     # Finish with measurements
-    # MeasureFock() | 0
+    MeasureIntensity() | 5
+    MeasureIntensity() | 1
+    MeasureIntensity() | 2
+    MeasureIntensity() | 3

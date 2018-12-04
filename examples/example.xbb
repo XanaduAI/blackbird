@@ -97,4 +97,4 @@ with fock:#(num_subsystems=1, cutoff_dim=7, shots=10):
     Interferometer(U4) | [0, 1, 2, 3]
 
     # Finish with measurements
-    MeasureFock() | 0
+    # MeasureFock() | 0

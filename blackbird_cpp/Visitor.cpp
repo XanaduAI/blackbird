@@ -1,108 +1,7 @@
 #include <regex>
 
 #include "Visitor.h"
-
-template<typename T>
-struct variable_map;
-
-template <class DstType, class SrcType>
-bool is_type(const SrcType* src)
-{
-  return dynamic_cast<const DstType*>(src) != nullptr;
-}
-
-
-// ===========================
-// Define the variable maps
-// ===========================
-
-
-template<>
-struct variable_map<int>
-{
-    static int getVal(Visitor *V, std::string key) {
-        auto iter1 = V->int_vars.find(key);
-        auto iter2 = V->float_vars.find(key);
-        auto iter3 = V->complex_vars.find(key);
-
-        int val;
-
-        if (iter1 != V->int_vars.end()) {
-            val = iter1->second;
-        }
-        else if (iter2 != V->float_vars.end()) {
-            val = iter2->second;
-        }
-        else if (iter3 != V->complex_vars.end()) {
-            std::invalid_argument("Cannot convert a complex variable to an int");
-        }
-
-        return val;
-    }
-    static int setVal(Visitor *V, std::string key, int val) {
-        V->int_vars[key] = val;
-        return 0;
-    }
-};
-
-template<>
-struct variable_map<double>
-{
-    static double getVal(Visitor *V, std::string key) {
-        auto iter1 = V->float_vars.find(key);
-        auto iter2 = V->int_vars.find(key);
-        auto iter3 = V->complex_vars.find(key);
-
-        double val;
-
-        if (iter1 != V->float_vars.end()) {
-            val = iter1->second;
-        }
-        else if (iter2 != V->int_vars.end()) {
-            val = iter2->second;
-        }
-        else if (iter3 != V->complex_vars.end()) {
-            std::invalid_argument("Cannot convert a complex variable to an float");
-        }
-
-        return val;
-    }
-    static double setVal(Visitor *V, std::string key, double val) {
-        V->float_vars[key] = val;
-        return 0;
-    }
-};
-
-
-template<>
-struct variable_map<std::complex<double>>
-{
-    static std::complex<double> getVal(Visitor *V, std::string key) {
-        auto iter1 = V->complex_vars.find(key);
-        auto iter2 = V->int_vars.find(key);
-        auto iter3 = V->float_vars.find(key);
-
-        std::complex<double> val;
-
-        if (iter1 != V->complex_vars.end()) {
-            val = iter1->second;
-        }
-        else if (iter2 != V->int_vars.end()) {
-            val = iter2->second;
-        }
-        else if (iter3 != V->float_vars.end()) {
-            val = iter3->second;
-        }
-
-        return val;
-    }
-    static std::complex<double> setVal(Visitor *V, std::string key, std::complex<double> val) {
-        V->complex_vars[key] = val;
-        return 0;
-    }
-};
-
-
+#include "Variables.h"
 
 // ===========================
 // Number auxillary functions
@@ -195,12 +94,12 @@ T _func(Visitor *V, blackbirdParser::FunctionLabelContext *ctx, T value) {
         return sqrt(_expression(V, arg, value));
     }
     else {
-        std::invalid_argument("Unkown function: "+func->getText());
+        throw std::invalid_argument("Unkown function: "+func->getText());
     }
 }
 
 template <typename T>
-T _expression(Visitor *V, blackbirdParser::ExpressionContext *ctx, T value) {
+T _expression(Visitor* V, blackbirdParser::ExpressionContext* ctx, T value) {
 
     if (is_type<blackbirdParser::NumberLabelContext>(ctx)) {
         blackbirdParser::NumberLabelContext* child_ctx = dynamic_cast<blackbirdParser::NumberLabelContext*>(ctx);
@@ -264,6 +163,18 @@ T _expression(Visitor *V, blackbirdParser::ExpressionContext *ctx, T value) {
     }
 }
 
+template <typename T>
+void _set_expression_variable(Visitor* V, blackbirdParser::ExpressionvarContext *ctx, T val) {
+    T result =  _expression(V, ctx->expression(), val);
+    variable_map<T>::setVal(V, ctx->name()->getText(), result);
+}
+
+template <typename T>
+void _set_non_numeric_variable(Visitor* V, blackbirdParser::ExpressionvarContext *ctx, T val) {
+    std::string result = ctx->nonnumeric()->getText();
+    variable_map<T>::setVal(V, ctx->name()->getText(), result);
+}
+
 antlrcpp::Any Visitor::visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx) {
     // get var name
     var_name = ctx->name()->getText();
@@ -271,41 +182,30 @@ antlrcpp::Any Visitor::visitExpressionvar(blackbirdParser::ExpressionvarContext 
     // get array type
     var_type = ctx->vartype()->getText();
 
-    if (ctx->expression()) {
-        if (var_type == "complex"){
-            std::complex<double> value;
-            value = _expression(this, ctx->expression(), value);
-            complex_vars[var_name] = value;
-            var_types[var_name] = "complex";
-        }
-        else if (var_type == "float"){
-            double value;
-            value = _expression(this, ctx->expression(), value);
-            float_vars[var_name] = value;
-            var_types[var_name] = "float";
-        }
-        else if (var_type == "int"){
-            int value;
-            value = _expression(this, ctx->expression(), value);
-            int_vars[var_name] = value;
-            var_types[var_name] = "int";
-        }
+    if (var_type == "complex"){
+        std::complex<double> value;
+        _set_expression_variable(this, ctx, value);
     }
-    else if (ctx->nonnumeric()) {
-        if (var_type == "str" and ctx->nonnumeric()->STR()){
-            std::string value = ctx->nonnumeric()->getText();
-            string_vars[var_name] = value;
-            var_types[var_name] = "string";
-        } else if (var_type == "bool" and ctx->nonnumeric()->BOOL()){
-            std::string value = ctx->nonnumeric()->getText();
-            var_types[var_name] = "bool";
-            if (value == "True") {
-                bool_vars[var_name] = true;
-            } else if (value == "False") {
-                bool_vars[var_name] = false;
-            }
-        }
+    else if (var_type == "float"){
+        double value;
+        _set_expression_variable(this, ctx, value);
     }
+    else if (var_type == "int"){
+        int value;
+        _set_expression_variable(this, ctx, value);
+    }
+    else if (var_type == "str"){
+        std::string value;
+        _set_non_numeric_variable(this, ctx, value);
+    }
+    else if (var_type == "bool"){
+        bool value;
+        _set_non_numeric_variable(this, ctx, value);
+    }
+    else {
+        throw std::invalid_argument("Unknown variable type " + var_type);
+    }
+    return 0;
 }
 
 
@@ -382,19 +282,16 @@ antlrcpp::Any Visitor::visitArrayvar(blackbirdParser::ArrayvarContext *ctx) {
         complexmat array;
         array = _array(this, ctx, array);
         complexmat_vars[var_name] = array;
-        var_types[var_name] = "complexmat";
     }
     else if (var_type == "float") {
         floatmat array;
         array = _array(this, ctx, array);
         floatmat_vars[var_name] = array;
-        var_types[var_name] = "floatmat";
     }
     else if (var_type == "int") {
         intmat array;
         array = _array(this, ctx, array);
         intmat_vars[var_name] = array;
-        var_types[var_name] = "intmat";
     }
 }
 
@@ -461,6 +358,8 @@ T _get_arguments(Visitor *V, blackbirdParser::ArgumentsContext *ctx, T array, S 
 }
 
 antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
+    intvec modes = split_string_to_ints(ctx->modes()->getText());
+
     if (ctx->operation()) {
         var_name = ctx->operation()->NAME()->getText();
         if (var_name == "Coherent") {
@@ -469,7 +368,6 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
 
             floatvec args;
             args = _get_arguments(this, ctx->arguments(), args, s);
-            intvec modes = split_string_to_ints(ctx->modes()->getText());
 
             std::cout << var_name << "(";
             for (auto i : args) {
@@ -480,6 +378,12 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
                 std::cout << i << ',' << ' ';
             }
             std::cout << std::endl;
+
+            Coherent op;
+            op.alpha_mag = args[0];
+            op.alpha_phase = args[1];
+            operations.push_back(op);
+            return 0;
         }
         else if (var_name == "Interferometer") {
             var_type = "complex";
@@ -489,7 +393,6 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
             blackbirdParser::VariableLabelContext *var = dynamic_cast<blackbirdParser::VariableLabelContext*>(expr);
 
             complexmat U = complexmat_vars[var->NAME()->getText()];
-            intvec modes = split_string_to_ints(ctx->modes()->getText());
 
             std::cout << var_name << "(";
             for (auto i : U) {
@@ -503,9 +406,15 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
                 std::cout << i << ',' << ' ';
             }
             std::cout << std::endl;
+
+            Interferometer op;
+            op.U = U;
+            op.name = "Interferometer";
+            operations.push_back(op);
+            return 0;
         }
         else {
-            std::invalid_argument("Unknown operation "+var_name);
+            throw std::invalid_argument("Unknown operation "+var_name);
         }
     }
     return 0;
@@ -514,171 +423,17 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
 
 antlrcpp::Any Visitor::visitVarblock(blackbirdParser::VarblockContext *ctx) {
     // Visit the variable block
-    visitChildren(ctx);
-
-    // // Extract all variables
-    // std::cout << "Variables: ";
-    // for (auto j : ctx->var_list) {
-    //     // j->vartype() is a string
-    //     std::cout << j->vartype()->getText() << " ";
-    //     // j->name() is a string
-    //     std::cout << j->name()->getText() << " ";
-    //     if (j->expression()) {
-    //         // j->expression() is an expression
-    //         std::cout << j->expression()->getText() << " ";
-    //     }
-    //     else if (j->nonnumeric()) {
-    //         // j->nonnumeric() is an string
-    //         std::cout << j->nonnumeric()->getText() << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-    // std::cout << std::endl << std::endl;
-
-
-    // // Extract all arrays
-    // std::cout << "Arrays: ";
-    // for (auto i : ctx->array_list) {
-    //     // i->vartype() is a string
-    //     std::cout << i->vartype()->getText() << " ";
-    //     // i->name() is a string
-    //     std::cout << i->name()->getText() << std::endl;
-
-    //     // get array name
-    //     std::string var_name = i->name()->getText();
-
-    //     // get array type
-    //     std::string var_type = i->vartype()->getText();
-
-    //     // get array shape
-    //     int rows;
-    //     int cols;
-    //     if(i->shape()){
-    //         std::vector<int> shape = split_string_to_ints(i->shape()->getText());
-    //         rows = shape[0];
-    //         cols = shape[1];
-    //     }
-
-    //     // get array elements
-    //     if (var_type == "complex"){
-    //         complexmat array;
-    //         // get the rows of the array
-    //         for (auto j : i->arrayval()->row_list) {
-    //             complexvec row;
-    //             std::vector<blackbirdParser::ExpressionContext*> col = j->expression();
-    //             // get the elements of the row
-    //             for (auto k : col) {
-    //                 row.push_back(visitChildren(k));
-    //             }
-    //             array.push_back(row);
-    //         }
-    //         // print array
-    //         for (auto i : array) {
-    //             for (auto j : i) {
-    //                 std::cout << j << ',' << ' ';
-    //             }
-    //             std::cout << std::endl;
-    //         }
-    //     }
-    //     else if (var_type == "float") {
-    //         floatmat array;
-    //         // get the rows of the array
-    //         for (auto j : i->arrayval()->row_list) {
-    //             floatvec row;
-    //             std::vector<blackbirdParser::ExpressionContext*> col = j->expression();
-    //             // get the elements of the row
-    //             for (auto k : col) {
-    //                 row.push_back(visitChildren(k));
-    //             }
-    //             array.push_back(row);
-    //         }
-    //         // print array
-    //         for (auto i : array) {
-    //             for (auto j : i) {
-    //                 std::cout << j << ',' << ' ';
-    //             }
-    //             std::cout << std::endl;
-    //         }
-    //     }
-    //     else if (var_type == "int") {
-    //         intmat array;
-    //         // get the rows of the array
-    //         for (auto j : i->arrayval()->row_list) {
-    //             intvec row;
-    //             std::vector<blackbirdParser::ExpressionContext*> col = j->expression();
-    //             // get the elements of the row
-    //             for (auto k : col) {
-    //                 row.push_back(visitChildren(k));
-    //             }
-    //             array.push_back(row);
-    //         }
-    //         // print array
-    //         for (auto i : array) {
-    //             for (auto j : i) {
-    //                 std::cout << j << ',' << ' ';
-    //             }
-    //             std::cout << std::endl;
-    //         }
-    //     }
-
-    //     std::cout << std::endl;
-    // }
-    // std::cout << std::endl << std::endl;
-
-    return 0;
+    return visitChildren(ctx);
 }
 
 
 antlrcpp::Any Visitor::visitProgram(blackbirdParser::ProgramContext *ctx) {
     // Visit the quantum program
-    var_name = "None";
-    var_type = "str";
+    return visitChildren(ctx);
+}
+
+
+antlrcpp::Any Visitor::visitStart(blackbirdParser::StartContext *ctx) {
     visitChildren(ctx);
-
-    // get device name
-    // std::cout << "Device: ";
-    // std::cout << ctx->device()->getText() << std::endl;
-
-    // // get device arguments
-    // std::cout << "Device parameters: ";
-    // for (auto i : ctx->arguments()->val_list) {
-    //     // i is an expression
-    //     std::cout << i->getText();
-    // }
-    // for (auto i : ctx->arguments()->kwarg_list) {
-    //     // i->NAME() is the parameter name
-    //     // i->val() is an expression
-    //     std::cout << i->NAME()->getText() << ":" << i->val()->getText() << "; ";
-    // }
-    // std::cout << std::endl << std::endl;
-
-    // // get operations, parameters, and modes
-    // for (auto i : ctx->statement_list) {
-    //     // get operation name
-    //     std::cout << "Operation: " << i->operation()->getText() << std::endl;
-
-    //     // get parameters
-    //     std::cout << "Parameters: ";
-    //     for (auto j : i->arguments()->val_list) {
-    //         // j is an expression
-    //         std::cout << j->getText() << "; ";
-    //     }
-    //     for (auto j : i->arguments()->kwarg_list) {
-    //         // j->NAME() is the parameter name
-    //         // j->val() is an expression
-    //         std::cout << j->NAME()->getText() << ":" << j->val()->getText() << "; ";
-    //     }
-    //     std::cout << std::endl;
-
-    //     // generate the vector of modes that the operation is applied to
-    //     std::vector<int> modes = split_string_to_ints(i->modes()->getText());
-
-    //     std::cout << "Modes: ";
-    //     for (auto j : modes) {
-    //         std::cout << j << "; ";
-    //     }
-    //     std::cout << std::endl << std::endl;
-    // }
-
-    return 0;
+    return operations;
 }

@@ -36,7 +36,7 @@ int main(int argc, const char* argv[])
 
   blackbirdParser::StartContext* tree = parser.start();
   Visitor visitor;
-  visitor.visitStart(tree);
+  std::vector<Operation> ops = visitor.visitStart(tree);
 
   // print all variable names and types
   std::cout << "Variables" << std::endl;
@@ -50,7 +50,7 @@ int main(int argc, const char* argv[])
   for (auto v : visitor.int_vars) {
     std::cout << v.first << ' ' << v.second << std::endl;
   }
-  for (auto v : visitor.string_vars) {
+  for (auto v : visitor.str_vars) {
     std::cout << v.first << ' ' << v.second << std::endl;
   }
   for (auto v : visitor.bool_vars) {
@@ -72,6 +72,11 @@ int main(int argc, const char* argv[])
   std::cout << "Int arrays" << std::endl;
   std::cout << "---------------" << std::endl;
   print_array_maps(visitor.intmat_vars);
+
+  // print operations
+  for (auto i : ops) {
+    std::cout << i.name << std::endl;
+  }
 
   return 0;
 }

@@ -12,37 +12,49 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # pylint: disable=too-many-return-statements,too-many-branches,too-many-instance-attributes
-"""Blackbird parser for Python"""
-import sys
-import antlr4
+"""
+Auxillary functions
+===================
 
+**Module name:** :mod:`blackbird.auxiliary`
+
+.. currentmodule:: blackbird.auxiliary
+
+This module contains a variety of auxiliary functions used by the main
+:class:`blackbird.BlackbirdListener`.
+
+Note that every auxiliary function in this module accepts a
+:class:`blackbird.blackbirdParser` context as an argument.
+
+Summary
+-------
+
+.. autosummary::
+	_expression
+	_func
+	_get_arguments
+	_literal
+	_number
+	_VAR
+
+Code details
+~~~~~~~~~~~~
+"""
 import numpy as np
 
-from .blackbirdLexer import blackbirdLexer
 from .blackbirdParser import blackbirdParser
-from .blackbirdListener import blackbirdListener
+
 
 _VAR = {}
+""" dict[str->[int, float, complex, str, bool, numpy.ndarray]]: Mapping from the
+variable names in the Blackbird script, to their declared values.
 
+This dictionary is populated when parsing
+:class:`blackbird.blackbirdParser.ExpressionvarContext` objects via
+:class:`blackbird.BlackbirdListener.exitExpressionvar`, and accessed when
+required by :func:`~._expression`.
 
-PYTHON_TYPES = {
-    'array': np.ndarray,
-    'float': float,
-    'complex': complex,
-    'int': int,
-    'str': str,
-    'bool': bool
-}
-
-
-NUMPY_TYPES = {
-    'float': np.float64,
-    'complex': np.complex128,
-    'int': np.int64,
-    'str': np.str,
-    'bool': np.bool
-}
-
+"""
 
 def _literal(nonnumeric):
     """Convert a non-numeric blackbird literal to a Python literal.
@@ -57,7 +69,7 @@ def _literal(nonnumeric):
     elif nonnumeric.BOOL():
         return bool(nonnumeric.getText())
     else:
-        raise ValueError("Unknown value: " + nonnumeric.getText())
+        raise ValueError("Unknown value " + nonnumeric.getText())
 
 
 def _number(number):
@@ -77,7 +89,7 @@ def _number(number):
     elif number.PI:
         return np.pi
     else:
-        raise ValueError("Unknown number: " + number.getText())
+        raise ValueError("Unknown number " + number.getText())
 
 
 def _func(function, arg):
@@ -98,7 +110,7 @@ def _func(function, arg):
     elif function.SQRT():
         return np.sqrt(_expression(arg))
     else:
-        raise NameError("Unknown function: " + function.getText())
+        raise NameError("Unknown function " + function.getText())
 
 
 def _expression(expr):
@@ -190,138 +202,3 @@ def _get_arguments(arguments):
                 kwargs[name] = _literal(arg.val().nonnumeric())
 
     return args, kwargs
-
-
-class BlackbirdListener(blackbirdListener):
-    """Listener to run a Blackbird program and extract the program queue and device information."""
-    def __init__(self):
-        self.var = {}
-        self.device = None
-        self.queue = []
-
-    def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
-        """Run after exiting an expression variable.
-
-        Args:
-            ctx: variable context
-        """
-        name = ctx.name().getText()
-        vartype = ctx.vartype().getText()
-
-        if ctx.expression():
-            value = _expression(ctx.expression())
-        elif ctx.nonnumeric():
-            value = _literal(ctx.nonnumeric())
-
-        try:
-            final_value = PYTHON_TYPES[vartype](value)
-        except:
-            raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
-
-        _VAR[name] = final_value
-
-    def exitArrayvar(self, ctx: blackbirdParser.ArrayvarContext):
-        """Run after exiting an array variable.
-
-        Args:
-            ctx: array variable context
-        """
-        name = ctx.name().getText()
-        vartype = ctx.vartype().getText()
-
-        shape = None
-        if ctx.shape():
-            shape = tuple([int(i) for i in ctx.shape().getText().split(',')])
-
-        value = []
-        # loop through all children of the 'arrayval' branch
-        for i in ctx.arrayval().getChildren():
-            # Check if the child is an array row (this is to
-            # avoid the '\n' row delimiter)
-            if isinstance(i, blackbirdParser.ArrayrowContext):
-                value.append([])
-                for j in i.getChildren():
-                    # Check if the child is not the column delimiter ','
-                    if j.getText() != ',':
-                        value[-1].append(_expression(j))
-
-        try:
-            final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
-        except:
-            raise TypeError("Array var {} is not of declared type {}".format(name, vartype)) from None
-
-        if shape is not None:
-            actual_shape = final_value.shape
-            if actual_shape != shape:
-                raise TypeError("Array var {} has declared shape {} "
-                                " but actual shape {}".format(name, shape, actual_shape)) from None
-
-        _VAR[name] = final_value
-
-    def exitStatement(self, ctx: blackbirdParser.StatementContext):
-        """Run after exiting a quantum statement.
-
-        Args:
-            ctx: statement context
-        """
-        if ctx.operation():
-            op = ctx.operation().getText()
-        elif ctx.measure():
-            op = ctx.measure().getText()
-
-        modes = [int(i) for i in ctx.modes().getText().split(',')]
-
-        if ctx.arguments():
-            op_args, op_kwargs = _get_arguments(ctx.arguments())
-            self.queue.append({
-                    'op': op,
-                    'args': op_args,
-                    'kwargs': op_kwargs,
-                    'modes': modes
-                })
-        else:
-            self.queue.append({'op': op, 'modes': modes})
-
-    def exitProgram(self, ctx: blackbirdParser.ProgramContext):
-        """Run after exiting the program block.
-
-        Args:
-            ctx: program context
-        """
-        self.var.update(_VAR)
-        self.device = {'name': ctx.device().getText()}
-
-        args = {}
-        kwargs = {}
-
-        if ctx.arguments():
-            args, kwargs = _get_arguments(ctx.arguments())
-
-        self.device['args'] = args
-        self.device['kwargs'] = kwargs
-
-
-def parse_blackbird(file, listener=BlackbirdListener):
-    """Parse a blackbird program.
-
-    Args:
-        file (str): location of the .xbb blackbird file to run
-        Listener (BlackbirdListener): an Blackbird listener to use to walk the AST.
-            By default, the basic :class:`~.BlackbirdListener` defined above
-            is used.
-
-    Returns:
-        BlackbirdListener: returns the Blackbird listener instance after
-            parsing the abstract syntax tree
-    """
-    data = antlr4.FileStream(file)
-    lexer = blackbirdLexer(data)
-    stream = antlr4.CommonTokenStream(lexer)
-    parser = blackbirdParser(stream)
-    tree = parser.start()
-
-    blackbird = listener()
-    walker = antlr4.ParseTreeWalker()
-    walker.walk(blackbird, tree)
-
-    return blackbird

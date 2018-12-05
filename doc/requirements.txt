@@ -1,0 +1,7 @@
+autograd
+numpy
+scipy
+toml
+appdirs
+sphinxcontrib-bibtex
+pygments-github-lexers

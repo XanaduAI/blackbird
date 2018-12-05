@@ -94,7 +94,7 @@ T _func(Visitor *V, blackbirdParser::FunctionLabelContext *ctx, T value) {
         return sqrt(_expression(V, arg, value));
     }
     else {
-        throw std::invalid_argument("Unkown function: "+func->getText());
+        throw std::invalid_argument("Unkown function "+func->getText());
     }
 }
 

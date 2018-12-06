@@ -87,6 +87,13 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
    blackbird_cpp/overview
    blackbird_cpp/installing
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Applications
+   :hidden:
+
+   apps/sf
+
 
 Indices and tables
 ------------------

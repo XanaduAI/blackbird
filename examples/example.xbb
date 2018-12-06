@@ -73,6 +73,9 @@ float array B =
     -1.0, 2.7e5
     -0.1, 0.2
 
+float array C =
+    -0.1, 0.2
+
 complex array U4[4, 4] =
     -0.23191638+0.17828953j,  0.58457815+0.41415933j, -0.05795454-0.46965132j,  0.37146591+0.19811629j
     +0.42259383+0.56368926j, -0.42219920+0.04735544j, -0.18902308-0.01590913j,  0.33017685+0.42210731j
@@ -91,8 +94,24 @@ with Chip0(shots=10):
     #   Operation(parameters) | modes
     # Depending on the operation, parameters may be optional
     # Parameters can be variables of literals or expressions
+
+    Vac | 1
+    Fock(2) | 0
+
     Coherent(beta) | 2
     Coherent(alpha**2.0, Delta*sqrt(pi)) | 2
+
+    Squeezed(alpha**2.0, Delta*sqrt(pi)) | 2
+
+    Thermal(alpha) | 2
+    Thermal(0.5) | 2
+
+    DisplacedSqueezed(0.4+0.1j, 0.5*3.0, 0.1/2.0) | 0
+
+    Catstate(0.4+0.1j) | 0
+    Catstate(0.4+0.1j, 1.0) | 0
+
+
     Dgate(0.43, 0.12) | 3
     Dgate(1+2j) | 1
     Sgate(0.43, -0.123) | 2
@@ -102,9 +121,12 @@ with Chip0(shots=10):
 
     # Multiple modes are specified by comma separated integers
     Interferometer(U4) | [0, 1, 2, 3]
+    GaussianTransform(B) | [0]
+    Gaussian(B, C) | [0]
+    Gaussian(B) | [0]
 
     # Finish with measurements
-    MeasureIntensity() | 5
-    MeasureIntensity() | 1
-    MeasureIntensity() | 2
-    MeasureIntensity() | 3
+    MeasureFock() | 5
+    Measure | 1
+    MeasureHomodyne(0.32) | 2
+    MeasureP | 3

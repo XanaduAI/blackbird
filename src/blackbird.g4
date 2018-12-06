@@ -123,7 +123,7 @@ TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
 
 // Variable names
-MEASURE             : 'Measure'[A-Za-z];
+MEASURE             : 'Measure'[A-Za-z]*;
 NAME                : [A-Za-z][0-9A-Za-z_]*;
 DEVICE              : [0-9A-Za-z._]+;
 

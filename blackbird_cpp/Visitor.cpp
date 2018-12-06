@@ -360,6 +360,13 @@ O* Visitor::_create_operation(blackbirdParser::ArgumentsContext *ctx, intvec mod
         O* op = new O(args, modes);
         return op;
     }
+    else if (var_type == "int") {
+        intvec args;
+        int s;
+        args = _get_mult_expr_args(this, ctx, args, s);
+        O* op = new O(args, modes);
+        return op;
+    }
 }
 
 antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
@@ -369,7 +376,11 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
         var_name = ctx->operation()->NAME()->getText();
 
         // state preparations
-        if (var_name == "Coherent") {
+        if (var_name == "Vacuum" or var_name == "Vac") {
+            Vacuum* op = new Vacuum(modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Coherent") {
             int num_args = _get_num_args(this, ctx->arguments());
             if (num_args == 2) {
                 var_type = "float";
@@ -378,6 +389,72 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
                 var_type = "complex";
             }
             Coherent* op = _create_operation<Coherent>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Squeezed") {
+            var_type = "float";
+            Squeezed* op = _create_operation<Squeezed>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "DisplacedSqueezed") {
+            std::vector<blackbirdParser::ValContext*> vals = ctx->arguments()->val();
+
+            std::complex<double> alpha;
+            double r;
+            double p;
+
+            if (vals.size() == 3) {
+                var_type = "complex";
+                alpha = _expression(this, vals[0]->expression(), alpha);
+                var_type = "float";
+                r = _expression(this, vals[1]->expression(), r);
+                p = _expression(this, vals[2]->expression(), p);
+            }
+            else {
+                throw std::invalid_argument("DisplacedSqueezed requires 3 arguments.");
+            }
+
+            floatvec sq_args = {r, p};
+            Squeezed* op1 = new Squeezed(sq_args, modes);
+
+            complexvec d_args = {alpha};
+            Dgate* op2 = new Dgate(d_args, modes);
+
+            program->operations.push_back(op1);
+            program->operations.push_back(op2);
+        }
+        else if (var_name == "Thermal") {
+            var_type = "float";
+            Thermal* op = _create_operation<Thermal>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Fock") {
+            var_type = "int";
+            Fock* op = _create_operation<Fock>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Catstate") {
+            std::vector<blackbirdParser::ValContext*> vals = ctx->arguments()->val();
+
+            std::complex<double> alpha;
+            double parity = 0.;
+
+            if (vals.size() == 1) {
+                var_type = "complex";
+                alpha = _expression(this, vals[0]->expression(), alpha);
+            }
+            else if (vals.size() == 2) {
+                var_type = "complex";
+                alpha = _expression(this, vals[0]->expression(), alpha);
+                var_type = "float";
+                parity = _expression(this, vals[1]->expression(), parity);
+            }
+            else {
+                throw std::invalid_argument("Catstate requires 3 arguments.");
+            }
+
+            complexvec args = {alpha};
+            Catstate* op = new Catstate(args, modes, parity);
             program->operations.push_back(op);
         }
         // gates
@@ -455,10 +532,19 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
             CKgate* op = _create_operation<CKgate>(ctx->arguments(), modes);
             program->operations.push_back(op);
         }
+        // channels
+        else if (var_name == "LossChannel") {
+            var_type = "float";
+            LossChannel* op = _create_operation<LossChannel>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "ThermalLossChannel") {
+            var_type = "float";
+            ThermalLossChannel* op = _create_operation<ThermalLossChannel>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        // decompositions
         else if (var_name == "Interferometer") {
-            var_type = "complex";
-            std::complex<double> s;
-
             blackbirdParser::ExpressionContext *expr = ctx->arguments()->val()[0]->expression();
             blackbirdParser::VariableLabelContext *var = dynamic_cast<blackbirdParser::VariableLabelContext*>(expr);
 
@@ -467,12 +553,72 @@ antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
             Interferometer* op = new Interferometer(U, modes);
             program->operations.push_back(op);
         }
-        else if (var_name == "MeasureIntensity") {
-            MeasureIntensity* op = new MeasureIntensity(modes);
+        else if (var_name == "GaussianTransform") {
+            blackbirdParser::ExpressionContext *expr = ctx->arguments()->val()[0]->expression();
+            blackbirdParser::VariableLabelContext *var = dynamic_cast<blackbirdParser::VariableLabelContext*>(expr);
+
+            floatmat S = floatmat_vars[var->NAME()->getText()];
+
+            GaussianTransform* op = new GaussianTransform(S, modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Gaussian") {
+            std::vector<blackbirdParser::ValContext*> vals = ctx->arguments()->val();
+
+            floatmat S1;
+            floatmat S2;
+
+            if (vals.size() == 1) {
+                blackbirdParser::VariableLabelContext *var = dynamic_cast<blackbirdParser::VariableLabelContext*>(vals[0]->expression());
+                S1 = floatmat_vars[var->NAME()->getText()];
+                Gaussian* op = new Gaussian(S1, modes);
+                program->operations.push_back(op);
+            }
+            else if (vals.size() == 2) {
+                blackbirdParser::VariableLabelContext *var0 = dynamic_cast<blackbirdParser::VariableLabelContext*>(vals[0]->expression());
+                S1 = floatmat_vars[var0->NAME()->getText()];
+
+                blackbirdParser::VariableLabelContext *var1 = dynamic_cast<blackbirdParser::VariableLabelContext*>(vals[1]->expression());
+                S2 = floatmat_vars[var1->NAME()->getText()];
+
+                Gaussian* op = new Gaussian(S1, S2, modes);
+                program->operations.push_back(op);
+            }
+            else {
+                throw std::invalid_argument("Gaussian operation requires 1 or 2 arguments.");
+            }
+        }
+        else {
+            throw std::invalid_argument("Unknown operation: "+var_name);
+        }
+    }
+    else if (ctx->measure()) {
+        var_name = ctx->measure()->MEASURE()->getText();
+        // Measurements
+        if (var_name == "MeasureFock" or var_name == "Measure") {
+            MeasureFock* op = new MeasureFock(modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "MeasureHeterodyne") {
+            MeasureHeterodyne* op = new MeasureHeterodyne(modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "MeasureHomodyne") {
+            var_type = "float";
+            MeasureHomodyne* op = _create_operation<MeasureHomodyne>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "MeasureX") {
+            MeasureHomodyne* op = new MeasureHomodyne(modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "MeasureP") {
+            floatvec args = {M_PI/2.0};
+            MeasureHomodyne* op = new MeasureHomodyne(args, modes);
             program->operations.push_back(op);
         }
         else {
-            throw std::invalid_argument("Unknown operation "+var_name);
+            throw std::invalid_argument("Unknown measurement: "+var_name);
         }
     }
     return 0;
@@ -497,6 +643,64 @@ antlrcpp::Any Visitor::visitProgram(blackbirdParser::ProgramContext *ctx) {
                 var_type = "int";
                 int s;
                 prog.shots = _expression(this, i->val()->expression(), s);
+            }
+            else {
+                throw std::invalid_argument("Unknown keyword argument "+var_name);
+            }
+        }
+
+        program = &prog;
+    }
+    else if (dev_name == "gaussian") {
+        static GaussianSimulator prog;
+
+        // get options
+        std::vector<blackbirdParser::KwargContext*> kwargs = ctx->arguments()->kwarg();
+
+        for (auto i : kwargs) {
+            var_name = i->NAME()->getText();
+            if (var_name == "shots") {
+                var_type = "int";
+                prog.shots = _expression(this, i->val()->expression(), prog.shots);
+            }
+            else if (var_name == "hbar") {
+                var_type = "float";
+                prog.ns = _expression(this, i->val()->expression(), prog.hb);
+            }
+            else if (var_name == "num_subsystems") {
+                var_type = "int";
+                prog.hb = _expression(this, i->val()->expression(), prog.ns);
+            }
+            else {
+                throw std::invalid_argument("Unknown keyword argument "+var_name);
+            }
+        }
+
+        program = &prog;
+    }
+    else if (dev_name == "fock") {
+        static FockSimulator prog;
+
+        // get options
+        std::vector<blackbirdParser::KwargContext*> kwargs = ctx->arguments()->kwarg();
+
+        for (auto i : kwargs) {
+            var_name = i->NAME()->getText();
+            if (var_name == "shots") {
+                var_type = "int";
+                prog.shots = _expression(this, i->val()->expression(), prog.shots);
+            }
+            else if (var_name == "hbar") {
+                var_type = "float";
+                prog.hb = _expression(this, i->val()->expression(), prog.hb);
+            }
+            else if (var_name == "num_subsystems") {
+                var_type = "int";
+                prog.ns = _expression(this, i->val()->expression(), prog.ns);
+            }
+            else if (var_name == "cutoff_dim") {
+                var_type = "int";
+                prog.cutoff = _expression(this, i->val()->expression(), prog.cutoff);
             }
             else {
                 throw std::invalid_argument("Unknown keyword argument "+var_name);

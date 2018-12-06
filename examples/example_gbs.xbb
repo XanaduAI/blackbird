@@ -24,6 +24,6 @@ with gaussian(num_subsystems=4, shots=10):
     Coherent(alpha, sqrt(pi)) | 0
     Interferometer(U4) | [0, 1, 2, 3]
     MeasureX | 0
-    MeasureHomodyne(0) | 1
+    MeasureHomodyne(0.0) | 1
     MeasureX | 2
-    MeasureHomodyne(phi=0, select=1) | 3
+    MeasureHomodyne(0.0) | 3

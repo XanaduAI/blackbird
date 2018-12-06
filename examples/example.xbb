@@ -91,7 +91,14 @@ with Chip0(shots=10):
     #   Operation(parameters) | modes
     # Depending on the operation, parameters may be optional
     # Parameters can be variables of literals or expressions
+    Coherent(beta) | 2
     Coherent(alpha**2.0, Delta*sqrt(pi)) | 2
+    Dgate(0.43, 0.12) | 3
+    Dgate(1+2j) | 1
+    Sgate(0.43, -0.123) | 2
+    Sgate(0.432) | 3
+    Rgate(pi) | 2
+    Fouriergate | 0
 
     # Multiple modes are specified by comma separated integers
     Interferometer(U4) | [0, 1, 2, 3]

@@ -339,21 +339,120 @@ T _get_mult_expr_args(Visitor *V, blackbirdParser::ArgumentsContext *ctx, T arra
     return array;
 }
 
+int _get_num_args(Visitor *V, blackbirdParser::ArgumentsContext *ctx) {
+    std::vector<blackbirdParser::ValContext*> vals = ctx->val();
+    return vals.size();
+}
+
+template <class O>
+O* Visitor::_create_operation(blackbirdParser::ArgumentsContext *ctx, intvec modes) {
+    if (var_type == "float") {
+        floatvec args;
+        double s;
+        args = _get_mult_expr_args(this, ctx, args, s);
+        O* op = new O(args, modes);
+        return op;
+    }
+    else if (var_type == "complex") {
+        complexvec args;
+        std::complex<double> s;
+        args = _get_mult_expr_args(this, ctx, args, s);
+        O* op = new O(args, modes);
+        return op;
+    }
+}
 
 antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
     intvec modes = split_string_to_ints(ctx->modes()->getText());
 
     if (ctx->operation()) {
         var_name = ctx->operation()->NAME()->getText();
+
+        // state preparations
         if (var_name == "Coherent") {
+            int num_args = _get_num_args(this, ctx->arguments());
+            if (num_args == 2) {
+                var_type = "float";
+            }
+            else if (num_args == 1) {
+                var_type = "complex";
+            }
+            Coherent* op = _create_operation<Coherent>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        // gates
+        else if (var_name == "Rgate") {
             var_type = "float";
-
-            floatvec args;
-            double s;
-
-            args = _get_mult_expr_args(this, ctx->arguments(), args, s);
-
-            Coherent* op = new Coherent(args[0], args[1], modes);
+            Rgate* op = _create_operation<Rgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Fouriergate") {
+            var_type = "float";
+            floatvec phi;
+            phi.push_back(M_PI/2.0);
+            Rgate* op = new Rgate(phi, modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Dgate") {
+            int num_args = _get_num_args(this, ctx->arguments());
+            if (num_args == 2) {
+                var_type = "float";
+            }
+            else if (num_args == 1) {
+                var_type = "complex";
+            }
+            Dgate* op = _create_operation<Dgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Sgate") {
+            var_type = "float";
+            Sgate* op = _create_operation<Sgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Xgate") {
+            var_type = "float";
+            Xgate* op = _create_operation<Xgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Zgate") {
+            var_type = "float";
+            Zgate* op = _create_operation<Zgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Pgate") {
+            var_type = "float";
+            Pgate* op = _create_operation<Pgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "Vgate") {
+            var_type = "float";
+            Vgate* op = _create_operation<Vgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        // multi-mode gates
+        else if (var_name == "BSgate") {
+            var_type = "float";
+            BSgate* op = _create_operation<BSgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "S2gate") {
+            var_type = "float";
+            S2gate* op = _create_operation<S2gate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "CXgate") {
+            var_type = "float";
+            CXgate* op = _create_operation<CXgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "CZgate") {
+            var_type = "float";
+            CZgate* op = _create_operation<CZgate>(ctx->arguments(), modes);
+            program->operations.push_back(op);
+        }
+        else if (var_name == "CKgate") {
+            var_type = "float";
+            CKgate* op = _create_operation<CKgate>(ctx->arguments(), modes);
             program->operations.push_back(op);
         }
         else if (var_name == "Interferometer") {

@@ -37,6 +37,9 @@ public:
 
     Program* program;
 
+    template <class O>
+    O* _create_operation(blackbirdParser::ArgumentsContext *ctx, intvec modes);
+
     antlrcpp::Any visitNumber(blackbirdParser::NumberContext *ctx);
     antlrcpp::Any visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx);
 

@@ -23,50 +23,9 @@ int main(int argc, const char* argv[])
 
     // print device info
     std::cout << std::endl;
-    if (program->name == Device::Chip0) {
-        Chip0* p = static_cast<Chip0*>(program);
-        std::cout << "Device: Chip0" << std::endl;
-        std::cout << "Shots: " << p->shots << std::endl;
-    }
+    program->print_device_info();
     std::cout << std::endl;
-
-    // print operations;
-    for (auto i : program->operations) {
-        if (i->gate == Gate::Coherent) {
-            // print state preparation
-            Coherent* g = static_cast<Coherent*>(i);
-            std::cout << "Coherent(" << g->a << ", " << g->p << ") | ";
-            for (auto j : g->modes) {
-                    std::cout << j << ',' << ' ';
-            }
-            std::cout << std::endl;
-        }
-        else if (i->gate == Gate::Interferometer) {
-            // print interferometer
-            Interferometer* g = static_cast<Interferometer*>(i);
-            std::cout << "Interferometer(" << std::endl;
-            for (auto j : g->U) {
-                for (auto k : j) {
-                        std::cout << k << ',' << ' ';
-                }
-                std::cout << std::endl;
-            }
-            std::cout << ") | ";
-            for (auto j : g->modes) {
-                    std::cout << j << ',' << ' ';
-            }
-            std::cout << std::endl;
-        }
-        else if (i->gate == Gate::MeasureIntensity) {
-            // print measurements
-            MeasureIntensity* g = static_cast<MeasureIntensity*>(i);
-            std::cout << "MeasureIntensity() | ";
-            for (auto j : g->modes) {
-                    std::cout << j << ',' << ' ';
-            }
-            std::cout << std::endl;
-        }
-    }
+    program->print_operations();
 
     return 0;
 }

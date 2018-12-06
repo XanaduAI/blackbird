@@ -70,20 +70,22 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
 
 .. toctree::
    :maxdepth: 1
-   :caption: Python Parser
+   :caption: Python package
    :hidden:
 
    blackbird_python/init
+   blackbird_python/installing
    blackbird_python/listener
    blackbird_python/auxiliary
    blackbird_python/error
 
 .. toctree::
    :maxdepth: 1
-   :caption: C++ Parser
+   :caption: C++ library
    :hidden:
 
    blackbird_cpp/overview
+   blackbird_cpp/installing
 
 
 Indices and tables

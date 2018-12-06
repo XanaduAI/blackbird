@@ -3,52 +3,10 @@
 Installation
 ============
 
+.. note::
 
-Installing the Python Parser
-----------------------------
-
-The Python Blackbird listener requires NumPy and the Python antlr4 runtime, which can be
-installed via pip:
-
-.. code-block:: console
-
-    $ pip install numpy antlr4-python3-runtime>=4.7.1
-
-Once this is installed, the Blackbird listener can be installed via
-
-.. code-block:: console
-
-    $ pip install -e .
-
-
-
-Compiling the C++ Parser
-------------------------
-
-To compile the Blackbird visitor, you will need to have a C++ compiler that supports
-C++11 (i.e. ``g++`` version 5 and above), and cmake version 2.8 or above,
-as well as the UUID library (``sudo apt install uuid-dev`` on Ubuntu).
-
-In addition, you will need to install the ANTLR C++ Runtime:
-
-.. code-block:: console
-
-    $ git clone https://github.com/antlr/antlr4.git
-    $ cd antlr4/runtime/Cpp
-    $ cmake -DCMAKE_INSTALL_PREFIX:PATH=$HOME/.local ..
-    $ make
-    $ make install
-
-Once this is done, you can compile the Blackbird C++ visitor by simply running
-``make blackbird-cpp`` from the Blackbird root directory.
-
-**Note:** as the C++ visitor is intended to directly target our photonics hardware,
-at the moment it only support the device ``Chip0``, with optional integer kwarg ``shots``,
-as well as the operations:
-
-* ``Coherent`` (accepts two float parameters)
-* ``Interferometer`` (accepts one complex array parameter)
-* ``MeasureIntensity`` (accepts no parameters)
+    See the individual installation details for :ref:`installing the Python <python_installation>`
+    and :ref:`compiling and installing the C++ library <cpp_installation>`.
 
 
 Compiling the grammar

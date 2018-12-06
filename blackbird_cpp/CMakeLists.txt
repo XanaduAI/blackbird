@@ -12,7 +12,6 @@ macro(use_cxx11)
 endmacro(use_cxx11)
 
 use_cxx11()
-set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
@@ -25,7 +24,6 @@ add_library(${PROJECT_NAME} SHARED
 	blackbirdBaseVisitor.cpp
 	blackbirdLexer.cpp
 	blackbirdParser.cpp)
-
 
 find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
 

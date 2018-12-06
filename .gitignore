@@ -5,6 +5,7 @@
 doc/_build
 _test
 build
+build_examples
 bin
 dist
 *.ipynb

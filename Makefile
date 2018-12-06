@@ -23,12 +23,10 @@ help:
 	@echo "  test-grammar       to run the grammar test suite"
 	@echo "  coverage           to generate a coverage report"
 
-.PHONY: install
-install:
-ifndef PYTHON3
-	@echo "To install Blackbird you need to have Python 3 installed"
-endif
-	$(PYTHON) setup.py install
+install: build/libblackbird.so
+	cd build && make install
+
+build/libblackbird.so: blackbird-cpp
 
 .PHONY: wheel
 wheel:
@@ -65,9 +63,9 @@ grammar-cpp: src/$(GRAMMAR)
 blackbird-cpp:
 	mkdir -p build
 ifeq ($(PREFIX),)
-	cd build && cmake ../blackbird_cpp && make -j4 && make install
+	cd build && cmake ../blackbird_cpp && make -j4
 else
-	cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=$(PREFIX) ../blackbird_cpp && make -j4 && make install
+	cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=$(PREFIX) ../blackbird_cpp && make -j4
 endif
 
 cpp-examples:

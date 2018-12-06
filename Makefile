@@ -1,3 +1,5 @@
+PREFIX := $(shell echo $(PREFIX))
+
 ANTLR4 := java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$(CLASSPATH)" org.antlr.v4.Tool
 GRUN := java org.antlr.v4.gui.TestRig
 
@@ -42,6 +44,7 @@ clean:
 	rm -rf blackbird_python/blackbird/tests/__pycache__
 	rm -rf dist
 	rm -rf build
+	rm -rf build_examples
 	rm -rf .coverage coverage_html_report/
 
 docs:
@@ -61,7 +64,15 @@ grammar-cpp: src/$(GRAMMAR)
 
 blackbird-cpp:
 	mkdir -p build
-	cd build && cmake ../blackbird_cpp && make -j4
+ifeq ($(PREFIX),)
+	cd build && cmake ../blackbird_cpp && make -j4 && make install
+else
+	cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=$(PREFIX) ../blackbird_cpp && make -j4 && make install
+endif
+
+cpp-examples:
+	mkdir -p build_examples
+	cd build_examples && cmake ../blackbird_cpp_examples && make -j4
 
 test-grammar: src/$(GRAMMAR)
 	mkdir -p _test

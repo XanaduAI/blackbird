@@ -3,32 +3,58 @@
 Syntax and grammar
 ==================
 
+.. note:: The below is still a work-in-progress
+
+.. note::
+
+    The Blackbird used *directly* inside a Strawberry Fields Engine context
+    is a **superset** of the Blackbird quantum assembly language described here,
+    as it is embedded in a Python environment.
+
+    You can think of it as 'Python-enhanced Blackbird'. The reason for this is twofold:
+
+    1. We are already in a Python environment, we might as well allow the user
+       to use Python functions and constructs, even if they are not 'officially'
+       part of the Blackbird spec.
+
+    .. 
+
+    2. It would be near impossible to restrict the code inside the
+       Strawberry Fields Engine context anyway. We could force the user to provide
+       a string containing the Blackbird code, but this is ugly and not elegent.
+
+    Currently, I like the SF Blackbird approach. It is close enough to
+    Blackbird to look qualitatively the same in most cases.
+
+
 Introduction
 ------------
 
 In this section, we define the structure, syntax, and grammar of Blackbird code.
 
+Philosophy
+~~~~~~~~~~
+
 Blackbird was designed from the ground up adhering to the following philosophies:
 
-1. It should encapsulate the universal ability of continuous-variable (CV) quantum computation.
+**It should encapsulate the universal ability of continuous-variable (CV) quantum computation.**
 
-.. 
+**It should be clear, concise, and simple to read and follow.** This simplicity should allow for both
 
-2. It should be clear, concise, and simple to read and follow. This simplicity should allow for both
+* **Human readability** - operations and expressions should correspond to
+  existing conventions, and allude to common notation in quantum computing.
 
-   * Human readability - operations and expressions should correspond to
-     existing conventions, and allude to common notation in quantum computing.
+* **Hardware execution** - code should be un-ambiguous, with one quantum operation per line.
 
-   * Hardware execution - code should be un-ambiguous, with one quantum operation per line.
 
-.. 
+**It should be easy to learn, using constructs and operators familiar in scientific computation**
 
-3. It should be easy to learn, using constructs and operators familiar in scientific computation
 
-.. 
+**A Blackbird script should contain only one quantum algorithm or simulation,
+making it an ideal format for saving and loading CV quantum algorithms.**
 
-4. A Blackbird script should contain only **one** quantum algorithm or simulation,
-   making it an ideal format for saving and loading CV quantum algorithms.
+Similarity to Python
+~~~~~~~~~~~~~~~~~~~~
 
 To satisfy points 2 and 3, Blackbird deliberately is Python-like, inheriting
 the following:
@@ -63,6 +89,9 @@ the following:
 .. 
 
 * The resulting output is implicitly determined by the presence of measurement statements.
+
+Differences to Python
+~~~~~~~~~~~~~~~~~~~~~
 
 Contrary to Python, however, we also introduce the following restrictions,
 to enable Blackbird to function as a quantum assembly language across

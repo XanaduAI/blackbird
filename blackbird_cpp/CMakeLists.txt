@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 2.8.9)
-project(blackbird_cpp)
+cmake_minimum_required(VERSION 3.0.1)
+project(blackbird VERSION 0.1.0 DESCRIPTION "Blackbird C++ parser shared library")
+
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -15,38 +16,33 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
-
-#Bring the headers
 include_directories(~/.local/include)
 include_directories(~/.local/include/antlr4-runtime)
 
 
-#GDB debug flag
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
-
-#Can manually add the sources using the set command as follows:
-set(SOURCES main.cpp Visitor.cpp blackbirdBaseVisitor.cpp blackbirdLexer.cpp blackbirdParser.cpp)
-##set(SOURCES main_antlr.cpp)
-
-#However, the file(GLOB...) allows for wildcard additions:
-#file(GLOB SOURCES "AsyncSerial/MeComAPI/*.cpp")
-
-add_executable(blackbird ${SOURCES})
+add_library(${PROJECT_NAME} SHARED
+	Visitor.cpp
+	blackbirdBaseVisitor.cpp
+	blackbirdLexer.cpp
+	blackbirdParser.cpp)
 
 
 find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
-#add_subdirectory(Chat_Client)
 
-## Boost Link libraries
-# set(Boost_USE_STATIC_LIBS OFF)
-# set(Boost_USE_MULTITHREADED ON)
-# set(Boost_USE_STATIC_RUNTIME OFF)
-# find_package(Boost 1.54.0 COMPONENTS variant)
-# target_link_libraries(antlr_cpp boost)
+target_link_libraries(${PROJECT_NAME} -O ${ANTLR4_RUNTIME})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 
-##set(BOOST_LIBS thread date_time system)
-##find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER
+	"Blackbird.h;blackbirdLexer.h;blackbirdVisitor.h;blackbirdParser.h;blackbirdBaseVisitor.h;BlackbirdProgram.h;BlackbirdVariables.h")
+target_include_directories(${PROJECT_NAME} PRIVATE .)
+set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 0)
 
-##target_link_libraries(chipcontrol ${Boost_LIBRARIES})
-#find_package(Threads REQUIRED)
-target_link_libraries(blackbird -O ${ANTLR4_RUNTIME})
+include(GNUInstallDirs)
+
+install(TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)

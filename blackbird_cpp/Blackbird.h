@@ -8,9 +8,11 @@
 #include <unordered_map>
 
 #include "antlr4-runtime/antlr4-runtime.h"
+#include "blackbirdLexer.h"
+#include "blackbirdParser.h"
 #include "blackbirdBaseVisitor.h"
 
-#include "Program.h"
+#include "BlackbirdProgram.h"
 
 
 template <class DstType, class SrcType>
@@ -51,3 +53,16 @@ public:
 
     antlrcpp::Any visitStart(blackbirdParser::StartContext *ctx);
 };
+
+Program* parse_blackbird(std::ifstream &stream) {
+    antlr4::ANTLRInputStream input(stream);
+    blackbirdLexer lexer(&input);
+    antlr4::CommonTokenStream tokens(&lexer);
+    blackbirdParser parser(&tokens);
+
+    blackbirdParser::StartContext* tree = parser.start();
+    Visitor visitor;
+    Program* program = visitor.visitStart(tree);
+
+    return program;
+}

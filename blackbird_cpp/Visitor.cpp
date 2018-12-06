@@ -1,7 +1,7 @@
 #include <regex>
 
-#include "Visitor.h"
-#include "Variables.h"
+#include "Blackbird.h"
+#include "BlackbirdVariables.h"
 
 // ===========================
 // Number auxillary functions

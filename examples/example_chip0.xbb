@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-float alpha = 0.3423
+float alpha = 6.543
 
 complex array U4[4, 4] =
     -0.374559877614+0.1109693347j,   0.105835208525+0.395338593151j, -0.192128677443-0.326320923534j,  0.663459991938-0.310353146438j

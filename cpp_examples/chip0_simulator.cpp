@@ -1,5 +1,8 @@
 #include <iostream>
 #include <complex>
+#include <random>
+#include <iomanip>
+
 #include "Blackbird.h"
 
 typedef std::vector<double> floatvec;
@@ -66,12 +69,17 @@ floatmat matmult(floatmat &A, floatmat &B) {
 }
 
 
-floatvec coherent_sampling(blackbird::Program* program, double hbar=2.0) {
+floatmat coherent_sampling(blackbird::Program* program, double hbar=2.0) {
+    blackbird::Chip0* p = static_cast<blackbird::Chip0*>(program);
     // Perform the coherent sampling quantum algorithm
     const int modes = 4;
+    const int shots = p->shots;
+
     floatvec means(2*modes, 0.0);
-    floatmat cov(2*modes, std::vector<double>(2*modes, 0.0));
-    floatvec result(modes, 0.0);
+    floatmat cov(2*modes, floatvec(2*modes, 0.0));
+
+    floatvec mean_photon(modes, 0.0);
+    floatmat result(shots, floatvec(modes, 0.0));
 
     // initialise the vacuum state
     for (int i=0; i < 2*modes; i++) {
@@ -79,7 +87,7 @@ floatvec coherent_sampling(blackbird::Program* program, double hbar=2.0) {
     }
 
     // go through the queue
-    for (auto i : program->operations) {
+    for (auto i : p->operations) {
         if (i->name == "Coherent") {
             std::complex<double> alpha = std::polar(i->f1, i->f2);
             int n = i->modes[0];
@@ -112,9 +120,22 @@ floatvec coherent_sampling(blackbird::Program* program, double hbar=2.0) {
             // get reduced state
             floatmat V = {{cov[n][n], cov[n][n+modes]}, {cov[n+modes][n], cov[n+modes][n+modes]}};
             floatvec mu = {means[n], means[n+modes]};
-            result[n] = (trace(V) + dot(mu, mu))/(2.0*hbar) - 0.5;
+            mean_photon[n] = (trace(V) + dot(mu, mu))/(2.0*hbar) - 0.5;
         }
     }
+
+    // sample from normal distribution
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    for (int i=0; i < modes; i++) {
+        std::normal_distribution<float> d(mean_photon[i], 1.0/mean_photon[i]);
+        for (int j=0; j < shots; j++) {
+            float sample = d(gen);
+            result[j][i] = (sample >= 0.0) ? sample : 0.0;
+        }
+    }
+
     std::cout << std::endl;
     return result;
 }
@@ -134,7 +155,7 @@ int main(int argc, const char* argv[])
     std::cout << std::endl;
 
     // print operations
-    std::cout << " Quantum program  " << std::endl;
+    std::cout << "Quantum program  " << std::endl;
     std::cout << "==================" << std::endl;
     program->print_operations();
     std::cout << std::endl;
@@ -143,7 +164,7 @@ int main(int argc, const char* argv[])
     std::cout << "Running simulation" << std::endl;
     std::cout << "==================" << std::endl;
 
-    floatvec result;
+    floatmat result;
 
     // check if the device is Chip0
     if (program->name == blackbird::Device::Chip0) {
@@ -153,10 +174,18 @@ int main(int argc, const char* argv[])
         throw std::invalid_argument("This example simulator only works with device Chip0!");
     }
 
-    std::cout << "  Results         " << std::endl;
+    std::cout << "Results         " << std::endl;
     std::cout << "==================" << std::endl;
-    for (auto i : result) {
-        std::cout << i << std::endl;
+
+    std::cout << std::fixed;
+    std::cout << std::setprecision(5);
+
+    for (floatmat::iterator it = result.begin(); it != result.end(); ++it) {
+        std::cout << "Shot " << it-result.begin() << ": ";
+        for (auto j : *it) {
+            std::cout << j << ", ";
+        }
+        std::cout << std::endl;
     }
 
     return 0;

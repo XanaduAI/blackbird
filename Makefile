@@ -70,7 +70,7 @@ endif
 
 cpp-examples:
 	mkdir -p build_examples
-	cd build_examples && cmake ../blackbird_cpp_examples && make -j4
+	cd build_examples && cmake ../cpp_examples && make -j4
 
 test-grammar: src/$(GRAMMAR)
 	mkdir -p _test

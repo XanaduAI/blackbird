@@ -26,7 +26,7 @@ namespace blackbird {
         // decompositions
         Interferometer, GaussianTransform, Gaussian,
         // measurements
-        MeasureFock, MeasureHomodyne, MeasureHeterodyne};
+        MeasureFock, MeasureHomodyne, MeasureHeterodyne, MeasureIntensity};
 
     enum class ParDomain {None, Int, Float, Complex, String, Bool, ArrayFloat, ArrayComplex};
 
@@ -1015,6 +1015,24 @@ namespace blackbird {
             };
     };
 
+    class MeasureIntensity : public Operation {
+        // Mean photon number measurement
+        public:
+            MeasureIntensity(intvec m) {
+                gate = Gate::MeasureIntensity;
+                name = "MeasureIntensity";
+                num_params = 0;
+                num_modes = 1;
+                domain = ParDomain::None;
+
+                // put input validation here
+                int mode_size = static_cast<int>(m.size());
+                check_num_modes(mode_size);
+                modes = m;
+            };
+    };
+
+
     //================================
     // Device definitions
     //================================
@@ -1066,11 +1084,13 @@ namespace blackbird {
 
     class Chip0 : public Program {
         public:
-            Device name = Device::Chip0;
             int shots = 1;
 
-            Chip0(Program dev) {};
+            Chip0(Program dev) {
+                name = Device::Chip0;
+            };
             Chip0(int s=1) {
+                name = Device::Chip0;
                 shots = s;
             };
 
@@ -1083,14 +1103,18 @@ namespace blackbird {
 
     class GaussianSimulator : public Program {
         public:
-            Device name = Device::Gaussian;
             int ns;
             int shots = 1;
             double hb = 2.0;
 
-            GaussianSimulator() {};
-            GaussianSimulator(Program dev) {};
+            GaussianSimulator() {
+                name = Device::Gaussian;
+            };
+            GaussianSimulator(Program dev) {
+                name = Device::Gaussian;
+            };
             GaussianSimulator(int num_subsystems, int s=0, double hbar=2) {
+                name = Device::Gaussian;
                 ns = num_subsystems;
                 shots = s;
                 hb = hbar;
@@ -1107,15 +1131,19 @@ namespace blackbird {
 
     class FockSimulator : public Program {
         public:
-            Device name = Device::Fock;
             int ns;
             int cutoff;
             int shots = 1;
             double hb = 2.0;
 
-            FockSimulator() {};
-            FockSimulator(Program dev) {};
+            FockSimulator() {
+                name = Device::Fock;
+            };
+            FockSimulator(Program dev) {
+                name = Device::Fock;
+            };
             FockSimulator(int num_subsystems, int cutoff_dim, int s=0, double hbar=2) {
+                name = Device::Fock;
                 cutoff = cutoff_dim;
                 ns = num_subsystems;
                 shots = s;

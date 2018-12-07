@@ -27,3 +27,8 @@ find_library(BLACKBIRD blackbird HINTS ~/.local/lib)
 set(SOURCES print_blackbird.cpp)
 add_executable(print_blackbird ${SOURCES})
 target_link_libraries(print_blackbird -O ${ANTLR4_RUNTIME} ${BLACKBIRD})
+
+# Create chip0_simulator example
+set(SOURCES chip0_simulator.cpp)
+add_executable(chip0_simulator ${SOURCES})
+target_link_libraries(chip0_simulator -O ${ANTLR4_RUNTIME} ${BLACKBIRD})

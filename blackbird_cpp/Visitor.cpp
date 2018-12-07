@@ -601,6 +601,10 @@ namespace blackbird {
                 MeasureFock* op = new MeasureFock(modes);
                 program->operations.push_back(op);
             }
+            else if (var_name == "MeasureIntensity") {
+                MeasureIntensity* op = new MeasureIntensity(modes);
+                program->operations.push_back(op);
+            }
             else if (var_name == "MeasureHeterodyne") {
                 MeasureHeterodyne* op = new MeasureHeterodyne(modes);
                 program->operations.push_back(op);

@@ -8,6 +8,7 @@ Installation
     See the individual installation details for :ref:`installing the Python <python_installation>`
     and :ref:`compiling and installing the C++ library <cpp_installation>`.
 
+.. _compiling_grammar:
 
 Compiling the grammar
 ---------------------

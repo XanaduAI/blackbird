@@ -13,11 +13,12 @@ This repository contains:
 
 * ``blackbird_cpp``: C++ library ``libblackbird.so``, containing listener, visitor, and parser for Blackbird files. For details on how to install and use the C++ library, see the `C++ installation <doc/blackbird_cpp/installing.rst>`_ section of the documentation.
 
-* ``blackbird_cpp_examples``: Some basic C++ examples, showing how to use the Blackbird library to parse Blackbird programs.
-
 * ``doc``: documentation (can be built using Sphinx).
 
 * ``examples``: some example Blackbird programs (with file extension ``.xbb``).
+
+* ``cpp_examples``: some example C++ applications, including a basic Gaussian simulator,
+  that read and then manipulate Blackbird programs.
 
 In addition, it currently also contains the file ``strawberry_fields_listener.py``, which sub-classes ``blackbird_python.BlackbirdListener``, and extends it to also *run* the Blackbird program using the Strawberry Fields listeners, as a proof of concept.
 

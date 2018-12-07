@@ -1,7 +1,7 @@
 Strawberry Fields Listener
 ==========================
 
-To test the Strawberry Fields Listener, it can be applied to the provided example file ``example_gbs.xbb``,
+To test the Strawberry Fields Listener, create the Blackbird program ``example_gbs.xbb``,
 
 .. code-block:: python
 
@@ -25,7 +25,7 @@ by running the following line in your terminal:
 
 .. code-block:: console
 
-    python3 strawberry_fields_listener.py examples/example_gbs.xbb
+    python3 strawberry_fields_listener.py example_gbs.xbb
 
 producing the following output:
 

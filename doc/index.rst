@@ -25,6 +25,9 @@ This project contains the following folders:
 
 * ``examples``: some example Blackbird programs (with file extension .xbb)
 
+* ``cpp_examples``: some example C++ applications, including a basic Gaussian simulator,
+  that read and then manipulate Blackbird programs
+
 
 Getting started
 ---------------
@@ -93,6 +96,7 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
    :hidden:
 
    apps/sf
+   apps/chip0_simulator
 
 
 Indices and tables

@@ -55,16 +55,6 @@ namespace blackbird {
         antlrcpp::Any visitStart(blackbirdParser::StartContext *ctx);
     };
 
-    Program* parse_blackbird(std::ifstream &stream) {
-        antlr4::ANTLRInputStream input(stream);
-        blackbirdLexer lexer(&input);
-        antlr4::CommonTokenStream tokens(&lexer);
-        blackbirdParser parser(&tokens);
-
-        blackbirdParser::StartContext* tree = parser.start();
-        Visitor visitor;
-        Program* program = visitor.visitStart(tree);
-
-        return program;
-    }
+    Program* parse(std::ifstream &stream);
+    Program* parse(std::string &s_input);
 }

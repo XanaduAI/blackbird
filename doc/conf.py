@@ -39,9 +39,32 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.viewcode',
     'sphinxcontrib.bibtex',
-    'edit_on_github'
-    # 'nbsphinx'
+    'edit_on_github',
+    'breathe',
+    'exhale'
 ]
+
+# Setup the breathe extension
+breathe_projects = {
+    "Blackbird C++": "./doxyoutput/xml"
+}
+breathe_default_project = "Blackbird C++"
+
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder":     "./blackbird_cpp_api",
+    "rootFileName":          "library_root.rst",
+    "rootFileTitle":         "C++ Library API",
+    "doxygenStripFromPath":  "..",
+    # Suggested optional arguments
+    "createTreeView":        True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin":    "INPUT = ../blackbird_cpp"
+}
+
 
 # nbsphinx settings
 

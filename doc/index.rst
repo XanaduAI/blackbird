@@ -89,6 +89,7 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
 
    blackbird_cpp/overview
    blackbird_cpp/installing
+   blackbird_cpp_api/library_root
 
 .. toctree::
    :maxdepth: 1

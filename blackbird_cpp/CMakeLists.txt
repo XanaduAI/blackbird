@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0.1)
-project(blackbird VERSION 0.1.0 DESCRIPTION "Blackbird C++ parser shared library")
+# project(blackbird VERSION 0.1.0 DESCRIPTION "Blackbird C++ parser shared library")
+project(blackbird)
 
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")
@@ -28,12 +29,12 @@ add_library(${PROJECT_NAME} SHARED
 find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
 
 target_link_libraries(${PROJECT_NAME} -O ${ANTLR4_RUNTIME})
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+# set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER
 	"Blackbird.h;blackbirdLexer.h;blackbirdVisitor.h;blackbirdParser.h;blackbirdBaseVisitor.h;BlackbirdProgram.h;BlackbirdVariables.h")
 target_include_directories(${PROJECT_NAME} PRIVATE .)
-set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 0)
+# set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 0)
 
 include(GNUInstallDirs)
 

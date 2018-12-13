@@ -4,7 +4,36 @@
 #include "BlackbirdVariables.h"
 
 namespace blackbird {
+    // ===========================
+    // Parser utility functions
+    // ===========================
 
+    Program* parse(std::string &s_input) {
+        antlr4::ANTLRInputStream input(s_input);
+        blackbirdLexer lexer(&input);
+        antlr4::CommonTokenStream tokens(&lexer);
+        blackbirdParser parser(&tokens);
+
+        blackbirdParser::StartContext* tree = parser.start();
+        Visitor visitor;
+        Program* program = visitor.visitStart(tree);
+
+        return program;
+    }
+
+
+    Program* parse(std::ifstream &stream) {
+        antlr4::ANTLRInputStream input(stream);
+        blackbirdLexer lexer(&input);
+        antlr4::CommonTokenStream tokens(&lexer);
+        blackbirdParser parser(&tokens);
+
+        blackbirdParser::StartContext* tree = parser.start();
+        Visitor visitor;
+        Program* program = visitor.visitStart(tree);
+
+        return program;
+    }
     // ===========================
     // Number auxillary functions
     // ===========================
@@ -671,11 +700,11 @@ namespace blackbird {
                 }
                 else if (var_name == "hbar") {
                     var_type = "float";
-                    prog.ns = _expression(this, i->val()->expression(), prog.hb);
+                    prog.hb = _expression(this, i->val()->expression(), prog.hb);
                 }
                 else if (var_name == "num_subsystems") {
                     var_type = "int";
-                    prog.hb = _expression(this, i->val()->expression(), prog.ns);
+                    prog.ns = _expression(this, i->val()->expression(), prog.ns);
                 }
                 else {
                     throw std::invalid_argument("Unknown keyword argument "+var_name);

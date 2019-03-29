@@ -62,7 +62,8 @@ exhale_args = {
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../blackbird_cpp"
+    "exhaleDoxygenStdin":    "INPUT = ../blackbird_cpp/Blackbird.h ../blackbird_cpp/BlackbirdProgram.h ../blackbird_cpp/BlackbirdVariables.h ../blackbird_cpp/Visitor.cpp",
+    # "exhaleUseDoxyfile": True
 }
 
 
@@ -88,7 +89,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Blackbird'
-copyright = """&copy; Copyright 2018, Xanadu Quantum Technologies Inc."""
+copyright = """&copy; Copyright 2019, Xanadu Quantum Technologies Inc."""
 author = 'Xanadu Inc.'
 
 add_module_names = False

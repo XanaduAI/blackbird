@@ -47,6 +47,8 @@ clean:
 
 docs:
 	make -C doc html
+	rm -rf doc/doxyoutput
+	rm -rf doc/blackbird_cpp_api
 
 .PHONY : clean-docs
 clean-docs:

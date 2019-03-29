@@ -26,7 +26,7 @@ This project contains the following folders:
 * ``examples``: some example Blackbird programs (with file extension .xbb)
 
 * ``cpp_examples``: some example C++ applications, including a basic Gaussian simulator,
-  that read and then manipulate Blackbird programs
+  that reads and then manipulate Blackbird programs
 
 
 Getting started
@@ -89,7 +89,7 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
 
    blackbird_cpp/overview
    blackbird_cpp/installing
-   blackbird_cpp_api/library_root
+   blackbird_cpp_api/namespace_blackbird
 
 .. toctree::
    :maxdepth: 1

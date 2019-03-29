@@ -1,3 +1,16 @@
+// Copyright 2019 Xanadu Quantum Technologies Inc.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 #include <regex>
 
 #include "Blackbird.h"
@@ -8,6 +21,16 @@ namespace blackbird {
     // Parser utility functions
     // ===========================
 
+    /**
+     * Parse Blackbird code contained within a C++ `std::string`
+     *
+     * To apply the parser directly to a file stream (`std::ifstream`),
+     * use `parse(std::ifstream &stream)`.
+     *
+     * @param s_input string input
+     * @return an instance of the Blackbird program containing details
+     * about the device, gates, and parameters.
+     */
     Program* parse(std::string &s_input) {
         antlr4::ANTLRInputStream input(s_input);
         blackbirdLexer lexer(&input);
@@ -22,6 +45,16 @@ namespace blackbird {
     }
 
 
+    /**
+     * Parse Blackbird code contained within a C++ `std::ifstream` file stream
+     *
+     * To apply the parser directly to a string container (`std::string`),
+     * use `parse(std::string &s_input)`.
+     *
+     * @param stream file stream
+     * @return an instance of the Blackbird program containing details
+     * about the device, gates, and parameters.
+     */
     Program* parse(std::ifstream &stream) {
         antlr4::ANTLRInputStream input(stream);
         blackbirdLexer lexer(&input);
@@ -38,9 +71,13 @@ namespace blackbird {
     // Number auxillary functions
     // ===========================
 
+    /**
+     * Split a string of the form "0, 6, 2, 1" into a list of integers
+     *
+     * @param string_list string containing comma-separated integers
+     * @return returns a vector containing the integers
+     */
     std::vector<int> split_string_to_ints(std::string string_list) {
-        // Split a string of the form "0, 6, 2, 1"
-        // into a list of integers
         std::stringstream orig_string(string_list);
         std::vector<int> vec;
 
@@ -55,9 +92,13 @@ namespace blackbird {
     }
 
 
+    /**
+     * Convert a string containing a Blackbird-style complex number to a C++ complex double.
+     *
+     * @param num_string Blackbird style complex number string
+     * @return C++ complex container
+     */
     std::complex<double> _complex(std::string num_string) {
-        // Convert a string containing a Blackbird-style complex
-        // number to a C++ complex double.
         std::regex num_regex("((\\+|-)?[0-9\\.]+)(e((\\+|-)?\\d))?((\\+|-)[0-9\\.]+)(e((\\+|-)?\\d))?j");
         std::smatch match;
 
@@ -83,9 +124,13 @@ namespace blackbird {
     }
 
 
+    /**
+     * Convert a string containing a Blackbird-style real number to a C++ double.
+     *
+     * @param num_string Blackbird style real number string
+     * @return double literal
+     */
     double _float(std::string num_string) {
-        // Convert a string containing a Blackbird-style real
-        // number to a C++ complex double.
         std::regex num_regex("((\\+|-)?[0-9\\.]+)(e((\\+|-)?\\d))?");
         std::smatch match;
 
@@ -107,6 +152,15 @@ namespace blackbird {
     // ==========================================
 
 
+    /**
+     * Apply a blackbird function to an C++ argument.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `FunctionLabelContext`
+     * @param value a dummy template argument that corresponds to the expected
+     *     type of the function value, as determined by the Blackbird type declarations.
+     * @return the function value
+     */
     template <typename T>
     T _func(Visitor *V, blackbirdParser::FunctionLabelContext *ctx, T value) {
         blackbirdParser::FunctionContext *func = ctx->function();
@@ -129,6 +183,19 @@ namespace blackbird {
         }
     }
 
+
+    /**
+     * Evaluate a blackbird expression.
+     *
+     * This is a recursive function, that continually calls itself
+     * until the full expression has been evaluated.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ExpressionContext`
+     * @param value a dummy template argument that corresponds to the expected
+     *     type of the expression value, as determined by the Blackbird type declarations.
+     * @return the expression value
+     */
     template <typename T>
     T _expression(Visitor* V, blackbirdParser::ExpressionContext* ctx, T value) {
 
@@ -194,18 +261,47 @@ namespace blackbird {
         }
     }
 
+    /**
+     * Once an expression variable context is entered, this begins
+     * the recursive process of calling `_expression` to evaluate the
+     * expression, followed by storing the variable value in `variable_map`.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ExpressionvarContext`
+     * @param val a dummy template argument that corresponds to the expected
+     *     type of the variable, as determined by the Blackbird type declarations.
+     */
     template <typename T>
     void _set_expression_variable(Visitor* V, blackbirdParser::ExpressionvarContext *ctx, T val) {
         T result =  _expression(V, ctx->expression(), val);
         variable_map<T>::setVal(V, ctx->name()->getText(), result);
     }
 
+    /**
+     * Once an expression variable context is entered, this begins
+     * the process of storing a non-numeric variable value, such as a
+     * Blackbird `string` or `bool`.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ExpressionvarContext`
+     * @param val a dummy template argument that corresponds to the expected
+     *     type of the variable, as determined by the Blackbird type declarations.
+     */
     template <typename T>
     void _set_non_numeric_variable(Visitor* V, blackbirdParser::ExpressionvarContext *ctx, T val) {
         std::string result = ctx->nonnumeric()->getText();
         variable_map<T>::setVal(V, ctx->name()->getText(), result);
     }
 
+    /**
+     * Defines what the visitor does when an `ExpressionvarContext` is visited.
+     *
+     * Here, it gets the variable name and the variable type, and starts the process
+     * of extracting the variable based on the declared type.
+     *
+     * @param ctx `ExpressionvarContext`
+     * @return returns 0 to indicate successful visitation
+     */
     antlrcpp::Any Visitor::visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx) {
         // get var name
         var_name = ctx->name()->getText();
@@ -240,6 +336,16 @@ namespace blackbird {
     }
 
 
+    /**
+     * Defines what the visitor does when a `NumberContext` is visited.
+     *
+     * Here, it gets the string representing the number, and calls various
+     * helper functions to convert Blackbird complex, float, and int to the
+     * C++ equivalent.
+     *
+     * @param ctx `NumberContext`
+     * @return returns the number literal
+     */
     antlrcpp::Any Visitor::visitNumber(blackbirdParser::NumberContext *ctx) {
         // Visit a number, and convert it into the correct type
         std::string num_string = ctx->getText();
@@ -270,6 +376,15 @@ namespace blackbird {
     // Array auxillary functions
     // =========================
 
+    /**
+     * Helper function for iterating through a Blackbird array,
+     * and storing the result in a C++ vector container.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ArrayvarContext`
+     * @param array empty vector to store the Blackbird array in
+     * @return returns 0 to indicate successful visitation
+     */
     template <typename T>
     T _array(Visitor *V, blackbirdParser::ArrayvarContext *ctx, T array) {
         std::vector<blackbirdParser::ArrayrowContext*> arrayrow = ctx->arrayval()->arrayrow();
@@ -284,7 +399,15 @@ namespace blackbird {
     // Extract arrays
     // =========================
 
-    // Extract array values
+    /**
+     * Defines what the visitor does when a `ArrayvarContext` is visited.
+     *
+     * Here, it gets the name and type of the array variable, initializes
+     * a vector corresponding to the declared type, and stores it either in
+     * the `complexmat_vars`, `floatmat_vars`, or `intmat_vars` dictionary.
+     *
+     * @param ctx `NumberContext`
+     */
     antlrcpp::Any Visitor::visitArrayvar(blackbirdParser::ArrayvarContext *ctx) {
         // get array name
         var_name = ctx->name()->getText();
@@ -327,6 +450,15 @@ namespace blackbird {
     }
 
 
+    /**
+     * Defines what the visitor does when a `ArrayrowContext` is visited.
+     *
+     * Here, it extracts the column element values, and populates the row
+     * by manually visiting each child element.
+     *
+     * @param ctx `ArrayrowContext`
+     * @return the array row vector
+     */
     antlrcpp::Any Visitor::visitArrayrow(blackbirdParser::ArrayrowContext *ctx) {
         std::vector<blackbirdParser::ExpressionContext*> col = ctx->expression();
 
@@ -358,6 +490,16 @@ namespace blackbird {
     // =======================
 
 
+    /**
+     * Parse Blackbird function arguments with multiple expressions.
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ArgumentsContext`
+     * @param array vector to populate with each argument value
+     * @param type a dummy template argument that corresponds to the expected
+     *     type of the arguments, as determined by the Blackbird type declarations.
+     * @return the vector of argument values
+     */
     template <typename T, typename S>
     T _get_mult_expr_args(Visitor *V, blackbirdParser::ArgumentsContext *ctx, T array, S type) {
         std::vector<blackbirdParser::ValContext*> vals = ctx->val();
@@ -370,11 +512,26 @@ namespace blackbird {
         return array;
     }
 
+    /**
+     * Parse Blackbird function arguments to determine the number of arguments
+     *
+     * @param V the Blackbird visitor
+     * @param ctx `ArgumentsContext`
+     * @return the number of arguments present
+     */
     int _get_num_args(Visitor *V, blackbirdParser::ArgumentsContext *ctx) {
         std::vector<blackbirdParser::ValContext*> vals = ctx->val();
         return vals.size();
     }
 
+    /**
+     * Factory function to create Blackbird operations corresponding
+     * to those provided in the Blackbird script.
+     *
+     * @param ctx `ArgumentsContext`
+     * @param modes `std::vector<int>` containing the modes the operation is applied to
+     * @return the operation
+     */
     template <class O>
     O* Visitor::_create_operation(blackbirdParser::ArgumentsContext *ctx, intvec modes) {
         if (var_type == "float") {
@@ -400,6 +557,30 @@ namespace blackbird {
         }
     }
 
+    /**
+     * Defines what to do as each quantum operation in the device context is visited.
+     *
+     * In general, this includes:
+     *
+     *   * Getting the number of modes the operation is applied to using `split_string_to_ints`
+     *
+     *   * If the statement is an operation:
+     *
+     *     - Get the number of arguments/types of the arguments
+     *
+     *     - Evaluate the arguments
+     *
+     *     - Use `_create_operation` template to create the new operation object, acting
+     *
+     *       on the specified number of modes, with the specified arguments
+     *
+     *     - Add this operation to the `program->operations` vector.
+     *
+     *   * Repeat the previous steps for any measurements.
+     *
+     * @param ctx `StatementContext`
+     * @return 0 to specify correct visitation.
+     */
     antlrcpp::Any Visitor::visitStatement(blackbirdParser::StatementContext *ctx) {
         intvec modes = split_string_to_ints(ctx->modes()->getText());
 
@@ -660,6 +841,30 @@ namespace blackbird {
     }
 
 
+    /**
+     * Defines what to do as each quantum operation in the device context is visited.
+     *
+     * In general, this includes:
+     *
+     *   * Getting the number of modes the operation is applied to using `split_string_to_ints`
+     *
+     *   * If the statement is an operation:
+     *
+     *     - Get the number of arguments/types of the arguments
+     *
+     *     - Evaluate the arguments
+     *
+     *     - Use `_create_operation` template to create the new operation object, acting
+     *
+     *       on the specified number of modes, with the specified arguments
+     *
+     *     - Add this operation to the `program->operations` vector.
+     *
+     *   * Repeat the previous steps for any measurements.
+     *
+     * @param ctx `StatementContext`
+     * @return 0 to specify correct visitation.
+     */
     antlrcpp::Any Visitor::visitProgram(blackbirdParser::ProgramContext *ctx) {
         // Visit the quantum program
 
@@ -752,6 +957,13 @@ namespace blackbird {
     }
 
 
+    /**
+     * Starts the visitation process of parsing the Blackbird code.
+     *
+     * @param ctx `StartContext`
+     * @return returns the blackbird program, containing device information,
+     * metadata, and the quantum program to run
+     */
     antlrcpp::Any Visitor::visitStart(blackbirdParser::StartContext *ctx) {
         visitChildren(ctx);
         return program;

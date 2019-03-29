@@ -17,16 +17,19 @@ Blackbird is a quantum assembly language for continuous-variable quantum computa
 This project contains the following folders:
 
 * ``src``: The Blackbird grammar (both lexer and parser rules) in Extended Backus–Naur form.
-  For details on the structure of the Blackbird quantum assembly language, see the `syntax and
-  grammar <doc/syntax.rst>`_ section of the documentation.
+
+  For details on the structure of the Blackbird quantum assembly language, see the
+  `syntax and grammar <https://quantum-blackbird.readthedocs.io/en/latest/syntax.html>`_ section of the documentation.
 
 * ``blackbird_python``: Python package containing a Python listener/parser for Blackbird files.
-  For details on how to install and use the Python package, see the `Python installation <doc/
-  blackbird_python/installing.rst>`_ section of the documentation.
+
+  For details on how to install and use the Python package, see the `Python installation <https://quantum-blackbird.readthedocs.io/en/latest/blackbird_python/installing.html>`_ section of the documentation.
 
 * ``blackbird_cpp``: C++ library ``libblackbird.so``, containing listener, visitor, and parser
-  for Blackbird files. For details on how to install and use the C++ library, see the `C++
-  installation <doc/blackbird_cpp/installing.rst>`_ section of the documentation.
+  for Blackbird files.
+
+  For details on how to install and use the C++ library, see the
+  `C++ installation <https://quantum-blackbird.readthedocs.io/en/latest/blackbird_cpp/installing.html>`_ section of the documentation.
 
 * ``examples``: some example Blackbird programs (with file extension .xbb)
 

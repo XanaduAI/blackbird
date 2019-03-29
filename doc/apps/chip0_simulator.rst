@@ -25,5 +25,5 @@ to see this simulator in action.
 Source code
 -----------
 
-.. literalinclude :: ../../cpp_examples/chip0_simulator.cpp
+.. literalinclude :: ../../apps/chip0_simulator.cpp
    :language: cpp

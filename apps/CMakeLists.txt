@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.9)
-project(blackbird_cpp_examples)
+project(blackbird_apps)
 
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")

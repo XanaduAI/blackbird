@@ -25,8 +25,9 @@ This project contains the following folders:
 
 * ``examples``: some example Blackbird programs (with file extension .xbb)
 
-* ``cpp_examples``: some example C++ applications, including a basic Gaussian simulator,
-  that reads and then manipulate Blackbird programs
+* ``apps``: some example applications, including a basic C++ Gaussian simulator
+  that reads and then manipulate Blackbird programs, as well as a Python Strawberry Fields
+  listener that reads in Blackbird programs and simulates them via Strawberry Fields.
 
 
 Getting started

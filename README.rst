@@ -1,24 +1,67 @@
 Blackbird Quantum Assembly Language
 ###################################
 
-Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to control (a) Xanadu's quantum photonics hardware, and (b) Xanadu's Strawberry Fields simulator.
+.. image:: https://img.shields.io/readthedocs/quantum-blackbird.svg?style=for-the-badge
+    :alt: Read the Docs
+    :target: https://quantum-blackbird.readthedocs.io
 
-For details on the structure of the Blackbird quantum assembly language, see the `syntax and grammar <doc/syntax.rst>`_ section of the documentation.
 
-This repository contains:
+Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.
 
-* ``src``: The Blackbird grammar (both lexer and parser rules) in Extended Backus–Naur form. For details on how to use ANTLR4 to auto-generate a base parser for a specific programming language, see `installation <doc/installing.rst>`_.
 
-* ``blackbird_python``: Python package containing a Python listener/parser for Blackbird files. For details on how to install and use the Python package, see the `Python installation <doc/blackbird_python/installing.rst>`_ section of the documentation.
+Features
+--------
 
-* ``blackbird_cpp``: C++ library ``libblackbird.so``, containing listener, visitor, and parser for Blackbird files. For details on how to install and use the C++ library, see the `C++ installation <doc/blackbird_cpp/installing.rst>`_ section of the documentation.
+Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to control (a) Xanadu's quantum photonics hardware, and (b) Xanadu's Strawberry Fields simulator :cite:`killoran2018strawberry`.
 
-* ``doc``: documentation (can be built using Sphinx).
+This project contains the following folders:
 
-* ``examples``: some example Blackbird programs (with file extension ``.xbb``).
+* ``src``: The Blackbird grammar (both lexer and parser rules) in Extended Backus–Naur form.
+  For details on the structure of the Blackbird quantum assembly language, see the `syntax and
+  grammar <doc/syntax.rst>`_ section of the documentation.
 
-* ``cpp_examples``: some example C++ applications, including a basic Gaussian simulator,
-  that read and then manipulate Blackbird programs.
+* ``blackbird_python``: Python package containing a Python listener/parser for Blackbird files.
+  For details on how to install and use the Python package, see the `Python installation <doc/
+  blackbird_python/installing.rst>`_ section of the documentation.
 
-In addition, it currently also contains the file ``strawberry_fields_listener.py``, which sub-classes ``blackbird_python.BlackbirdListener``, and extends it to also *run* the Blackbird program using the Strawberry Fields listeners, as a proof of concept.
+* ``blackbird_cpp``: C++ library ``libblackbird.so``, containing listener, visitor, and parser
+  for Blackbird files. For details on how to install and use the C++ library, see the `C++
+  installation <doc/blackbird_cpp/installing.rst>`_ section of the documentation.
 
+* ``examples``: some example Blackbird programs (with file extension .xbb)
+
+* ``apps``: some example applications, including a basic C++ Gaussian simulator
+  that reads and then manipulate Blackbird programs, as well as a Python Strawberry Fields
+  listener that reads in Blackbird programs and simulates them via Strawberry Fields.
+
+
+Getting started
+---------------
+
+To get Blackbird installed and running on your system, begin at the :ref:`download and installation guide <installation>`. Then, familiarize yourself with the Blackbird's :ref:`syntax and grammar <syntax>` for machine learning on quantum circuits.
+
+
+How to cite
+-----------
+
+
+If you are doing research using Blackbird, please cite
+
+    Nathan Killoran, Josh Izaac, Nicolás Quesada, Ville Bergholm, Matthew Amy, and Christian Weedbrook.
+    *Strawberry Fields: A Software Platform for Photonic Quantum Computing* 2018. `arXiv:1804.03159 <https://arxiv.org/abs/1804.03159>`_
+
+Support
+-------
+
+- **Source Code:** https://github.com/XanaduAI/Blackbird
+- **Issue Tracker:** https://github.com/XanaduAI/Blackbird/issues
+
+If you are having issues, please let us know by posting the issue on our Github issue tracker.
+
+For more details on contributing or performing research with Blackbird, please see
+:ref:`research`.
+
+License
+-------
+
+Blackbird is **free** and **open source**, released under the Apache License, Version 2.0.

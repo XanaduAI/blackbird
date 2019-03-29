@@ -55,9 +55,6 @@ Support
 
 If you are having issues, please let us know by posting the issue on our Github issue tracker.
 
-For more details on contributing or performing research with Blackbird, please see
-:ref:`research`.
-
 License
 -------
 

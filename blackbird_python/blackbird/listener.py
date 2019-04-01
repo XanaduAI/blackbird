@@ -126,6 +126,7 @@ class BlackbirdListener(blackbirdListener):
             raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
 
         _VAR[name] = final_value
+        print(name, final_value)
 
     def exitArrayvar(self, ctx: blackbirdParser.ArrayvarContext):
         """Run after exiting an array variable.

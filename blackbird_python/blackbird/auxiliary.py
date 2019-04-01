@@ -66,10 +66,18 @@ def _literal(nonnumeric):
     """
     if nonnumeric.STR():
         return str(nonnumeric.getText())
-    elif nonnumeric.BOOL():
-        return bool(nonnumeric.getText())
-    else:
-        raise ValueError("Unknown value " + nonnumeric.getText())
+
+    if nonnumeric.BOOL():
+        val = nonnumeric.getText()
+        if val == "True":
+            return True
+
+        if val == "False":
+            return False
+
+        raise ValueError("Unknown boolean value " + nonnumeric.getText())
+
+    raise ValueError("Unknown value " + nonnumeric.getText())
 
 
 def _number(number):
@@ -82,14 +90,17 @@ def _number(number):
     """
     if number.INT():
         return int(number.getText())
-    elif number.FLOAT():
+
+    if number.FLOAT():
         return float(number.getText())
-    elif number.COMPLEX():
+
+    if number.COMPLEX():
         return complex(number.getText())
-    elif number.PI:
+
+    if number.PI():
         return np.pi
-    else:
-        raise ValueError("Unknown number " + number.getText())
+
+    raise ValueError("Unknown number " + number.getText())
 
 
 def _func(function, arg):
@@ -103,14 +114,17 @@ def _func(function, arg):
     """
     if function.EXP():
         return np.exp(_expression(arg))
-    elif function.SIN():
+
+    if function.SIN():
         return np.sin(_expression(arg))
-    elif function.COS():
+
+    if function.COS():
         return np.cos(_expression(arg))
-    elif function.SQRT():
+
+    if function.SQRT():
         return np.sqrt(_expression(arg))
-    else:
-        raise NameError("Unknown function " + function.getText())
+
+    raise NameError("Unknown function " + function.getText())
 
 
 def _expression(expr):
@@ -127,43 +141,42 @@ def _expression(expr):
     if isinstance(expr, blackbirdParser.NumberLabelContext):
         return _number(expr.number())
 
-    elif isinstance(expr, blackbirdParser.VariableLabelContext):
+    if isinstance(expr, blackbirdParser.VariableLabelContext):
         if expr.getText() not in _VAR:
             raise NameError("name '{}' is not defined".format(expr.getText()))
 
         return _VAR[expr.getText()]
 
-    elif isinstance(expr, blackbirdParser.BracketsLabelContext):
+    if isinstance(expr, blackbirdParser.BracketsLabelContext):
         return _expression(expr.expression())
 
-    elif isinstance(expr, blackbirdParser.SignLabelContext):
+    if isinstance(expr, blackbirdParser.SignLabelContext):
         a = expr.expression()
         if expr.PLUS():
             return _expression(a)
-        elif expr.MINUS():
+        if expr.MINUS():
             return -_expression(a)
 
-    elif isinstance(expr, blackbirdParser.AddLabelContext):
+    if isinstance(expr, blackbirdParser.AddLabelContext):
         a, b = expr.expression()
         if expr.PLUS():
-            return np.sum([_expression(a), _expression(b)])
-        elif expr.MINUS():
-            return np.subtract([_expression(a), _expression(b)])
+            return np.sum([_expression(a), _expression(b)], axis=0)
+        if expr.MINUS():
+            return np.sum([_expression(a), -_expression(b)], axis=0)
 
-    elif isinstance(expr, blackbirdParser.MulLabelContext):
+    if isinstance(expr, blackbirdParser.MulLabelContext):
         a, b = expr.expression()
         if expr.TIMES():
-            return np.prod([_expression(a), _expression(b)])
-        elif expr.DIVIDE():
-            return np.divide([_expression(a), _expression(b)])
+            return np.prod([_expression(a), _expression(b)], axis=0)
+        if expr.DIVIDE():
+            return np.prod([_expression(a), np.power(_expression(b), -1)], axis=0)
 
-    elif isinstance(expr, blackbirdParser.PowerLabelContext):
+    if isinstance(expr, blackbirdParser.PowerLabelContext):
         a, b = expr.expression()
         return np.power(_expression(a), _expression(b))
 
-    elif isinstance(expr, blackbirdParser.FunctionLabelContext):
+    if isinstance(expr, blackbirdParser.FunctionLabelContext):
         return _func(expr.function(), expr.expression())
-
 
 def _get_arguments(arguments):
     """Parse blackbird positional and keyword arguments.

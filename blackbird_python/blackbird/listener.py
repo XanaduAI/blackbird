@@ -121,12 +121,17 @@ class BlackbirdListener(blackbirdListener):
             value = _literal(ctx.nonnumeric())
 
         try:
+            # assume all variables are scalar
             final_value = PYTHON_TYPES[vartype](value)
         except:
-            raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
+            try:
+                # maybe one of the variables was a NumPy array?
+                final_value = NUMPY_TYPES[vartype](value)
+            except:
+                # nope
+                raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
 
         _VAR[name] = final_value
-        print(name, final_value)
 
     def exitArrayvar(self, ctx: blackbirdParser.ArrayvarContext):
         """Run after exiting an array variable.
@@ -162,7 +167,7 @@ class BlackbirdListener(blackbirdListener):
             actual_shape = final_value.shape
             if actual_shape != shape:
                 raise TypeError("Array var {} has declared shape {} "
-                                " but actual shape {}".format(name, shape, actual_shape)) from None
+                                "but actual shape {}".format(name, shape, actual_shape)) from None
 
         _VAR[name] = final_value
 
@@ -207,6 +212,7 @@ class BlackbirdListener(blackbirdListener):
 
         self.device['args'] = args
         self.device['kwargs'] = kwargs
+        _VAR.clear()
 
 
 def parse_blackbird(file, listener=BlackbirdListener):

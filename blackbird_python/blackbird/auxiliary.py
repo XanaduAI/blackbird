@@ -65,7 +65,7 @@ def _literal(nonnumeric):
         str or bool
     """
     if nonnumeric.STR():
-        return str(nonnumeric.getText())
+        return str(nonnumeric.getText().replace('"', ''))
 
     if nonnumeric.BOOL():
         val = nonnumeric.getText()

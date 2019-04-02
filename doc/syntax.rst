@@ -24,14 +24,14 @@ Philosophy
 
 Blackbird was designed from the ground up, adhering to the following philosophies:
 
-**Encapsulate any universal continuous-variable (CV) quantum computation.**
+**Encapsulate any universal photonic quantum computation.**
 
 **Be clear, concise, and simple to read and follow.** This simplicity should allow for both
 
 * **Human readability** - operations and expressions should correspond to
-  existing conventions, and allude to common notation in quantum computing.
+  existing conventions, and allude to common notation in quantum computing
 
-* **Hardware execution** - code should be unambiguous, with one quantum operation per line.
+* **Hardware execution** - code should be unambiguous, with one quantum operation per line
 
 **Be easy to learn, using constructs and operators familiar in scientific computation**.
 

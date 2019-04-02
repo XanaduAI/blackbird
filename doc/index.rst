@@ -18,7 +18,7 @@ The Blackbird repository contains three *separate* packages:
 * ``src``: The Blackbird grammar specification in enhanced Brackus-Naur form
 
 * ``blackbird_python``: The Python parser --- this is what is installed when you ``pip install``.
-  Used to develop Blackbird parsers for integration with Python programs
+  Used to develop Blackbird parsers for integration with Python programs.
 
 * ``blackbird_cpp``: The C++ parser --- header files and library needed to develop Blackbird
   parsers for integration with C++ programs
@@ -38,7 +38,7 @@ In addition, this repository contains:
 Getting started
 ---------------
 
-To get the Blackbird grammar installed and running on your system, begin at the :ref:`grammar installation guide <installation>`. Then, familiarize yourself with the Blackbird's :ref:`syntax and grammar <syntax>` for specifying continuous-variable quantum circuits.
+To get the Blackbird grammar installed and running on your system, begin at the :ref:`grammar installation guide <installation>`. Then, familiarize yourself with the Blackbird's :ref:`syntax and grammar <syntax>` for specifying photonic quantum circuits.
 
 If you only want to develop an application that makes use of the Python parser or the C++ parser, you can go directly to those sections and their corresponding installation guides.
 
@@ -50,7 +50,8 @@ How to cite
 If you are doing research using Blackbird, please cite
 
     Nathan Killoran, Josh Izaac, Nicolás Quesada, Ville Bergholm, Matthew Amy, and Christian Weedbrook.
-    *Strawberry Fields: A Software Platform for Photonic Quantum Computing* 2018. `arXiv:1804.03159 <https://arxiv.org/abs/1804.03159>`_
+    *Strawberry Fields: A Software Platform for Photonic Quantum Computing* 2018. `arXiv:1804.03159 <https://quantum-journal.org/papers/q-2019-03-11-129/>`_
+	"Strawberry Fields: A Software Platform for Photonic Quantum Computing", Quantum, 3, 129 (2019).
 
 
 Support

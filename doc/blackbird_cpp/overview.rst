@@ -9,7 +9,7 @@ Main components
 ---------------
 
 * :cpp:class:`Visitor`: the Blackbird visitor,
-  that parses the abstract syntax tree using ANTLR4, evaluating expressions,
+  which parses the abstract syntax tree using ANTLR4, evaluating expressions,
   extracting variables, and storing quantum program information.
 
   While derived classes can be defined in order to modify the actions
@@ -34,7 +34,7 @@ following files:
 
 * ``Visitor.cpp``: contains the source code for the :cpp:class:`Visitor`. The :cpp:class:`Visitor`
   is a derived class of :cpp:class:`blackbirdBaseVisitor`, and provides ANTLR4 with actions to perform
-  (e.g. evaluating expressions, storing variables, queuing quantum operations) as the abstract syntax
+  (e.g., evaluating expressions, storing variables, queuing quantum operations) as the abstract syntax
   tree is traversed.
 
   If a new quantum operation or quantum device needs to be added, its initialization will need to be
@@ -44,7 +44,7 @@ following files:
   and all derived classes.
 
   * Known devices and gates are recorded in the ``enum``'s :cpp:enum:`blackbird::Device` and
-    :cpp:enum:`blackbird::Gates`. These have the same value as their Blackbird command name.
+    :cpp:enum:`blackbird::Gate`. These have the same value as their Blackbird command name.
 
   * Each gate and measurement class is declared, including constructors, number of modes,
     number of parameters, and input/mode validation.

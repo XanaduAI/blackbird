@@ -28,8 +28,8 @@ is installed. Once Java is installed, use the following steps to install ANTLR 4
 
 .. code-block:: console
 
-    $ cd $HOME/.local/.lib
-    $ wget https://www.antlr.org/download/antlr-4.7.1-complete.jar
+    $ cd /usr/local/lib
+    $ sudo wget https://www.antlr.org/download/antlr-4.7.1-complete.jar
     $ export CLASSPATH=".:/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH"
     $ alias antlr4='java -jar /usr/local/lib/antlr-4.7.1-complete.jar'
     $ alias grun='java org.antlr.v4.gui.TestRig'

@@ -35,9 +35,6 @@ This custom listener enables us to:
 Note that we do not try and replace *all* error messages, just the more
 common ones that the user is likely to come across.
 
-At some point, it will be more scalable to introduce more parser rules
-to explicitly match incorrect Blackbird code, to automate the exception handling.
-
 Summary
 -------
 
@@ -59,6 +56,11 @@ from .blackbirdParser import blackbirdParser
 class NoTraceBack(Exception):
     """A generic exception with no traceback provided"""
     def __init__(self, msg):
+        """Method executed when the exception is called.
+
+        Args:
+            msg (str): message to be printed in the traceback
+        """
         try:
             ln = sys.exc_info()[-1].tb_lineno
         except AttributeError:
@@ -72,7 +74,9 @@ class BlackbirdSyntaxError(NoTraceBack):
 
 
 class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
-    """Custom error listener for Blackbird."""
+    """Custom error listener for Blackbird"""
+    # At some point, it will be more scalable to introduce more parser rules
+    # to explicitly match incorrect Blackbird code, to automate the exception handling.
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         if e:
             ctx = e.ctx

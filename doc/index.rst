@@ -17,10 +17,9 @@ The Blackbird repository contains three *separate* packages:
 
 * ``src``: The Blackbird grammar specification in enhanced Brackus-Naur form
 
-* ``blackbird_python``: The Python parser --- this is what is installed when you ``pip install``.
-  Used to develop Blackbird parsers for integration with Python programs.
+* ``blackbird_python``: to develop Blackbird parsers for integration with Python programs
 
-* ``blackbird_cpp``: The C++ parser --- header files and library needed to develop Blackbird
+* ``blackbird_cpp``: libraries and header files needed to develop Blackbird
   parsers for integration with C++ programs
 
 All of these packages are independent, and can be installed separately without
@@ -47,11 +46,10 @@ How to cite
 -----------
 
 
-If you are doing research using Blackbird, please cite
+If you are doing research using Blackbird, please cite the `StrawberryFields paper <https://quantum-journal.org/papers/q-2019-03-11-129/>`_:
 
-    Nathan Killoran, Josh Izaac, Nicolás Quesada, Ville Bergholm, Matthew Amy, and Christian Weedbrook.
-    *Strawberry Fields: A Software Platform for Photonic Quantum Computing* 2018. `arXiv:1804.03159 <https://quantum-journal.org/papers/q-2019-03-11-129/>`_
-	"Strawberry Fields: A Software Platform for Photonic Quantum Computing", Quantum, 3, 129 (2019).
+  Nathan Killoran, Josh Izaac, Nicolás Quesada, Ville Bergholm, Matthew Amy, and Christian Weedbrook.
+  "Strawberry Fields: A Software Platform for Photonic Quantum Computing", Quantum, 3, 129 (2019).
 
 
 Support
@@ -100,12 +98,10 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
 
    blackbird_cpp/overview
    blackbird_cpp/installing
-   blackbird_cpp_api/namespace_blackbird
 
 .. toctree::
    :maxdepth: 1
-   :caption: Applications
+   :caption: Examples
    :hidden:
 
    apps/sf
-   apps/chip0_simulator

@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """Tests for the Blackbird parser/listener"""
 # pylint: disable=too-many-ancestors,no-self-use,redefined-outer-name,too-many-arguments,no-value-for-parameter,too-few-public-methods
 import pytest

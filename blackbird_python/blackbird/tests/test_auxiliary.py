@@ -45,7 +45,8 @@ def ctx():
 
 @pytest.fixture
 def num(parser, ctx):
-    """Generates a blackbird number label"""
+    """Generates a blackbird number label that can be passed to the Blackbird parser.
+    This is convenient when testing other functions that require numbers."""
     def _number_label(n):
         """Generate the blackbird number n"""
         class DummyNumberLabel(blackbirdParser.NumberLabelContext):

@@ -64,7 +64,7 @@ def parse_input():
 
 
 @pytest.fixture
-def parser_input_using_mocked_device(device, monkeypatch):
+def parse_input_using_mocked_device(device, monkeypatch):
     """Create a parser for the test that mocks out the device"""
     def _parse_input(text):
         """The parser fixture accepts a blackbird string to parse"""
@@ -88,84 +88,84 @@ def parser_input_using_mocked_device(device, monkeypatch):
 class TestParsingVariables:
     """Tests for parsing variable declarations"""
 
-    def test_integer_variable(self, parser_input_using_mocked_device):
+    def test_integer_variable(self, parse_input_using_mocked_device):
         """Test that an integer variable is correctly parsed"""
-        bb = parser_input_using_mocked_device('int n = 5')
+        bb = parse_input_using_mocked_device('int n = 5')
         assert bb.var == {'n': 5}
 
-    def test_float_variable(self, parser_input_using_mocked_device):
+    def test_float_variable(self, parse_input_using_mocked_device):
         """Test that a float variable is correctly parsed"""
-        bb = parser_input_using_mocked_device("float alpha = -0.5432")
+        bb = parse_input_using_mocked_device("float alpha = -0.5432")
         assert bb.var == {'alpha': -0.5432}
 
-    def test_float_exponent_variable(self, parser_input_using_mocked_device):
+    def test_float_exponent_variable(self, parse_input_using_mocked_device):
         """Test that a float variable with an exponent is correctly parsed"""
-        bb = parser_input_using_mocked_device("float alpha = -9.54e-3")
+        bb = parse_input_using_mocked_device("float alpha = -9.54e-3")
         assert bb.var == {'alpha': -9.54e-3}
 
-    def test_complex_variable(self, parser_input_using_mocked_device):
+    def test_complex_variable(self, parse_input_using_mocked_device):
         """Test that a complex variable is correctly parsed"""
-        bb = parser_input_using_mocked_device("complex Beta = -0.231+5.21j")
+        bb = parse_input_using_mocked_device("complex Beta = -0.231+5.21j")
         assert bb.var == {'Beta': -0.231+5.21j}
 
-    def test_complex_exponent_variable(self, parser_input_using_mocked_device):
+    def test_complex_exponent_variable(self, parse_input_using_mocked_device):
         """Test that a complex variable with an exponent is correctly parsed"""
-        bb = parser_input_using_mocked_device("complex Beta = -0.231e-6+5.21e-2j")
+        bb = parse_input_using_mocked_device("complex Beta = -0.231e-6+5.21e-2j")
         assert bb.var == {'Beta': -0.231e-6+5.21e-2j}
 
-    def test_pi_variable(self, parser_input_using_mocked_device):
+    def test_pi_variable(self, parse_input_using_mocked_device):
         """Test that pi can be parsed"""
-        bb = parser_input_using_mocked_device("float test = pi")
+        bb = parse_input_using_mocked_device("float test = pi")
         assert bb.var == {'test': np.pi}
 
-    def test_string_variable(self, parser_input_using_mocked_device):
+    def test_string_variable(self, parse_input_using_mocked_device):
         """Test that string can be parsed"""
-        bb = parser_input_using_mocked_device('str name = "Josh"')
+        bb = parse_input_using_mocked_device('str name = "Josh"')
         assert bb.var == {'name': "Josh"}
 
-    def test_bool_variable(self, parser_input_using_mocked_device):
+    def test_bool_variable(self, parse_input_using_mocked_device):
         """Test that bool can be parsed"""
-        bb = parser_input_using_mocked_device('bool b1 = True\n bool b2 = False')
+        bb = parse_input_using_mocked_device('bool b1 = True\n bool b2 = False')
         assert bb.var == {'b1': True, 'b2': False}
 
-    def test_float_array_variable(self, parser_input_using_mocked_device):
+    def test_float_array_variable(self, parse_input_using_mocked_device):
         """Test that float array can be parsed"""
-        bb = parser_input_using_mocked_device("float array C =\n\t-0.1, 0.2")
+        bb = parse_input_using_mocked_device("float array C =\n\t-0.1, 0.2")
         assert np.all(bb.var['C'] == np.array([[-0.1, 0.2]]))
 
-    def test_complex_array_variable(self, parser_input_using_mocked_device):
+    def test_complex_array_variable(self, parse_input_using_mocked_device):
         """Test that complex array can be parsed"""
-        bb = parser_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        bb = parse_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
         assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
-    def test_complex_array_shape_variable(self, parser_input_using_mocked_device):
+    def test_complex_array_shape_variable(self, parse_input_using_mocked_device):
         """Test that complex array with shape can be parsed"""
-        bb = parser_input_using_mocked_device("complex array A[2, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        bb = parse_input_using_mocked_device("complex array A[2, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
         assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
-    def test_invalid_expression_type(self, parser_input_using_mocked_device):
+    def test_invalid_expression_type(self, parse_input_using_mocked_device):
         """Test exception is raised if the expression variable type is incorrect"""
         with pytest.raises(TypeError, match=r"not of declared type int"):
-            parser_input_using_mocked_device("int Beta = -0.231e-6+5.21e-2j")
+            parse_input_using_mocked_device("int Beta = -0.231e-6+5.21e-2j")
 
-    def test_invalid_array_type(self, parser_input_using_mocked_device):
+    def test_invalid_array_type(self, parse_input_using_mocked_device):
         """Test exception is raised if the array variable type is incorrect"""
         with pytest.raises(TypeError, match=r"not of declared type float"):
-            parser_input_using_mocked_device("float array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+            parse_input_using_mocked_device("float array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
 
-    def test_invalid_array_shape(self, parser_input_using_mocked_device):
+    def test_invalid_array_shape(self, parse_input_using_mocked_device):
         """Test exception is raised if the array variable shape is incorrect"""
         with pytest.raises(TypeError, match=r"has declared shape \(1, 2\) but actual shape \(2, 2\)"):
-            parser_input_using_mocked_device("complex array A[1, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+            parse_input_using_mocked_device("complex array A[1, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
 
-    def test_variable_expression(self, parser_input_using_mocked_device):
+    def test_variable_expression(self, parse_input_using_mocked_device):
         """Test that a variable expression is correctly parsed"""
-        bb = parser_input_using_mocked_device("float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2")
+        bb = parse_input_using_mocked_device("float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2")
         assert bb.var['gamma'] == (2.0*np.cos(0.32*np.pi)+1)**2
 
-    def test_array_variable_expression(self, parser_input_using_mocked_device):
+    def test_array_variable_expression(self, parse_input_using_mocked_device):
         """Test that a variable expression containing arrays is correctly parsed"""
-        bb = parser_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2")
+        bb = parse_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2")
         A = np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]])
         assert np.all(bb.var['res'] == (2.0*np.cos(A*np.pi)+1)**2)
 

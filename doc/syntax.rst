@@ -3,7 +3,6 @@
 Syntax and grammar
 ==================
 
-.. note:: The below is still a work-in-progress
 
 .. note::
 
@@ -11,20 +10,8 @@ Syntax and grammar
     is a **superset** of the Blackbird quantum assembly language described here,
     as it is embedded in a Python environment.
 
-    You can think of it as 'Python-enhanced Blackbird'. The reason for this is twofold:
-
-    1. We are already in a Python environment, we might as well allow the user
-       to use Python functions and constructs, even if they are not 'officially'
-       part of the Blackbird spec.
-
-    .. 
-
-    2. It would be near impossible to restrict the code inside the
-       Strawberry Fields Engine context anyway. We could force the user to provide
-       a string containing the Blackbird code, but this is ugly and not elegent.
-
-    Currently, I like the SF Blackbird approach. It is close enough to
-    Blackbird to look qualitatively the same in most cases.
+    You can think of it as 'Python-enhanced Blackbird', as Python functions and constructs,
+    can be used, even if they are not 'officially' part of the Blackbird spec.
 
 
 Introduction
@@ -35,28 +22,27 @@ In this section, we define the structure, syntax, and grammar of Blackbird code.
 Philosophy
 ~~~~~~~~~~
 
-Blackbird was designed from the ground up adhering to the following philosophies:
+Blackbird was designed from the ground up, adhering to the following philosophies:
 
-**It should encapsulate the universal ability of continuous-variable (CV) quantum computation.**
+**Encapsulate any universal continuous-variable (CV) quantum computation.**
 
-**It should be clear, concise, and simple to read and follow.** This simplicity should allow for both
+**Be clear, concise, and simple to read and follow.** This simplicity should allow for both
 
 * **Human readability** - operations and expressions should correspond to
   existing conventions, and allude to common notation in quantum computing.
 
-* **Hardware execution** - code should be un-ambiguous, with one quantum operation per line.
+* **Hardware execution** - code should be unambiguous, with one quantum operation per line.
 
-
-**It should be easy to learn, using constructs and operators familiar in scientific computation**
-
+**Be easy to learn, using constructs and operators familiar in scientific computation**.
 
 **A Blackbird script should contain only one quantum algorithm or simulation,
-making it an ideal format for saving and loading CV quantum algorithms.**
+making it an ideal format for saving and loading photonic quantum computing algorithms.**
+
 
 Similarity to Python
 ~~~~~~~~~~~~~~~~~~~~
 
-To satisfy points 2 and 3, Blackbird deliberately is Python-like, inheriting
+To satisfy points 2 and 3, Blackbird is deliberately Python-like, inheriting
 the following:
 
 * Case sensitivity.
@@ -127,9 +113,9 @@ with the following types supported:
 
 * ``int``: ``0``, ``1``, ``5``
 * ``float``: ``8.0``, ``0.43``, ``-0.123``, ``89.23e-10``
-* ``complex``: ``0+5j``, ``8-1j``, ``0.54+0.21j``
+* ``complex``: ``0+5j``, ``8.1-1j``, ``0.54+0.21j``
 * ``bool``: ``True``, ``False``
-* ``str``: any ASCII string surrounded by quotes, ``"hello world"``
+* ``str``: any ASCII string surrounded by double quotation marks, ``"hello world"``
 
 .. note::
 
@@ -163,26 +149,21 @@ Operators
 
 Blackbird allows expressions using the following operators:
 
-* ``+``: addition
+* ``+``: addition, unary positive
 * ``-``: subtraction, unary negation
 * ``*``: multiplication
 * ``/``: division
 * ``**``: right-associative exponentiation.
 
-.. note::
-
+.. 
     * Blackbird will attempt to dynamically cast variables where it makes sense.
       For example, consider the following:
-
       .. code-block:: python
-
         int n = 2
         float x = 5.0**n
-
       Blackbird will automatically cast variable ``n`` to a float to perform the calculation.
       However, note that literals will not be automatically cast - ``float x = 5**n`` would
       return an error, as ``5`` is an ``int`` and not a float.
-
     * No matrix operations are defined; if the expression includes arrays, these operators will act in an elementwise manner.
 
 Functions
@@ -228,7 +209,7 @@ columns separated by commas.
 .. note::
 
     For additional array validation, you can specify the *shape* of the array using square
-    brackets directly after the variable name (i.e. ``U[3, 3]``)
+    brackets directly after the variable name (i.e., ``U[3, 3]``)
     but this is optional.
 
 Quantum program
@@ -264,5 +245,5 @@ positional arguments.
 After running a Blackbird program, the user should expect to receive the results
 as an array:
 
-* each column is a measurement result, corresponding to the measurements in the order they appear in the blackbird program,
-* each row represents a shot/run.
+* each column is a measurement result, corresponding to the measurements in the order they appear in the blackbird program
+* each row represents a shot/run

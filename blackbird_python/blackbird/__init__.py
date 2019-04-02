@@ -36,9 +36,9 @@ Main components
   This class can be sub-classed, to create more advanced Blackbird listeners
   that perform actions (i.e. such as simulations) upon parsing the tree.
 
-* :class:`~.parse_blackbird`: a utility function that automates
+* :func:`~.parse_blackbird`: a utility function that automates
   the parsing of the Blackbird abstract syntax tree. Use this function, either
-  with the default parser :class:`~blackbird.BlackbirdListener` or a custom
+  with the default parser :class:`~.BlackbirdListener` or a custom
   derived class, to parse arbitrary Blackbird code.
 
 .. note::

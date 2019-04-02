@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """Tests for the auxiliary functions"""
 # pylint: disable=too-many-ancestors,no-self-use,redefined-outer-name,too-many-arguments,no-value-for-parameter
 import pytest
@@ -80,21 +81,21 @@ class TestLiteral:
         assert _literal(nonnumeric) == "Test value"
 
     def test_literal_bool_true(self):
-        """Test that a Blackbird bool is properly converted to a Python type"""
+        """Test that a Blackbird bool (True) is properly converted to a Python type"""
         nonnumeric = blackbirdParser.NonnumericContext(parser, ctx)
         nonnumeric.BOOL = lambda: True
         nonnumeric.getText = lambda: "True"
         assert _literal(nonnumeric)
 
     def test_literal_bool_false(self):
-        """Test that a Blackbird bool is properly converted to a Python type"""
+        """Test that a Blackbird bool (False) is properly converted to a Python type"""
         nonnumeric = blackbirdParser.NonnumericContext(parser, ctx)
         nonnumeric.BOOL = lambda: True
         nonnumeric.getText = lambda: "False"
         assert not _literal(nonnumeric)
 
     def test_literal_bool_invalid(self):
-        """Test that a Blackbird bool is properly converted to a Python type"""
+        """Test that an exception is raised if a Blackbird bool is invalid"""
         nonnumeric = blackbirdParser.NonnumericContext(parser, ctx)
         nonnumeric.BOOL = lambda: True
         nonnumeric.getText = lambda: "false"
@@ -103,7 +104,7 @@ class TestLiteral:
             _literal(nonnumeric)
 
     def test_literal_invalid(self):
-        """Test that a Blackbird bool is properly converted to a Python type"""
+        """Test that an exception is raised if a Blackbird literal is invalid"""
         nonnumeric = blackbirdParser.NonnumericContext(parser, ctx)
         nonnumeric.getText = lambda: ""
 
@@ -145,10 +146,9 @@ class TestNumber:
         assert _number(number) == np.pi
 
     def test_number_invalid(self, parser, ctx):
-        """Test that a Blackbird bool is properly converted to a Python type"""
+        """Test that an unknown number correctly raises and exception"""
         number = blackbirdParser.NumberContext(parser, ctx)
         number.getText = lambda: ""
-        print(number.PI())
 
         with pytest.raises(ValueError, match="Unknown number"):
             _number(number)
@@ -238,7 +238,7 @@ class TestExpression:
         class DummyBracketsLabel(blackbirdParser.BracketsLabelContext):
             """Dummy brackets"""
             def expression(self):
-                """Return expression"""
+                """Returns a Blackbird abstract syntax tree section corresponding to an expression"""
                 e = DummyAddLabel(parser, ctx)
                 e.PLUS = lambda: True
                 return e
@@ -386,7 +386,6 @@ class TestExpressionArray:
 
             expr = DummyAddLabel(parser, ctx)
             expr.PLUS = lambda: True
-            print(U*5+np.cos(U))
             assert np.allclose(_expression(expr), U*5+np.cos(U))
 
     @pytest.mark.parametrize('n1', test_complex)

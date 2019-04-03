@@ -21,7 +21,7 @@ Once this is installed, simply clone the Blackbird git repository, use pip to in
 
 .. code-block:: console
 
-	$ git clone https://github.com/XanaduAI/Blackbird
-	$ cd blackbird
+    $ git clone https://github.com/XanaduAI/Blackbird
+    $ cd blackbird
     $ pip install -e .
 

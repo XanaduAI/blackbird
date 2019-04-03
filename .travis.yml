@@ -4,17 +4,14 @@ cache: pip
 python:
 - 3.5
 - 3.6
-matrix:
-  include:
-  - python: 3.7
-    dist: xenial
+- 3.7
 env:
   global:
   - COVERALLS_PARALLEL=true
   - LOGGING=info
 install:
-- pip install -r requirements.txt
-- pip install wheel pytest pytest-cov codecov
+- pip install -r requirements.txt --upgrade
+- pip install wheel pytest pytest-cov codecov --upgrade
 - python3 setup.py bdist_wheel
 - pip install dist/blackbird*.whl
 script:

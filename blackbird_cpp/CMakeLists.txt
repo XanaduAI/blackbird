@@ -16,8 +16,8 @@ use_cxx11()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
-include_directories(~/.local/include)
-include_directories(~/.local/include/antlr4-runtime)
+include_directories(/usr/local/include)
+include_directories(/usr/local/include/antlr4-runtime)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -26,7 +26,7 @@ add_library(${PROJECT_NAME} SHARED
 	blackbirdLexer.cpp
 	blackbirdParser.cpp)
 
-find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
+find_library(ANTLR4_RUNTIME antlr4-runtime HINTS /usr/local/include/lib)
 
 target_link_libraries(${PROJECT_NAME} -O ${ANTLR4_RUNTIME})
 # set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})

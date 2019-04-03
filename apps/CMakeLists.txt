@@ -16,12 +16,12 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
 #Bring the headers
-include_directories(~/.local/include)
-include_directories(~/.local/include/antlr4-runtime)
+include_directories(/usr/local/include)
+include_directories(/usr/local/include/antlr4-runtime)
 
 # bring the libraries
-find_library(ANTLR4_RUNTIME antlr4-runtime HINTS ~/.local/lib)
-find_library(BLACKBIRD blackbird HINTS ~/.local/lib)
+find_library(ANTLR4_RUNTIME antlr4-runtime HINTS /usr/local/lib)
+find_library(BLACKBIRD blackbird HINTS /usr/local/lib)
 
 # Create print_blackbird example
 set(SOURCES print_blackbird.cpp)

@@ -6,8 +6,8 @@ GRUN := java org.antlr.v4.gui.TestRig
 PYTHON3 := $(shell which python3 2>/dev/null)
 
 PYTHON := python3
-COVERAGE := --cov=blackbird_python/blackbird --cov-report term-missing --cov-report=html:coverage_html_report
-TESTRUNNER := -m pytest tests
+COVERAGE := --cov=blackbird_python/blackbird --cov-report term --cov-report=html:coverage_html_report
+TESTRUNNER := -m pytest blackbird_python/blackbird/tests
 
 GRAMMAR := blackbird.g4
 

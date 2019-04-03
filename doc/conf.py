@@ -267,7 +267,7 @@ html_theme_options = {
     "project_nav_name": "Blackbird",
 
     # Set your Disqus short name to enable comments
-    # "disqus_comments_shortname": "blackbird-1",
+    # "disqus_comments_shortname": "blackbird",
 
     # Set you GA account ID to enable tracking
     # "google_analytics_account": "UA-116279123-2",

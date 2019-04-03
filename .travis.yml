@@ -5,6 +5,7 @@ matrix:
   include:
   - python: 3.7
     dist: xenial
+    after_success: codecov
   - python: 3.6
     dist: xenial
   - python: 3.5
@@ -19,5 +20,3 @@ install:
   - pip install -e .
 script:
   - make coverage
-after_success:
-  - codecov

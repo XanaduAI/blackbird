@@ -41,12 +41,14 @@ float m = -0.5432
 float alpha = 0.5432
 float x = 0.5+0.1
 float Delta = 0.543
+float test = pi
 
 complex beta = 0+5.21j
 complex y = -0.43e-4+0.912j
 complex z = +0.43e-4-0.912j
 
 bool flag = True
+bool flag2 = False
 str name = "program1"
 
 # Blackbird allows expressions using the operators:

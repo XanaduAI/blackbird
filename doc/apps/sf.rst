@@ -1,6 +1,10 @@
 Strawberry Fields Listener
 ==========================
 
+The Strawberry Fields listener :download:`strawberry_fields_listener.py <../../apps/strawberry_fields_listener.py>` is an
+example program that uses the Blackbird Python parser to read a Blackbird script,
+and automatically run it using a local Strawberry Fields installation.
+
 To test the Strawberry Fields Listener, create the Blackbird program ``example_gbs.xbb``,
 
 .. code-block:: python
@@ -21,13 +25,13 @@ To test the Strawberry Fields Listener, create the Blackbird program ``example_g
         MeasureX | 2
         MeasureX | 3
 
-by running the following line in your terminal:
+Then, run the following line in your terminal:
 
 .. code-block:: console
 
-    python3 strawberry_fields_listener.py example_gbs.xbb
+    python3 apps/strawberry_fields_listener.py example_gbs.xbb
 
-producing the following output:
+The program should produce the following output:
 
 .. code-block:: console
 

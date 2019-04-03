@@ -7,25 +7,26 @@ Compiling the library
 ---------------------
 
 To compile the Blackbird visitor, you will need to have a C++ compiler that supports
-C++11 (i.e. ``g++`` version 5 and above), and cmake version 2.8 or above,
-as well as the UUID library (``sudo apt install uuid-dev`` on Ubuntu).
+C++11 (i.e., ``g++`` version 5 and above), and cmake version 2.8 or above.
 
-In addition, you will need to install the ANTLR C++ Runtime:
+You will also need the UUID library (``sudo apt install uuid-dev`` on Ubuntu).
+
+Finally, you will need to install the ANTLR C++ Runtime:
 
 .. code-block:: console
 
     $ git clone https://github.com/antlr/antlr4.git
     $ cd antlr4/runtime/Cpp
-    $ cmake -DCMAKE_INSTALL_PREFIX:PATH=$HOME/.local ..
+    $ cmake .
     $ make
-    $ make install
+    $ sudo make install
 
 Once this is done, you can compile and install the Blackbird C++ library by simply running
 
 .. code-block:: console
 
     $ make blackbird-cpp
-    $ make install
+    $ sudo make install
 
 from the Blackbird root directory.
 
@@ -110,3 +111,17 @@ example, using ``g++``:
         -L/path/to/blackbird/lib \
         -lantlr4-runtime -lblackbird
 
+
+API
+---
+
+`See here <../blackbird_cpp_api/namespace_blackbird.html>`_ for full details on the C++ parser API
+and the ``blackbird`` namespace.
+
+
+.. toctree::
+   :maxdepth: 0
+   :caption: C++ API
+   :hidden:
+
+   ../blackbird_cpp_api/namespace_blackbird

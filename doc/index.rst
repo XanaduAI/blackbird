@@ -78,7 +78,6 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
    installing
    syntax
    research
-   zreferences
 
 .. toctree::
    :maxdepth: 1

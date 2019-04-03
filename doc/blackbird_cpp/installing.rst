@@ -111,3 +111,17 @@ example, using ``g++``:
         -L/path/to/blackbird/lib \
         -lantlr4-runtime -lblackbird
 
+
+API
+---
+
+`See here <../blackbird_cpp_api/namespace_blackbird.html>`_ for full details on the C++ parser API
+and the ``blackbird`` namespace.
+
+
+.. toctree::
+   :maxdepth: 0
+   :caption: C++ API
+   :hidden:
+
+   ../blackbird_cpp_api/namespace_blackbird

@@ -37,7 +37,7 @@ In addition, this repository contains:
 Getting started
 ---------------
 
-To get the Blackbird grammar installed and running on your system, begin at the :ref:`grammar installation guide <installation>`. Then, familiarize yourself with the Blackbird's :ref:`syntax and grammar <syntax>` for specifying photonic quantum circuits. You can even generate Blackbird parsers for any target language supported by ANTLR, including Java, C#, JavaScript, Go, and Swift.
+To get the Blackbird grammar installed and running on your system, begin at the :ref:`grammar installation guide <installation>`. Then, familiarize yourself with Blackbird's :ref:`syntax and grammar <syntax>` for specifying photonic quantum circuits. You can even generate Blackbird parsers for any target language supported by ANTLR, including Java, C#, JavaScript, Go, and Swift.
 
 If you only want to develop an application that makes use of the Python parser or the C++ parser, you can go directly to those sections and their corresponding installation guides.
 

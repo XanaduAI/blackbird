@@ -14,6 +14,8 @@
 
 """Tests for the Blackbird parser/listener"""
 # pylint: disable=too-many-ancestors,no-self-use,redefined-outer-name,no-value-for-parameter
+import sys
+
 import pytest
 
 import numpy as np
@@ -250,6 +252,7 @@ class TestParsingDevice:
 class TestParseFunction:
     """Tests for the `parse_blackbird` convenience parsing function"""
 
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_parse_file(self, tmpdir):
         """Test that device name is extracted"""
         filename = tmpdir.join('test.xbb')

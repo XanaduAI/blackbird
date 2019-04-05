@@ -1,23 +1,22 @@
 sudo: false
 language: python
 cache: pip
-python:
-- 3.5
-- 3.6
 matrix:
   include:
   - python: 3.7
     dist: xenial
+    after_success: codecov
+  - python: 3.6
+    dist: xenial
+  - python: 3.5
+    dist: xenial
 env:
   global:
-  - COVERALLS_PARALLEL=true
-  - LOGGING=info
+    - COVERALLS_PARALLEL=true
+    - LOGGING=info
 install:
-- pip install -r requirements.txt
-- pip install wheel pytest pytest-cov codecov
-- python3 setup.py bdist_wheel
-- pip install dist/blackbird*.whl
+  - pip install -r requirements.txt --upgrade
+  - pip install wheel pytest pytest-cov codecov --upgrade
+  - pip install -e .
 script:
-- make coverage
-after_success:
-- codecov
+  - make coverage

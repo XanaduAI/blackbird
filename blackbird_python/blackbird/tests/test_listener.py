@@ -19,12 +19,13 @@ import sys
 import pytest
 
 import numpy as np
+import sympy as sym
 
 import antlr4
 
 from blackbird.blackbirdLexer import blackbirdLexer
 from blackbird.blackbirdParser import blackbirdParser
-from blackbird.listener import BlackbirdListener, parse_blackbird
+from blackbird.listener import BlackbirdListener, RegRefTransform, parse_blackbird
 
 
 test_file = """
@@ -89,6 +90,14 @@ def parse_input_using_mocked_device(device, monkeypatch):
 
 class TestParsingVariables:
     """Tests for parsing variable declarations"""
+
+    def test_invalid_regref(self, parse_input_using_mocked_device):
+        """Test that a variable using the reserved name for regrefs returns an exception"""
+        with pytest.raises(NameError, match="reserved for register references"):
+            parse_input_using_mocked_device('float q0 = 5')
+
+        with pytest.raises(NameError, match="reserved for register references"):
+            parse_input_using_mocked_device("float array q4 =\n\t-0.1, 0.2")
 
     def test_integer_variable(self, parse_input_using_mocked_device):
         """Test that an integer variable is correctly parsed"""
@@ -247,6 +256,37 @@ class TestParsingDevice:
         """Test that an device with keyword arguments is correctly parsed"""
         bb = parse_input("with example(shots=10, hbar=0.2):\n\tVac | 0\n")
         assert bb.device['kwargs'] == {"shots": 10, "hbar": 0.2}
+
+
+class TestRegRefTransform:
+    """Tests for the RegRefTransform class"""
+
+    def test_initialize(self):
+        """Test initialization using a SymPy function"""
+        q0 = sym.Symbol('q0')
+        q2 = sym.Symbol('q2')
+        f = (q0-q2)/np.sqrt(2)
+
+        rrt = RegRefTransform(f)
+
+        assert rrt.func_str == "0.707106781186547*q0 - 0.707106781186547*q2"
+        assert set(rrt.regrefs) == {0, 2}
+
+        if rrt.regrefs == [0, 2]:
+            assert np.allclose(rrt.func(0.543, -0.432), (0.543+0.432)/np.sqrt(2))
+
+        if rrt.regrefs == [2, 0]:
+            assert np.allclose(rrt.func(0.543, -0.432), (-0.432-0.543)/np.sqrt(2))
+
+    def test_str(self):
+        """Test string representation of a RegRefTransform"""
+        q0 = sym.Symbol('q0')
+        q2 = sym.Symbol('q2')
+        f = (q0+q2)/np.sqrt(2)
+
+        rrt = RegRefTransform(f)
+
+        assert rrt.__str__() == "0.707106781186547*q0 + 0.707106781186547*q2"
 
 
 class TestParseFunction:

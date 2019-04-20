@@ -48,9 +48,14 @@ The Python Blackbird parser is built using the ANTLR listener pattern.
 Modules
 -------
 
-* Blackbird listener class: :mod:`blackbird.listener`
-* Auxiliary parsing functions: :mod:`blackbird.auxiliary`
-* Syntax error class: :mod:`blackbird.error`
+* :mod:`blackbird.listener`: the Blackbird listener module. Contains
+  the main Blackbird listener class, as well as a class for encapsulating
+  classical processing of measured modes as register transforms.
+
+* :mod:`blackbird.error`: contains the error parser for
+  returning useful syntax errors to the user.
+
+* :mod:`blackbird.auxiliary`: auxiliary parsing functions.
 
 
 Main components
@@ -62,6 +67,12 @@ Main components
 
   This class can be sub-classed, to create more advanced Blackbird listeners
   that perform actions (i.e. such as simulations) upon parsing the tree.
+
+* :class:`~.RegRefTransform`: a class for representing classically processed
+  measurement results as parameters for subsequent quantum operations.
+
+  If the operation argument you are parsing is an instance of this class,
+  that indicates that a register transform is required.
 
 * :func:`~.parse_blackbird`: a utility function that automates
   the parsing of the Blackbird abstract syntax tree. Use this function, either
@@ -78,5 +89,5 @@ Main components
 		from blackbird import BlackbirdListener, parse_blackbird
 """
 
-from .listener import BlackbirdListener, parse_blackbird
+from .listener import BlackbirdListener, RegRefTransform, parse_blackbird
 from ._version import __version__

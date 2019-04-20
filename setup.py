@@ -28,7 +28,7 @@ requirements = [
 ]
 
 info = {
-    'name': 'blackbird',
+    'name': 'quantum-blackbird',
     'version': version,
     'maintainer': 'Xanadu Inc.',
     'maintainer_email': 'josh@xanadu.ai',

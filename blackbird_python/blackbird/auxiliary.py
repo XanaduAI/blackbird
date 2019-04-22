@@ -41,6 +41,7 @@ Code details
 ~~~~~~~~~~~~
 """
 import numpy as np
+from sympy import Symbol
 
 from .blackbirdParser import blackbirdParser
 
@@ -55,6 +56,7 @@ This dictionary is populated when parsing
 required by :func:`~._expression`.
 
 """
+
 
 def _literal(nonnumeric):
     """Convert a non-numeric blackbird literal to a Python literal.
@@ -142,6 +144,9 @@ def _expression(expr):
         return _number(expr.number())
 
     if isinstance(expr, blackbirdParser.VariableLabelContext):
+        if expr.REGREF():
+            return Symbol(expr.getText())
+
         if expr.getText() not in _VAR:
             raise NameError("name '{}' is not defined".format(expr.getText()))
 
@@ -169,7 +174,13 @@ def _expression(expr):
         if expr.TIMES():
             return np.prod([_expression(a), _expression(b)], axis=0)
         if expr.DIVIDE():
-            return np.prod([_expression(a), np.power(_expression(b), -1)], axis=0)
+            a = _expression(a)
+            b = _expression(b)
+
+            if isinstance(b, int):
+                b = float(b)
+
+            return np.prod([a, np.power(b, -1)], axis=0)
 
     if isinstance(expr, blackbirdParser.PowerLabelContext):
         a, b = expr.expression()
@@ -177,6 +188,7 @@ def _expression(expr):
 
     if isinstance(expr, blackbirdParser.FunctionLabelContext):
         return _func(expr.function(), expr.expression())
+
 
 def _get_arguments(arguments):
     """Parse blackbird positional and keyword arguments.

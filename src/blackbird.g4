@@ -14,7 +14,7 @@ expressionvar       : vartype name ASSIGN (expression | nonnumeric);
 
 arrayvar            : vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval;
 
-name                : NAME;
+name                : (REGREF | NAME);
 
 vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL);
 
@@ -56,7 +56,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | expression ( PLUS | MINUS ) expression    #AddLabel
                     | function LBRAC expression RBRAC           #FunctionLabel
                     | number                                    #NumberLabel
-                    | NAME                                      #VariableLabel
+                    | (REGREF | NAME)                           #VariableLabel
                     ;
 
 number              : (INT|FLOAT|COMPLEX|PI);
@@ -123,6 +123,7 @@ TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
 
 // Variable names
+REGREF              : 'q' DIGIT;
 MEASURE             : 'Measure'[A-Za-z]*;
 NAME                : [A-Za-z][0-9A-Za-z_]*;
 DEVICE              : [0-9A-Za-z._]+;

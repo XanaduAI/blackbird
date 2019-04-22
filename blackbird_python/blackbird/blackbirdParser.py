@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3,")
         buf.write("\u00e5\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
@@ -31,78 +31,78 @@ def serializedATN():
         buf.write("\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\7\25\u00dc")
         buf.write("\n\25\f\25\16\25\u00df\13\25\3\26\3\26\3\27\3\27\3\27")
         buf.write("\2\3(\30\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(")
-        buf.write("*,\2\13\3\2!&\3\2\f\r\3\2()\4\2\34\34\36\36\4\2\35\35")
-        buf.write("\37\37\3\2\3\4\3\2\5\6\4\2\t\13\17\17\3\2\24\27\2\u00ec")
-        buf.write("\2.\3\2\2\2\4=\3\2\2\2\6@\3\2\2\2\bG\3\2\2\2\nT\3\2\2")
-        buf.write("\2\fV\3\2\2\2\16X\3\2\2\2\20Z\3\2\2\2\22h\3\2\2\2\24k")
-        buf.write("\3\2\2\2\26s\3\2\2\2\30\u0083\3\2\2\2\32\u0085\3\2\2\2")
-        buf.write("\34\u0097\3\2\2\2\36\u0099\3\2\2\2 \u009b\3\2\2\2\"\u00b2")
-        buf.write("\3\2\2\2$\u00b8\3\2\2\2&\u00ba\3\2\2\2(\u00d0\3\2\2\2")
-        buf.write("*\u00e0\3\2\2\2,\u00e2\3\2\2\2./\5\4\3\2/\63\5\26\f\2")
-        buf.write("\60\62\7\20\2\2\61\60\3\2\2\2\62\65\3\2\2\2\63\61\3\2")
-        buf.write("\2\2\63\64\3\2\2\2\64\66\3\2\2\2\65\63\3\2\2\2\66\67\7")
-        buf.write("\2\2\3\67\3\3\2\2\28<\7\20\2\29<\5\6\4\2:<\5\b\5\2;8\3")
-        buf.write("\2\2\2;9\3\2\2\2;:\3\2\2\2<?\3\2\2\2=;\3\2\2\2=>\3\2\2")
-        buf.write("\2>\5\3\2\2\2?=\3\2\2\2@A\5\f\7\2AB\5\n\6\2BE\7\b\2\2")
-        buf.write("CF\5(\25\2DF\5\16\b\2EC\3\2\2\2ED\3\2\2\2F\7\3\2\2\2G")
-        buf.write("H\5\f\7\2HI\7!\2\2IN\5\n\6\2JK\7\36\2\2KL\5\20\t\2LM\7")
-        buf.write("\37\2\2MO\3\2\2\2NJ\3\2\2\2NO\3\2\2\2OP\3\2\2\2PQ\7\b")
-        buf.write("\2\2QR\7\20\2\2RS\5\22\n\2S\t\3\2\2\2TU\7(\2\2U\13\3\2")
-        buf.write("\2\2VW\t\2\2\2W\r\3\2\2\2XY\t\3\2\2Y\17\3\2\2\2Z_\7\t")
-        buf.write("\2\2[\\\7\31\2\2\\^\7\t\2\2][\3\2\2\2^a\3\2\2\2_]\3\2")
-        buf.write("\2\2_`\3\2\2\2`\21\3\2\2\2a_\3\2\2\2bc\7\21\2\2cd\5\24")
-        buf.write("\13\2de\7\20\2\2eg\3\2\2\2fb\3\2\2\2gj\3\2\2\2hf\3\2\2")
-        buf.write("\2hi\3\2\2\2i\23\3\2\2\2jh\3\2\2\2kp\5(\25\2lm\7\31\2")
-        buf.write("\2mo\5(\25\2nl\3\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2\2\2q")
-        buf.write("\25\3\2\2\2rp\3\2\2\2st\7\23\2\2tv\5\30\r\2uw\5 \21\2")
-        buf.write("vu\3\2\2\2vw\3\2\2\2wx\3\2\2\2xy\7\32\2\2y\u0080\7\20")
-        buf.write("\2\2z\177\5\32\16\2{\177\7\20\2\2|}\7\21\2\2}\177\7\20")
-        buf.write("\2\2~z\3\2\2\2~{\3\2\2\2~|\3\2\2\2\177\u0082\3\2\2\2\u0080")
-        buf.write("~\3\2\2\2\u0080\u0081\3\2\2\2\u0081\27\3\2\2\2\u0082\u0080")
-        buf.write("\3\2\2\2\u0083\u0084\t\4\2\2\u0084\31\3\2\2\2\u0085\u0088")
-        buf.write("\7\21\2\2\u0086\u0089\5\34\17\2\u0087\u0089\5\36\20\2")
-        buf.write("\u0088\u0086\3\2\2\2\u0088\u0087\3\2\2\2\u0089\u008b\3")
-        buf.write("\2\2\2\u008a\u008c\5 \21\2\u008b\u008a\3\2\2\2\u008b\u008c")
-        buf.write("\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008f\7 \2\2\u008e")
-        buf.write("\u0090\t\5\2\2\u008f\u008e\3\2\2\2\u008f\u0090\3\2\2\2")
-        buf.write("\u0090\u0091\3\2\2\2\u0091\u0093\5&\24\2\u0092\u0094\t")
-        buf.write("\6\2\2\u0093\u0092\3\2\2\2\u0093\u0094\3\2\2\2\u0094\u0095")
-        buf.write("\3\2\2\2\u0095\u0096\7\20\2\2\u0096\33\3\2\2\2\u0097\u0098")
-        buf.write("\7(\2\2\u0098\35\3\2\2\2\u0099\u009a\7\'\2\2\u009a\37")
-        buf.write("\3\2\2\2\u009b\u00a4\7\34\2\2\u009c\u00a1\5$\23\2\u009d")
-        buf.write("\u009e\7\31\2\2\u009e\u00a0\5$\23\2\u009f\u009d\3\2\2")
-        buf.write("\2\u00a0\u00a3\3\2\2\2\u00a1\u009f\3\2\2\2\u00a1\u00a2")
-        buf.write("\3\2\2\2\u00a2\u00a5\3\2\2\2\u00a3\u00a1\3\2\2\2\u00a4")
-        buf.write("\u009c\3\2\2\2\u00a4\u00a5\3\2\2\2\u00a5\u00ae\3\2\2\2")
-        buf.write("\u00a6\u00ab\5\"\22\2\u00a7\u00a8\7\31\2\2\u00a8\u00aa")
-        buf.write("\5\"\22\2\u00a9\u00a7\3\2\2\2\u00aa\u00ad\3\2\2\2\u00ab")
-        buf.write("\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac\u00af\3\2\2\2")
-        buf.write("\u00ad\u00ab\3\2\2\2\u00ae\u00a6\3\2\2\2\u00ae\u00af\3")
-        buf.write("\2\2\2\u00af\u00b0\3\2\2\2\u00b0\u00b1\7\35\2\2\u00b1")
-        buf.write("!\3\2\2\2\u00b2\u00b3\7(\2\2\u00b3\u00b4\7\b\2\2\u00b4")
-        buf.write("\u00b5\5$\23\2\u00b5#\3\2\2\2\u00b6\u00b9\5\16\b\2\u00b7")
-        buf.write("\u00b9\5(\25\2\u00b8\u00b6\3\2\2\2\u00b8\u00b7\3\2\2\2")
-        buf.write("\u00b9%\3\2\2\2\u00ba\u00bf\7\t\2\2\u00bb\u00bc\7\31\2")
-        buf.write("\2\u00bc\u00be\7\t\2\2\u00bd\u00bb\3\2\2\2\u00be\u00c1")
-        buf.write("\3\2\2\2\u00bf\u00bd\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0")
-        buf.write("\'\3\2\2\2\u00c1\u00bf\3\2\2\2\u00c2\u00c3\b\25\1\2\u00c3")
-        buf.write("\u00c4\7\34\2\2\u00c4\u00c5\5(\25\2\u00c5\u00c6\7\35\2")
-        buf.write("\2\u00c6\u00d1\3\2\2\2\u00c7\u00c8\t\7\2\2\u00c8\u00d1")
-        buf.write("\5(\25\t\u00c9\u00ca\5,\27\2\u00ca\u00cb\7\34\2\2\u00cb")
-        buf.write("\u00cc\5(\25\2\u00cc\u00cd\7\35\2\2\u00cd\u00d1\3\2\2")
-        buf.write("\2\u00ce\u00d1\5*\26\2\u00cf\u00d1\7(\2\2\u00d0\u00c2")
-        buf.write("\3\2\2\2\u00d0\u00c7\3\2\2\2\u00d0\u00c9\3\2\2\2\u00d0")
-        buf.write("\u00ce\3\2\2\2\u00d0\u00cf\3\2\2\2\u00d1\u00dd\3\2\2\2")
-        buf.write("\u00d2\u00d3\f\b\2\2\u00d3\u00d4\7\7\2\2\u00d4\u00dc\5")
-        buf.write("(\25\b\u00d5\u00d6\f\7\2\2\u00d6\u00d7\t\b\2\2\u00d7\u00dc")
-        buf.write("\5(\25\b\u00d8\u00d9\f\6\2\2\u00d9\u00da\t\7\2\2\u00da")
-        buf.write("\u00dc\5(\25\7\u00db\u00d2\3\2\2\2\u00db\u00d5\3\2\2\2")
-        buf.write("\u00db\u00d8\3\2\2\2\u00dc\u00df\3\2\2\2\u00dd\u00db\3")
-        buf.write("\2\2\2\u00dd\u00de\3\2\2\2\u00de)\3\2\2\2\u00df\u00dd")
-        buf.write("\3\2\2\2\u00e0\u00e1\t\t\2\2\u00e1+\3\2\2\2\u00e2\u00e3")
-        buf.write("\t\n\2\2\u00e3-\3\2\2\2\32\63;=EN_hpv~\u0080\u0088\u008b")
-        buf.write("\u008f\u0093\u00a1\u00a4\u00ab\u00ae\u00b8\u00bf\u00d0")
-        buf.write("\u00db\u00dd")
+        buf.write("*,\2\f\4\2\'\'))\3\2!&\3\2\f\r\3\2)*\4\2\34\34\36\36\4")
+        buf.write("\2\35\35\37\37\3\2\3\4\3\2\5\6\4\2\t\13\17\17\3\2\24\27")
+        buf.write("\2\u00ec\2.\3\2\2\2\4=\3\2\2\2\6@\3\2\2\2\bG\3\2\2\2\n")
+        buf.write("T\3\2\2\2\fV\3\2\2\2\16X\3\2\2\2\20Z\3\2\2\2\22h\3\2\2")
+        buf.write("\2\24k\3\2\2\2\26s\3\2\2\2\30\u0083\3\2\2\2\32\u0085\3")
+        buf.write("\2\2\2\34\u0097\3\2\2\2\36\u0099\3\2\2\2 \u009b\3\2\2")
+        buf.write("\2\"\u00b2\3\2\2\2$\u00b8\3\2\2\2&\u00ba\3\2\2\2(\u00d0")
+        buf.write("\3\2\2\2*\u00e0\3\2\2\2,\u00e2\3\2\2\2./\5\4\3\2/\63\5")
+        buf.write("\26\f\2\60\62\7\20\2\2\61\60\3\2\2\2\62\65\3\2\2\2\63")
+        buf.write("\61\3\2\2\2\63\64\3\2\2\2\64\66\3\2\2\2\65\63\3\2\2\2")
+        buf.write("\66\67\7\2\2\3\67\3\3\2\2\28<\7\20\2\29<\5\6\4\2:<\5\b")
+        buf.write("\5\2;8\3\2\2\2;9\3\2\2\2;:\3\2\2\2<?\3\2\2\2=;\3\2\2\2")
+        buf.write("=>\3\2\2\2>\5\3\2\2\2?=\3\2\2\2@A\5\f\7\2AB\5\n\6\2BE")
+        buf.write("\7\b\2\2CF\5(\25\2DF\5\16\b\2EC\3\2\2\2ED\3\2\2\2F\7\3")
+        buf.write("\2\2\2GH\5\f\7\2HI\7!\2\2IN\5\n\6\2JK\7\36\2\2KL\5\20")
+        buf.write("\t\2LM\7\37\2\2MO\3\2\2\2NJ\3\2\2\2NO\3\2\2\2OP\3\2\2")
+        buf.write("\2PQ\7\b\2\2QR\7\20\2\2RS\5\22\n\2S\t\3\2\2\2TU\t\2\2")
+        buf.write("\2U\13\3\2\2\2VW\t\3\2\2W\r\3\2\2\2XY\t\4\2\2Y\17\3\2")
+        buf.write("\2\2Z_\7\t\2\2[\\\7\31\2\2\\^\7\t\2\2][\3\2\2\2^a\3\2")
+        buf.write("\2\2_]\3\2\2\2_`\3\2\2\2`\21\3\2\2\2a_\3\2\2\2bc\7\21")
+        buf.write("\2\2cd\5\24\13\2de\7\20\2\2eg\3\2\2\2fb\3\2\2\2gj\3\2")
+        buf.write("\2\2hf\3\2\2\2hi\3\2\2\2i\23\3\2\2\2jh\3\2\2\2kp\5(\25")
+        buf.write("\2lm\7\31\2\2mo\5(\25\2nl\3\2\2\2or\3\2\2\2pn\3\2\2\2")
+        buf.write("pq\3\2\2\2q\25\3\2\2\2rp\3\2\2\2st\7\23\2\2tv\5\30\r\2")
+        buf.write("uw\5 \21\2vu\3\2\2\2vw\3\2\2\2wx\3\2\2\2xy\7\32\2\2y\u0080")
+        buf.write("\7\20\2\2z\177\5\32\16\2{\177\7\20\2\2|}\7\21\2\2}\177")
+        buf.write("\7\20\2\2~z\3\2\2\2~{\3\2\2\2~|\3\2\2\2\177\u0082\3\2")
+        buf.write("\2\2\u0080~\3\2\2\2\u0080\u0081\3\2\2\2\u0081\27\3\2\2")
+        buf.write("\2\u0082\u0080\3\2\2\2\u0083\u0084\t\5\2\2\u0084\31\3")
+        buf.write("\2\2\2\u0085\u0088\7\21\2\2\u0086\u0089\5\34\17\2\u0087")
+        buf.write("\u0089\5\36\20\2\u0088\u0086\3\2\2\2\u0088\u0087\3\2\2")
+        buf.write("\2\u0089\u008b\3\2\2\2\u008a\u008c\5 \21\2\u008b\u008a")
+        buf.write("\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d\3\2\2\2\u008d")
+        buf.write("\u008f\7 \2\2\u008e\u0090\t\6\2\2\u008f\u008e\3\2\2\2")
+        buf.write("\u008f\u0090\3\2\2\2\u0090\u0091\3\2\2\2\u0091\u0093\5")
+        buf.write("&\24\2\u0092\u0094\t\7\2\2\u0093\u0092\3\2\2\2\u0093\u0094")
+        buf.write("\3\2\2\2\u0094\u0095\3\2\2\2\u0095\u0096\7\20\2\2\u0096")
+        buf.write("\33\3\2\2\2\u0097\u0098\7)\2\2\u0098\35\3\2\2\2\u0099")
+        buf.write("\u009a\7(\2\2\u009a\37\3\2\2\2\u009b\u00a4\7\34\2\2\u009c")
+        buf.write("\u00a1\5$\23\2\u009d\u009e\7\31\2\2\u009e\u00a0\5$\23")
+        buf.write("\2\u009f\u009d\3\2\2\2\u00a0\u00a3\3\2\2\2\u00a1\u009f")
+        buf.write("\3\2\2\2\u00a1\u00a2\3\2\2\2\u00a2\u00a5\3\2\2\2\u00a3")
+        buf.write("\u00a1\3\2\2\2\u00a4\u009c\3\2\2\2\u00a4\u00a5\3\2\2\2")
+        buf.write("\u00a5\u00ae\3\2\2\2\u00a6\u00ab\5\"\22\2\u00a7\u00a8")
+        buf.write("\7\31\2\2\u00a8\u00aa\5\"\22\2\u00a9\u00a7\3\2\2\2\u00aa")
+        buf.write("\u00ad\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2")
+        buf.write("\u00ac\u00af\3\2\2\2\u00ad\u00ab\3\2\2\2\u00ae\u00a6\3")
+        buf.write("\2\2\2\u00ae\u00af\3\2\2\2\u00af\u00b0\3\2\2\2\u00b0\u00b1")
+        buf.write("\7\35\2\2\u00b1!\3\2\2\2\u00b2\u00b3\7)\2\2\u00b3\u00b4")
+        buf.write("\7\b\2\2\u00b4\u00b5\5$\23\2\u00b5#\3\2\2\2\u00b6\u00b9")
+        buf.write("\5\16\b\2\u00b7\u00b9\5(\25\2\u00b8\u00b6\3\2\2\2\u00b8")
+        buf.write("\u00b7\3\2\2\2\u00b9%\3\2\2\2\u00ba\u00bf\7\t\2\2\u00bb")
+        buf.write("\u00bc\7\31\2\2\u00bc\u00be\7\t\2\2\u00bd\u00bb\3\2\2")
+        buf.write("\2\u00be\u00c1\3\2\2\2\u00bf\u00bd\3\2\2\2\u00bf\u00c0")
+        buf.write("\3\2\2\2\u00c0\'\3\2\2\2\u00c1\u00bf\3\2\2\2\u00c2\u00c3")
+        buf.write("\b\25\1\2\u00c3\u00c4\7\34\2\2\u00c4\u00c5\5(\25\2\u00c5")
+        buf.write("\u00c6\7\35\2\2\u00c6\u00d1\3\2\2\2\u00c7\u00c8\t\b\2")
+        buf.write("\2\u00c8\u00d1\5(\25\t\u00c9\u00ca\5,\27\2\u00ca\u00cb")
+        buf.write("\7\34\2\2\u00cb\u00cc\5(\25\2\u00cc\u00cd\7\35\2\2\u00cd")
+        buf.write("\u00d1\3\2\2\2\u00ce\u00d1\5*\26\2\u00cf\u00d1\t\2\2\2")
+        buf.write("\u00d0\u00c2\3\2\2\2\u00d0\u00c7\3\2\2\2\u00d0\u00c9\3")
+        buf.write("\2\2\2\u00d0\u00ce\3\2\2\2\u00d0\u00cf\3\2\2\2\u00d1\u00dd")
+        buf.write("\3\2\2\2\u00d2\u00d3\f\b\2\2\u00d3\u00d4\7\7\2\2\u00d4")
+        buf.write("\u00dc\5(\25\b\u00d5\u00d6\f\7\2\2\u00d6\u00d7\t\t\2\2")
+        buf.write("\u00d7\u00dc\5(\25\b\u00d8\u00d9\f\6\2\2\u00d9\u00da\t")
+        buf.write("\b\2\2\u00da\u00dc\5(\25\7\u00db\u00d2\3\2\2\2\u00db\u00d5")
+        buf.write("\3\2\2\2\u00db\u00d8\3\2\2\2\u00dc\u00df\3\2\2\2\u00dd")
+        buf.write("\u00db\3\2\2\2\u00dd\u00de\3\2\2\2\u00de)\3\2\2\2\u00df")
+        buf.write("\u00dd\3\2\2\2\u00e0\u00e1\t\n\2\2\u00e1+\3\2\2\2\u00e2")
+        buf.write("\u00e3\t\13\2\2\u00e3-\3\2\2\2\32\63;=EN_hpv~\u0080\u0088")
+        buf.write("\u008b\u008f\u0093\u00a1\u00a4\u00ab\u00ae\u00b8\u00bf")
+        buf.write("\u00d0\u00db\u00dd")
         return buf.getvalue()
 
 
@@ -130,8 +130,8 @@ class blackbirdParser ( Parser ):
                       "SQRT", "SIN", "COS", "EXP", "PERIOD", "COMMA", "COLON", 
                       "QUOTE", "LBRAC", "RBRAC", "LSQBRAC", "RSQBRAC", "APPLY", 
                       "TYPE_ARRAY", "TYPE_FLOAT", "TYPE_COMPLEX", "TYPE_INT", 
-                      "TYPE_STR", "TYPE_BOOL", "MEASURE", "NAME", "DEVICE", 
-                      "COMMENT", "ANY" ]
+                      "TYPE_STR", "TYPE_BOOL", "REGREF", "MEASURE", "NAME", 
+                      "DEVICE", "COMMENT", "ANY" ]
 
     RULE_start = 0
     RULE_varblock = 1
@@ -199,11 +199,12 @@ class blackbirdParser ( Parser ):
     TYPE_INT=34
     TYPE_STR=35
     TYPE_BOOL=36
-    MEASURE=37
-    NAME=38
-    DEVICE=39
-    COMMENT=40
-    ANY=41
+    REGREF=37
+    MEASURE=38
+    NAME=39
+    DEVICE=40
+    COMMENT=41
+    ANY=42
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -423,7 +424,7 @@ class blackbirdParser ( Parser ):
             self.state = 67
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP, blackbirdParser.LBRAC, blackbirdParser.NAME]:
+            if token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP, blackbirdParser.LBRAC, blackbirdParser.REGREF, blackbirdParser.NAME]:
                 self.state = 65
                 self.expression(0)
                 pass
@@ -538,6 +539,9 @@ class blackbirdParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+        def REGREF(self):
+            return self.getToken(blackbirdParser.REGREF, 0)
+
         def NAME(self):
             return self.getToken(blackbirdParser.NAME, 0)
 
@@ -559,10 +563,16 @@ class blackbirdParser ( Parser ):
 
         localctx = blackbirdParser.NameContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_name)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 82
-            self.match(blackbirdParser.NAME)
+            _la = self._input.LA(1)
+            if not(_la==blackbirdParser.REGREF or _la==blackbirdParser.NAME):
+                self._errHandler.recoverInline(self)
+            else:
+                self._errHandler.reportMatch(self)
+                self.consume()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1448,7 +1458,7 @@ class blackbirdParser ( Parser ):
                 self.state = 180
                 self.nonnumeric()
                 pass
-            elif token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP, blackbirdParser.LBRAC, blackbirdParser.NAME]:
+            elif token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.EXP, blackbirdParser.LBRAC, blackbirdParser.REGREF, blackbirdParser.NAME]:
                 self.state = 181
                 self.expression(0)
                 pass
@@ -1539,6 +1549,32 @@ class blackbirdParser ( Parser ):
             super().copyFrom(ctx)
 
 
+    class FunctionLabelContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def function(self):
+            return self.getTypedRuleContext(blackbirdParser.FunctionContext,0)
+
+        def LBRAC(self):
+            return self.getToken(blackbirdParser.LBRAC, 0)
+        def expression(self):
+            return self.getTypedRuleContext(blackbirdParser.ExpressionContext,0)
+
+        def RBRAC(self):
+            return self.getToken(blackbirdParser.RBRAC, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFunctionLabel" ):
+                listener.enterFunctionLabel(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFunctionLabel" ):
+                listener.exitFunctionLabel(self)
+
+
     class BracketsLabelContext(ExpressionContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
@@ -1560,90 +1596,6 @@ class blackbirdParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitBracketsLabel" ):
                 listener.exitBracketsLabel(self)
-
-
-    class SignLabelContext(ExpressionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
-            super().__init__(parser)
-            self.copyFrom(ctx)
-
-        def expression(self):
-            return self.getTypedRuleContext(blackbirdParser.ExpressionContext,0)
-
-        def PLUS(self):
-            return self.getToken(blackbirdParser.PLUS, 0)
-        def MINUS(self):
-            return self.getToken(blackbirdParser.MINUS, 0)
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSignLabel" ):
-                listener.enterSignLabel(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSignLabel" ):
-                listener.exitSignLabel(self)
-
-
-    class PowerLabelContext(ExpressionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
-            super().__init__(parser)
-            self.copyFrom(ctx)
-
-        def expression(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(blackbirdParser.ExpressionContext)
-            else:
-                return self.getTypedRuleContext(blackbirdParser.ExpressionContext,i)
-
-        def PWR(self):
-            return self.getToken(blackbirdParser.PWR, 0)
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPowerLabel" ):
-                listener.enterPowerLabel(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPowerLabel" ):
-                listener.exitPowerLabel(self)
-
-
-    class NumberLabelContext(ExpressionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
-            super().__init__(parser)
-            self.copyFrom(ctx)
-
-        def number(self):
-            return self.getTypedRuleContext(blackbirdParser.NumberContext,0)
-
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterNumberLabel" ):
-                listener.enterNumberLabel(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitNumberLabel" ):
-                listener.exitNumberLabel(self)
-
-
-    class VariableLabelContext(ExpressionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
-            super().__init__(parser)
-            self.copyFrom(ctx)
-
-        def NAME(self):
-            return self.getToken(blackbirdParser.NAME, 0)
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterVariableLabel" ):
-                listener.enterVariableLabel(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitVariableLabel" ):
-                listener.exitVariableLabel(self)
 
 
     class MulLabelContext(ExpressionContext):
@@ -1672,30 +1624,47 @@ class blackbirdParser ( Parser ):
                 listener.exitMulLabel(self)
 
 
-    class FunctionLabelContext(ExpressionContext):
+    class NumberLabelContext(ExpressionContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
-        def function(self):
-            return self.getTypedRuleContext(blackbirdParser.FunctionContext,0)
+        def number(self):
+            return self.getTypedRuleContext(blackbirdParser.NumberContext,0)
 
-        def LBRAC(self):
-            return self.getToken(blackbirdParser.LBRAC, 0)
-        def expression(self):
-            return self.getTypedRuleContext(blackbirdParser.ExpressionContext,0)
-
-        def RBRAC(self):
-            return self.getToken(blackbirdParser.RBRAC, 0)
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFunctionLabel" ):
-                listener.enterFunctionLabel(self)
+            if hasattr( listener, "enterNumberLabel" ):
+                listener.enterNumberLabel(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFunctionLabel" ):
-                listener.exitFunctionLabel(self)
+            if hasattr( listener, "exitNumberLabel" ):
+                listener.exitNumberLabel(self)
+
+
+    class PowerLabelContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(blackbirdParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(blackbirdParser.ExpressionContext,i)
+
+        def PWR(self):
+            return self.getToken(blackbirdParser.PWR, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPowerLabel" ):
+                listener.enterPowerLabel(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPowerLabel" ):
+                listener.exitPowerLabel(self)
 
 
     class AddLabelContext(ExpressionContext):
@@ -1722,6 +1691,49 @@ class blackbirdParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitAddLabel" ):
                 listener.exitAddLabel(self)
+
+
+    class SignLabelContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(blackbirdParser.ExpressionContext,0)
+
+        def PLUS(self):
+            return self.getToken(blackbirdParser.PLUS, 0)
+        def MINUS(self):
+            return self.getToken(blackbirdParser.MINUS, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterSignLabel" ):
+                listener.enterSignLabel(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitSignLabel" ):
+                listener.exitSignLabel(self)
+
+
+    class VariableLabelContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a blackbirdParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def REGREF(self):
+            return self.getToken(blackbirdParser.REGREF, 0)
+        def NAME(self):
+            return self.getToken(blackbirdParser.NAME, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterVariableLabel" ):
+                listener.enterVariableLabel(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitVariableLabel" ):
+                listener.exitVariableLabel(self)
 
 
 
@@ -1784,12 +1796,17 @@ class blackbirdParser ( Parser ):
                 self.state = 204
                 self.number()
                 pass
-            elif token in [blackbirdParser.NAME]:
+            elif token in [blackbirdParser.REGREF, blackbirdParser.NAME]:
                 localctx = blackbirdParser.VariableLabelContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 205
-                self.match(blackbirdParser.NAME)
+                _la = self._input.LA(1)
+                if not(_la==blackbirdParser.REGREF or _la==blackbirdParser.NAME):
+                    self._errHandler.recoverInline(self)
+                else:
+                    self._errHandler.reportMatch(self)
+                    self.consume()
                 pass
             else:
                 raise NoViableAltException(self)

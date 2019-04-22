@@ -66,7 +66,7 @@ Main components
   extracting variables, and storing quantum program information.
 
   This class can be sub-classed, to create more advanced Blackbird listeners
-  that perform actions (i.e. such as simulations) upon parsing the tree.
+  that perform actions (e.g., simulations) upon parsing the tree.
 
 * :class:`~.RegRefTransform`: a class for representing classically processed
   measurement results as parameters for subsequent quantum operations.

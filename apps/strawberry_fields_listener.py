@@ -21,7 +21,7 @@ import numpy as np
 import strawberryfields as sf
 import strawberryfields.ops as sfo
 
-from blackbird import BlackbirdListener, parse_blackbird
+from blackbird import BlackbirdListener, RegRefTransform, parse_blackbird
 
 
 class StrawberryFieldsListener(BlackbirdListener):
@@ -53,6 +53,12 @@ class StrawberryFieldsListener(BlackbirdListener):
                 if 'args' in statement:
                     args = statement['args']
                     kwargs = statement['kwargs']
+
+                    for idx, a in enumerate(args):
+                        if isinstance(a, RegRefTransform):
+                            regrefs = [self.q[i] for i in a.regrefs]
+                            args[idx] = sf.engine.RegRefTransform(regrefs, a.func, a.func_str)
+
                     op = getattr(sfo, statement['op'])(*args, **kwargs)
                 else:
                     op = getattr(sfo, statement['op'])

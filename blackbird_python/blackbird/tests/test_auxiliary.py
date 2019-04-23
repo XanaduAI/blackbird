@@ -17,6 +17,7 @@
 import pytest
 
 import numpy as np
+import sympy as sym
 
 from antlr4 import ParserRuleContext
 
@@ -47,14 +48,21 @@ def ctx():
 def num(parser, ctx):
     """Generates a blackbird number label that can be passed to the Blackbird parser.
     This is convenient when testing other functions that require numbers."""
-    def _number_label(n):
+    def _number_label(n, num_type='complex'):
         """Generate the blackbird number n"""
         class DummyNumberLabel(blackbirdParser.NumberLabelContext):
             """Dummy class"""
             def number(self):
                 """The number method"""
                 number = blackbirdParser.NumberContext(parser, ctx)
-                number.COMPLEX = lambda: True
+
+                if num_type == 'float':
+                    number.FLOAT = lambda: True
+                elif num_type == 'int':
+                    number.INT = lambda: True
+                else:
+                    number.COMPLEX = lambda: True
+
                 number.getText = lambda: n
                 return number
         return DummyNumberLabel(parser, ctx)
@@ -322,7 +330,22 @@ class TestExpression:
 
         class DummyMulLabel(blackbirdParser.MulLabelContext):
             """Dummy mul label"""
-            expression = lambda self: (num(n1[0]), num(n2[0]))
+            expression = lambda self: (num(n1[0], num_type='complex'), num(n2[0], num_type='float'))
+
+        expr = DummyMulLabel(parser, ctx)
+        expr.DIVIDE = lambda: True
+        assert np.allclose(_expression(expr), n1[1]/n2[1])
+
+    @pytest.mark.parametrize('n1', test_complex)
+    @pytest.mark.parametrize('n2', test_ints)
+    def test_divide_by_integer(self, parser, ctx, n1, n2, num):
+        """Test division of a number by an integer"""
+        if n2[1] == 0:
+            pytest.skip("Cannot divide by zero")
+
+        class DummyMulLabel(blackbirdParser.MulLabelContext):
+            """Dummy mul label"""
+            expression = lambda self: (num(n1[0]), num(n2[0], num_type='int'))
 
         expr = DummyMulLabel(parser, ctx)
         expr.DIVIDE = lambda: True
@@ -335,7 +358,7 @@ class TestExpression:
 
         class DummyPowerLabel(blackbirdParser.PowerLabelContext):
             """Dummy power label"""
-            expression = lambda self: (num(n1[0]), num(n2[0]))
+            expression = lambda self: (num(n1[0], num_type='complex'), num(n2[0], num_type='float'))
 
         expr = DummyPowerLabel(parser, ctx)
         assert np.allclose(_expression(expr), n1[1]**n2[1])
@@ -355,6 +378,15 @@ class TestExpression:
 
         expr = DummyFunctionLabel(parser, ctx)
         assert np.allclose(_expression(expr), np.sin(n1[1]))
+
+    def test_regref_transform(self, parser, ctx, monkeypatch):
+        """Test that a Blackbird expression containing register references evaluates"""
+        expr = blackbirdParser.VariableLabelContext(parser, ctx)
+        expr.getText = lambda: "q2"
+        expr.REGREF = lambda: True
+
+        assert isinstance(_expression(expr), sym.Symbol)
+        assert str(_expression(expr)) == "q2"
 
 
 class TestExpressionArray:

@@ -34,24 +34,24 @@ Summary
 .. autosummary::
     PYTHON_TYPES
     NUMPY_TYPES
+    RegRefTransform
     BlackbirdListener
     parse_blackbird
 
 Code details
 ~~~~~~~~~~~~
 """
-import sys
-
 import antlr4
 
 import numpy as np
+import sympy as sym
 
 from .blackbirdLexer import blackbirdLexer
 from .blackbirdParser import blackbirdParser
 from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener
-from .auxiliary import _expression, _func, _get_arguments, _literal, _number, _VAR
+from .auxiliary import _expression, _get_arguments, _literal, _VAR
 
 
 PYTHON_TYPES = {
@@ -75,6 +75,43 @@ NUMPY_TYPES = {
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""
+
+
+class RegRefTransform:
+    """Class to represent a classical register transform.
+
+    Args:
+        expr (sympy.Expr): a SymPy expression representing the RegRef transform
+    """
+    def __init__(self, expr):
+        """After initialization, the RegRefTransform has three attributes
+        which may be inspected to translate the Blackbird program to a
+        simulator or quantum hardware:
+
+        * :attr:`func`
+        * :attr:`regrefs`
+        * :attr:`func_str`
+        """
+        regref_symbols = list(expr.free_symbols)
+        # get the Python function represented by the regref transform
+        self.func = sym.lambdify(regref_symbols, expr)
+        """function: Scalar function that takes one or more values corresponding
+        to measurement results, and outputs a single numeric value."""
+
+        # get the regrefs involved
+        self.regrefs = [int(str(i)[1:]) for i in regref_symbols]
+        """list[int]: List of integers corresponding to the modes that are measured
+        and act as inputs to :attr:`func`. Note that the order of this list corresponds
+        to the order that the measured mode results should be passed to the function."""
+
+        self.func_str = str(expr)
+        """str: String representation of the RegRefTransform function."""
+
+    def __str__(self):
+        """Print formatting"""
+        return self.func_str
+
+    __repr__ = __str__
 
 
 class BlackbirdListener(blackbirdListener):
@@ -121,6 +158,9 @@ class BlackbirdListener(blackbirdListener):
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
 
+        if ctx.name().REGREF():
+            raise NameError("Variable name {} is reserved for register references".format(name))
+
         if ctx.expression():
             value = _expression(ctx.expression())
         elif ctx.nonnumeric():
@@ -147,6 +187,9 @@ class BlackbirdListener(blackbirdListener):
         """
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
+
+        if ctx.name().REGREF():
+            raise NameError("Variable name {} is reserved for register references".format(name))
 
         shape = None
         if ctx.shape():
@@ -192,12 +235,16 @@ class BlackbirdListener(blackbirdListener):
 
         if ctx.arguments():
             op_args, op_kwargs = _get_arguments(ctx.arguments())
+
+            # convert any sympy expressions into regref transforms
+            op_args = [RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args]
+
             self.queue.append({
-                    'op': op,
-                    'args': op_args,
-                    'kwargs': op_kwargs,
-                    'modes': modes
-                })
+                'op': op,
+                'args': op_args,
+                'kwargs': op_kwargs,
+                'modes': modes
+            })
         else:
             self.queue.append({'op': op, 'modes': modes})
 

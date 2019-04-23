@@ -22,12 +22,13 @@ with open("blackbird_python/blackbird/_version.py") as f:
 	version = f.readlines()[-1].split()[-1].strip("\"'")
 
 requirements = [
-    "numpy",
+    "numpy>=1.16",
+    "sympy",
     "antlr4-python3-runtime>=4.7.1"
 ]
 
 info = {
-    'name': 'blackbird',
+    'name': 'quantum-blackbird',
     'version': version,
     'maintainer': 'Xanadu Inc.',
     'maintainer_email': 'josh@xanadu.ai',

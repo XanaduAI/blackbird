@@ -16,17 +16,31 @@
 # Blackbird quantum assembly language example
 # ===========================================
 # Blackbird is case sensitive.
-# Newlines at the same indentation level indicate
-# the end of a statement.
+# Newlines indicate the end of a statement.
 # Like Python, we use # for comments.
+
+# -------------------------------------------
+# Metadata
+# -------------------------------------------
+# At the top of the file, we define:
+#
+# * name: the name of the quantum program,
+# * version: the Blackbird version the script targets
+# * target: (optional) device/simulator target
+#   that the quantum program has been compiled for.
+#
+# In addition, keyword options can be provided for the
+# target using the syntax (option1=0.34, option2=True)
+
 name example
 version 1.0
+
 target Chip0 (shots=10)
 
 # -------------------------------------------
 # Variable declarations
 # -------------------------------------------
-# Variable are defined at the top of the file.
+# Variable can be defined anywhere in the file.
 
 # Format for defining variables:
 #   type name = expression
@@ -37,6 +51,7 @@ target Chip0 (shots=10)
 #   complex: 5j, 8-1j, 0.54+0.21j
 #   bool: True, False
 #   str: any ASCII string surrounded by quotes, "sdfds"
+
 int n = +5
 int k = n
 
@@ -130,6 +145,8 @@ Gaussian(B) | [0]
 
 # Finish with measurements
 MeasureFock() | 5
+# use a measured register as a gate argument
+Xgate(sqrt(2)*q5) | 1
 Measure | 1
 MeasureHomodyne(0.32) | 2
 MeasureP | 3

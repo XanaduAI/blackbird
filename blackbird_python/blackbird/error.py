@@ -47,6 +47,7 @@ Summary
 Code details
 ~~~~~~~~~~~~
 """
+#pylint: disable=too-many-statements, protected-access
 import sys
 import antlr4
 
@@ -62,8 +63,9 @@ class NoTraceBack(Exception):
         Args:
             msg (str): message to be printed in the traceback
         """
+        #pylint: disable=super-init-not-called,unused-argument
         try:
-            ln = sys.exc_info()[-1].tb_lineno
+            _ = sys.exc_info()[-1].tb_lineno
         except AttributeError:
             pass
         sys.exit(self)
@@ -88,21 +90,11 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
             # is returned from the parser. Instead, we can get the context from the parser itself.
             ctx = recognizer._ctx
 
-        if offendingSymbol.text in {
-            ";",
-            "[",
-            "]",
-            "\\",
-            "$",
-            "@",
-            "&",
-            "%",
-            "~",
-            "`",
-            "?",
-        }:
+        if offendingSymbol.text in {";", "[", "]", "\\", "$", "@", "&", "%", "~", "`", "?"}:
             # inform the user of invalid symbol usage
-            error_msg = "Blackbird SyntaxError (line {}:{}): {} is not a valid Blackbird symbol."
+            error_msg = (
+                "Blackbird SyntaxError (line {}:{}): {} is not a valid Blackbird symbol."
+            )
             raise BlackbirdSyntaxError(
                 error_msg.format(line, column + 1, offendingSymbol.text)
             ) from None
@@ -115,7 +107,9 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
 
             if not ctx.ASSIGN():
                 # equal sign was not found
-                error_msg = "Blackbird SyntaxError (line {}:{}): variable {} missing an assignment."
+                error_msg = (
+                    "Blackbird SyntaxError (line {}:{}): variable {} missing an assignment."
+                )
                 raise BlackbirdSyntaxError(
                     error_msg.format(line, column + 1, var_name)
                 ) from None

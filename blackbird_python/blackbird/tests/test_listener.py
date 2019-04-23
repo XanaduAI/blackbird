@@ -25,7 +25,12 @@ import antlr4
 
 from blackbird.blackbirdLexer import blackbirdLexer
 from blackbird.blackbirdParser import blackbirdParser
-from blackbird.listener import BlackbirdListener, RegRefTransform, parse_blackbird
+from blackbird.listener import (
+    BlackbirdListener,
+    RegRefTransform,
+    parse_blackbird,
+    parse_blackbird_string
+)
 
 
 test_file = """
@@ -54,7 +59,7 @@ def parse_input():
         bb = BlackbirdListener()
         walker = antlr4.ParseTreeWalker()
         walker.walk(bb, tree)
-        return bb
+        return bb.program
     return _parse_input
 
 
@@ -74,7 +79,7 @@ def parse_input_mocked_metadata(monkeypatch):
         walker = antlr4.ParseTreeWalker()
         walker.walk(bb, tree)
 
-        return bb
+        return bb.program
     return _parse_input
 
 
@@ -112,57 +117,57 @@ class TestParsingVariables:
     def test_integer_variable(self, parse_input_mocked_metadata):
         """Test that an integer variable is correctly parsed"""
         bb = parse_input_mocked_metadata('int n = 5')
-        assert bb.var == {'n': 5}
+        assert bb._var == {'n': 5}
 
     def test_float_variable(self, parse_input_mocked_metadata):
         """Test that a float variable is correctly parsed"""
         bb = parse_input_mocked_metadata("float alpha = -0.5432")
-        assert bb.var == {'alpha': -0.5432}
+        assert bb._var == {'alpha': -0.5432}
 
     def test_float_exponent_variable(self, parse_input_mocked_metadata):
         """Test that a float variable with an exponent is correctly parsed"""
         bb = parse_input_mocked_metadata("float alpha = -9.54e-3")
-        assert bb.var == {'alpha': -9.54e-3}
+        assert bb._var == {'alpha': -9.54e-3}
 
     def test_complex_variable(self, parse_input_mocked_metadata):
         """Test that a complex variable is correctly parsed"""
         bb = parse_input_mocked_metadata("complex Beta = -0.231+5.21j")
-        assert bb.var == {'Beta': -0.231+5.21j}
+        assert bb._var == {'Beta': -0.231+5.21j}
 
     def test_complex_exponent_variable(self, parse_input_mocked_metadata):
         """Test that a complex variable with an exponent is correctly parsed"""
         bb = parse_input_mocked_metadata("complex Beta = -0.231e-6+5.21e-2j")
-        assert bb.var == {'Beta': -0.231e-6+5.21e-2j}
+        assert bb._var == {'Beta': -0.231e-6+5.21e-2j}
 
     def test_pi_variable(self, parse_input_mocked_metadata):
         """Test that pi can be parsed"""
         bb = parse_input_mocked_metadata("float test = pi")
-        assert bb.var == {'test': np.pi}
+        assert bb._var == {'test': np.pi}
 
     def test_string_variable(self, parse_input_mocked_metadata):
         """Test that string can be parsed"""
         bb = parse_input_mocked_metadata('str username = "Josh"')
-        assert bb.var == {'username': "Josh"}
+        assert bb._var == {'username': "Josh"}
 
     def test_bool_variable(self, parse_input_mocked_metadata):
         """Test that bool can be parsed"""
         bb = parse_input_mocked_metadata('bool b1 = True\n bool b2 = False')
-        assert bb.var == {'b1': True, 'b2': False}
+        assert bb._var == {'b1': True, 'b2': False}
 
     def test_float_array_variable(self, parse_input_mocked_metadata):
         """Test that float array can be parsed"""
         bb = parse_input_mocked_metadata("float array C =\n\t-0.1, 0.2")
-        assert np.all(bb.var['C'] == np.array([[-0.1, 0.2]]))
+        assert np.all(bb._var['C'] == np.array([[-0.1, 0.2]]))
 
     def test_complex_array_variable(self, parse_input_mocked_metadata):
         """Test that complex array can be parsed"""
         bb = parse_input_mocked_metadata("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
-        assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
+        assert np.all(bb._var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
     def test_complex_array_shape_variable(self, parse_input_mocked_metadata):
         """Test that complex array with shape can be parsed"""
         bb = parse_input_mocked_metadata("complex array A[2, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
-        assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
+        assert np.all(bb._var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
     def test_invalid_expression_type(self, parse_input_mocked_metadata):
         """Test exception is raised if the expression variable type is incorrect"""
@@ -182,13 +187,13 @@ class TestParsingVariables:
     def test_variable_expression(self, parse_input_mocked_metadata):
         """Test that a variable expression is correctly parsed"""
         bb = parse_input_mocked_metadata("float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2")
-        assert bb.var['gamma'] == (2.0*np.cos(0.32*np.pi)+1)**2
+        assert bb._var['gamma'] == (2.0*np.cos(0.32*np.pi)+1)**2
 
     def test_array_variable_expression(self, parse_input_mocked_metadata):
         """Test that a variable expression containing arrays is correctly parsed"""
         bb = parse_input_mocked_metadata("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2")
         A = np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]])
-        assert np.all(bb.var['res'] == (2.0*np.cos(A*np.pi)+1)**2)
+        assert np.all(bb._var['res'] == (2.0*np.cos(A*np.pi)+1)**2)
 
 
 class TestParsingQuantumPrograms:
@@ -197,46 +202,46 @@ class TestParsingQuantumPrograms:
     def test_operation_no_args(self, parse_input_mocked_metadata):
         """Test that an operation with no arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("Vac | 0\n")
-        assert bb.queue == [{'modes': [0], 'op': 'Vac'}]
+        assert bb.operations == [{'modes': [0], 'op': 'Vac'}]
 
     def test_measure_no_args(self, parse_input_mocked_metadata):
         """Test that a measurement with no args is correctly parsed"""
         bb = parse_input_mocked_metadata("Measure | 0\n")
-        assert bb.queue == [{'modes': [0], 'op': 'Measure'}]
+        assert bb.operations == [{'modes': [0], 'op': 'Measure'}]
 
     @pytest.mark.parametrize('modes', ['[0, 1, 2, 5]', '0, 1, 2, 5'])
     def test_multiple_modes(self, parse_input_mocked_metadata, modes):
         """Test that multiple modes are correctly parsed"""
         bb = parse_input_mocked_metadata("Vac | {}\n".format(modes))
-        assert bb.queue == [{'modes': [0, 1, 2, 5], 'op': 'Vac'}]
+        assert bb.operations == [{'modes': [0, 1, 2, 5], 'op': 'Vac'}]
 
     @pytest.mark.parametrize('arg', ['-0.3+2j', '0', '1e-3'])
     def test_operation_single_arg(self, parse_input_mocked_metadata, arg):
         """Test that an operation with one argument is correctly parsed"""
         bb = parse_input_mocked_metadata("Coherent({}) | 0\n".format(arg))
-        assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [complex(arg)], 'kwargs': {}}]
+        assert bb.operations == [{'modes': [0], 'op': 'Coherent', 'args': [complex(arg)], 'kwargs': {}}]
 
     def test_operation_multiple_arg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("Coherent(-0.3+2j, 0, 1e-3) | 0\n")
-        assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [-0.3+2j, 0, 1e-3], 'kwargs': {}}]
+        assert bb.operations == [{'modes': [0], 'op': 'Coherent', 'args': [-0.3+2j, 0, 1e-3], 'kwargs': {}}]
 
     def test_operation_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("Coherent(alpha=-0.3+2j) | 0\n")
-        assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [], 'kwargs': {'alpha':-0.3+2j}}]
+        assert bb.operations == [{'modes': [0], 'op': 'Coherent', 'args': [], 'kwargs': {'alpha':-0.3+2j}}]
 
     def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureHomodyne(phi=0.23, b=1) | 0\n")
-        assert bb.queue == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [], 'kwargs': {'phi':0.23, 'b':1}}]
+        assert bb.operations == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [], 'kwargs': {'phi':0.23, 'b':1}}]
 
     # @pytest.mark.skip()
     # def test_operation_args_and_kwarg(self, parse_input):
     #     """Test that an operation with multiple args/keyword arguments is correctly parsed
     #     NOTE: This is currently not supported by the parser."""
     #     bb = parse_input("MeasureHomodyne(0.23, post_select=0.41) | 0\n")
-    #     assert bb.queue == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [0.23], 'kwargs': {'post_select':0.41}}]
+    #     assert bb.operations == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [0.23], 'kwargs': {'post_select':0.41}}]
 
     def test_operation_arg_expressions(self, parse_input_mocked_metadata):
         """Test that expressions inside arguments are properly evaluated"""
@@ -246,12 +251,12 @@ class TestParsingQuantumPrograms:
         Delta = np.sqrt(2)
         expected = [alpha**2, Delta*np.sqrt(np.pi), 0.2*10]
 
-        assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': expected, 'kwargs': {}}]
+        assert bb.operations == [{'modes': [0], 'op': 'Coherent', 'args': expected, 'kwargs': {}}]
 
     def test_operation_arg_array(self, parse_input_mocked_metadata):
         """Test that arrays inside arguments are properly evaluated"""
         bb = parse_input_mocked_metadata("float array A =\n\t1, 5\nGaussian(means=A) | 0\n")
-        assert np.all(bb.queue[0]['kwargs']['means'] == np.array([[1, 5]]))
+        assert np.all(bb.operations[0]['kwargs']['means'] == np.array([[1, 5]]))
 
 
 class TestParsingMetadata:
@@ -319,7 +324,7 @@ class TestParseFunction:
 
         bb = parse_blackbird(filename)
 
-        assert bb.var == {"alpha": 0.3423}
+        assert bb._var == {"alpha": 0.3423}
 
         expected = {"name": 'fock', 'options': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}}
         assert bb.target == expected
@@ -329,4 +334,20 @@ class TestParseFunction:
             {'op': 'MeasureFock', 'args': [], 'kwargs':{}, 'modes': [0]}
             ]
 
-        assert bb.queue == expected
+        assert bb.operations == expected
+
+    def test_parse_string(self, tmpdir):
+        """Test that device name is extracted"""
+        bb = parse_blackbird_string(test_file)
+
+        assert bb._var == {"alpha": 0.3423}
+
+        expected = {"name": 'fock', 'options': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}}
+        assert bb.target == expected
+
+        expected = [
+            {'op': 'Coherent', 'args': [0.3423, np.sqrt(np.pi)], 'kwargs':{}, 'modes': [0]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs':{}, 'modes': [0]}
+            ]
+
+        assert bb.operations == expected

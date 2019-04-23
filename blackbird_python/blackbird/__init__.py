@@ -48,6 +48,10 @@ The Python Blackbird parser is built using the ANTLR listener pattern.
 Modules
 -------
 
+* :mod:`blackbird.program`: the Blackbird program module. Contains
+  the main Blackbird program class, used for encapsulating Blackbird
+  programs in Python.
+
 * :mod:`blackbird.listener`: the Blackbird listener module. Contains
   the main Blackbird listener class, as well as a class for encapsulating
   classical processing of measured modes as register transforms.
@@ -60,6 +64,9 @@ Modules
 
 Main components
 ---------------
+
+* :class:`~.BlackbirdProgram`: a class that encapsulates a Blackbird
+  program, using standard Python data structures accessible via attributes.
 
 * :class:`~.BlackbirdListener`: the Python Blackbird listener,
   that traverses the abstract syntax tree using ANTLR4, evaluating expressions,
@@ -75,19 +82,32 @@ Main components
   that indicates that a register transform is required.
 
 * :func:`~.parse_blackbird`: a utility function that automates
-  the parsing of the Blackbird abstract syntax tree. Use this function, either
-  with the default parser :class:`~.BlackbirdListener` or a custom
-  derived class, to parse arbitrary Blackbird code.
+  the parsing of the Blackbird abstract syntax tree from a file.
+  Use this function, either with the default parser
+  :class:`~.BlackbirdListener` or a custom derived class, to parse
+  arbitrary Blackbird code given a file location.
+
+* :func:`~.parse_blackbird_string`: a utility function that automates
+  the parsing of the Blackbird abstract syntax tree from a string.
+  Use this function, either with the default parser
+  :class:`~.BlackbirdListener` or a custom derived class, to parse
+  arbitrary Blackbird code given a string containing valid Blackbird code.
 
 .. note::
 
-	While both the above classes/functions are located in the :mod:`blackbird.listener`,
-	they are both importable from the top-level of the Blackbird Python package:
+  All the above classes/functions are importable from the top-level
+  of the Blackbird Python package:
 
-	.. code-block:: python
+  .. code-block:: python
 
-		from blackbird import BlackbirdListener, parse_blackbird
+    from blackbird import BlackbirdListener, parse_blackbird, BlackbirdProgram
 """
 
-from .listener import BlackbirdListener, RegRefTransform, parse_blackbird
+from .listener import (
+    BlackbirdListener,
+    RegRefTransform,
+    parse_blackbird,
+    parse_blackbird_string,
+)
+from .program import BlackbirdProgram
 from ._version import __version__

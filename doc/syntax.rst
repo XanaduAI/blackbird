@@ -247,7 +247,6 @@ Quantum program
 
 The ``|`` operator is used to apply intrinsic quantum operations to quantum registers.
 
-All operations are queued to be executed on the device, in the order they appear.
 
 For example:
 

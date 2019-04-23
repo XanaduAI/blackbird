@@ -276,11 +276,10 @@ variables ``qX``, where ``X`` is an integer representing mode ``X``, as paramete
 
 .. code-block:: python
 
-    with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
-        S2gate(0.43, 0.12) | [0, 1]
-        MeasureX | 0
-        MeasureP | 1
-        Xgate(sqrt(2)*q0+q1) | 2
+    S2gate(0.43, 0.12) | [0, 1]
+    MeasureX | 0
+    MeasureP | 1
+    Xgate(sqrt(2)*q0+q1) | 2
 
 After running a Blackbird program, the user should expect to receive the results
 as an array:

@@ -119,27 +119,35 @@ class BlackbirdListener(blackbirdListener):
     """Listener to run a Blackbird program and extract the program queue and target information."""
 
     def __init__(self):
-        """On initialization, the Blackbird listener creates three empty attributes:
+        """On initialization, the Blackbird listener creates the following empty attributes:
 
+        * :attr:`name = "" <name>`
+        * :attr:`version = None <version>`
         * :attr:`var = {} <var>`
-        * :attr:`target = None <var>`
-        * :attr:`queue = [] <var>`
+        * :attr:`target = None <target>`
+        * :attr:`queue = [] <queue>`
         """
         self.name = ""
+        """str: Name of the Blackbird program"""
+
         self.version = None
+        """float: Version of the Blackbird parser the script targets"""
+
         self.active_modes = set()
+        """set[int]: A set of non-negative integers specifying the modes the program manipulates."""
 
         self.var = {}
         """dict[str->[int, float, complex, str, bool, numpy.ndarray]]: Mapping from the
         variable names in the Blackbird script to their declared values."""
 
         self.target = None
-        """dict[str->[str, list, dict]]: Contains information regarding the target device of the quantum
-        program. Important keys include:
+        """dict[str->[str, dict]]: Contains information regarding the target device of the quantum
+        program (i.e., the target device the Blackbird script is compiled for).
+
+        Important keys include:
 
         * ``'name'`` (str): the name of the device the Blackbird script requests to be run on
-        * ``'args'`` (list): a list of positional arguments for the target device
-        * ``'kwargs'`` (dict): a dictionary of keyword arguments for the target device
+        * ``'options'`` (dict): a dictionary of keyword arguments for the target device
         """
 
         self.queue = []

@@ -285,6 +285,13 @@ class TestRegRefTransform:
         if rrt.regrefs == [0, 2]:
             assert np.allclose(rrt.func(0.543, -0.432), (0.543+0.432)/np.sqrt(2))
 
+        # Note: the order in which SymPy returns the variables of a symbolic function are
+        # stochastic and may change at runtime. In this particular case, sometimes it returns
+        # (q[0], q[2]) as the free variables, other times it returns (q[2], q[0]).
+        #
+        # This is not an issue during usage, as the Blackbird parser will always know the
+        # correct order to apply the register arguments, but must be taken into account
+        # during test assertions.
         if rrt.regrefs == [2, 0]:
             assert np.allclose(rrt.func(0.543, -0.432), (-0.432-0.543)/np.sqrt(2))
 

@@ -34,7 +34,7 @@ Then, run the following line in your terminal:
 
     python3 apps/strawberry_fields_listener.py example_gbs.xbb
 
-The program should produce the following output:
+The program should produce output of the following form:
 
 .. code-block:: console
 
@@ -75,3 +75,8 @@ The program should produce the following output:
     [0.04867173005302908, -0.06002034383841427, -0.3508878249063201, -0.4967925510880631]
     [0.3176843381426753, -1.162220958492132, -0.3853901767570399, -0.3913219425517237]
     [2.072597223449096, -0.030247777077356014, 0.3279580729444779, -1.6905388925113236]
+
+.. note::
+
+    As the measurements performed in this program are stochastic, the result values will change
+    with every program run!

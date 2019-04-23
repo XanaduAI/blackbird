@@ -30,22 +30,14 @@ from blackbird.listener import BlackbirdListener, RegRefTransform, parse_blackbi
 
 test_file = """
 # a test blackbird script
+name test_name
+version 1.0
+target fock (num_subsystems=1, cutoff_dim=7, shots=10)
 
 float alpha = 0.3423
-
-with fock(num_subsystems=1, cutoff_dim=7, shots=10):
-    Coherent(alpha, sqrt(pi)) | 0
-    MeasureFock() | 0
+Coherent(alpha, sqrt(pi)) | 0
+MeasureFock() | 0
 """
-
-
-@pytest.fixture
-def device():
-    """Mock out the device inside the blackbird parser"""
-    class DummyDeviceContext:
-        """Dummy device context with mocked out device name"""
-        getText = lambda self: "MockedDevice"
-    return DummyDeviceContext
 
 
 @pytest.fixture
@@ -67,10 +59,11 @@ def parse_input():
 
 
 @pytest.fixture
-def parse_input_using_mocked_device(device, monkeypatch):
-    """Create a parser for the test that mocks out the device"""
+def parse_input_mocked_metadata(monkeypatch):
+    """Create a parser for the test that mocks out the metadata"""
     def _parse_input(text):
         """The parser fixture accepts a blackbird string to parse"""
+        text = "name mockname\nversion 1.0\n" + text
         lexer = blackbirdLexer(antlr4.InputStream(text))
         stream = antlr4.CommonTokenStream(lexer)
         parser = blackbirdParser(stream)
@@ -79,10 +72,7 @@ def parse_input_using_mocked_device(device, monkeypatch):
 
         bb = BlackbirdListener()
         walker = antlr4.ParseTreeWalker()
-
-        with monkeypatch.context() as m:
-            m.setattr("blackbird.blackbirdParser.blackbirdParser.ProgramContext.device", device)
-            walker.walk(bb, tree)
+        walker.walk(bb, tree)
 
         return bb
     return _parse_input
@@ -91,92 +81,112 @@ def parse_input_using_mocked_device(device, monkeypatch):
 class TestParsingVariables:
     """Tests for parsing variable declarations"""
 
-    def test_invalid_regref(self, parse_input_using_mocked_device):
+    def test_invalid_regref(self, parse_input_mocked_metadata):
         """Test that a variable using the reserved name for regrefs returns an exception"""
-        with pytest.raises(NameError, match="reserved for register references"):
-            parse_input_using_mocked_device('float q0 = 5')
+        with pytest.raises(SystemExit, match="reserved for register references"):
+            parse_input_mocked_metadata('float q0 = 5')
 
-        with pytest.raises(NameError, match="reserved for register references"):
-            parse_input_using_mocked_device("float array q4 =\n\t-0.1, 0.2")
+        with pytest.raises(SystemExit, match="reserved for register references"):
+            parse_input_mocked_metadata("float array q4 =\n\t-0.1, 0.2")
 
-    def test_integer_variable(self, parse_input_using_mocked_device):
+    def test_invalid_variable_name(self, parse_input_mocked_metadata):
+        """Test that a variable using the reserved name for a blackbird keyword returns an exception"""
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float name = 5')
+
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float target = 5')
+
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float version = 5')
+
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float array name =\n\t-0.1, 0.2')
+
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float array target =\n\t-0.1, 0.2')
+
+        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+            parse_input_mocked_metadata('float array version =\n\t-0.1, 0.2')
+
+    def test_integer_variable(self, parse_input_mocked_metadata):
         """Test that an integer variable is correctly parsed"""
-        bb = parse_input_using_mocked_device('int n = 5')
+        bb = parse_input_mocked_metadata('int n = 5')
         assert bb.var == {'n': 5}
 
-    def test_float_variable(self, parse_input_using_mocked_device):
+    def test_float_variable(self, parse_input_mocked_metadata):
         """Test that a float variable is correctly parsed"""
-        bb = parse_input_using_mocked_device("float alpha = -0.5432")
+        bb = parse_input_mocked_metadata("float alpha = -0.5432")
         assert bb.var == {'alpha': -0.5432}
 
-    def test_float_exponent_variable(self, parse_input_using_mocked_device):
+    def test_float_exponent_variable(self, parse_input_mocked_metadata):
         """Test that a float variable with an exponent is correctly parsed"""
-        bb = parse_input_using_mocked_device("float alpha = -9.54e-3")
+        bb = parse_input_mocked_metadata("float alpha = -9.54e-3")
         assert bb.var == {'alpha': -9.54e-3}
 
-    def test_complex_variable(self, parse_input_using_mocked_device):
+    def test_complex_variable(self, parse_input_mocked_metadata):
         """Test that a complex variable is correctly parsed"""
-        bb = parse_input_using_mocked_device("complex Beta = -0.231+5.21j")
+        bb = parse_input_mocked_metadata("complex Beta = -0.231+5.21j")
         assert bb.var == {'Beta': -0.231+5.21j}
 
-    def test_complex_exponent_variable(self, parse_input_using_mocked_device):
+    def test_complex_exponent_variable(self, parse_input_mocked_metadata):
         """Test that a complex variable with an exponent is correctly parsed"""
-        bb = parse_input_using_mocked_device("complex Beta = -0.231e-6+5.21e-2j")
+        bb = parse_input_mocked_metadata("complex Beta = -0.231e-6+5.21e-2j")
         assert bb.var == {'Beta': -0.231e-6+5.21e-2j}
 
-    def test_pi_variable(self, parse_input_using_mocked_device):
+    def test_pi_variable(self, parse_input_mocked_metadata):
         """Test that pi can be parsed"""
-        bb = parse_input_using_mocked_device("float test = pi")
+        bb = parse_input_mocked_metadata("float test = pi")
         assert bb.var == {'test': np.pi}
 
-    def test_string_variable(self, parse_input_using_mocked_device):
+    def test_string_variable(self, parse_input_mocked_metadata):
         """Test that string can be parsed"""
-        bb = parse_input_using_mocked_device('str name = "Josh"')
-        assert bb.var == {'name': "Josh"}
+        bb = parse_input_mocked_metadata('str username = "Josh"')
+        assert bb.var == {'username': "Josh"}
 
-    def test_bool_variable(self, parse_input_using_mocked_device):
+    def test_bool_variable(self, parse_input_mocked_metadata):
         """Test that bool can be parsed"""
-        bb = parse_input_using_mocked_device('bool b1 = True\n bool b2 = False')
+        bb = parse_input_mocked_metadata('bool b1 = True\n bool b2 = False')
         assert bb.var == {'b1': True, 'b2': False}
 
-    def test_float_array_variable(self, parse_input_using_mocked_device):
+    def test_float_array_variable(self, parse_input_mocked_metadata):
         """Test that float array can be parsed"""
-        bb = parse_input_using_mocked_device("float array C =\n\t-0.1, 0.2")
+        bb = parse_input_mocked_metadata("float array C =\n\t-0.1, 0.2")
         assert np.all(bb.var['C'] == np.array([[-0.1, 0.2]]))
 
-    def test_complex_array_variable(self, parse_input_using_mocked_device):
+    def test_complex_array_variable(self, parse_input_mocked_metadata):
         """Test that complex array can be parsed"""
-        bb = parse_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        bb = parse_input_mocked_metadata("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
         assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
-    def test_complex_array_shape_variable(self, parse_input_using_mocked_device):
+    def test_complex_array_shape_variable(self, parse_input_mocked_metadata):
         """Test that complex array with shape can be parsed"""
-        bb = parse_input_using_mocked_device("complex array A[2, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        bb = parse_input_mocked_metadata("complex array A[2, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
         assert np.all(bb.var['A'] == np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]]))
 
-    def test_invalid_expression_type(self, parse_input_using_mocked_device):
+    def test_invalid_expression_type(self, parse_input_mocked_metadata):
         """Test exception is raised if the expression variable type is incorrect"""
         with pytest.raises(TypeError, match=r"not of declared type int"):
-            parse_input_using_mocked_device("int Beta = -0.231e-6+5.21e-2j")
+            parse_input_mocked_metadata("int Beta = -0.231e-6+5.21e-2j")
 
-    def test_invalid_array_type(self, parse_input_using_mocked_device):
+    def test_invalid_array_type(self, parse_input_mocked_metadata):
         """Test exception is raised if the array variable type is incorrect"""
-        with pytest.raises(TypeError, match=r"not of declared type float"):
-            parse_input_using_mocked_device("float array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        with pytest.raises(SystemExit, match=r"not of declared type float"):
+            parse_input_mocked_metadata("float array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
 
-    def test_invalid_array_shape(self, parse_input_using_mocked_device):
+    def test_invalid_array_shape(self, parse_input_mocked_metadata):
         """Test exception is raised if the array variable shape is incorrect"""
-        with pytest.raises(TypeError, match=r"has declared shape \(1, 2\) but actual shape \(2, 2\)"):
-            parse_input_using_mocked_device("complex array A[1, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
+        with pytest.raises(SystemExit, match=r"has declared shape \(1, 2\) but actual shape \(2, 2\)"):
+            parse_input_mocked_metadata("complex array A[1, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j")
 
-    def test_variable_expression(self, parse_input_using_mocked_device):
+    def test_variable_expression(self, parse_input_mocked_metadata):
         """Test that a variable expression is correctly parsed"""
-        bb = parse_input_using_mocked_device("float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2")
+        bb = parse_input_mocked_metadata("float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2")
         assert bb.var['gamma'] == (2.0*np.cos(0.32*np.pi)+1)**2
 
-    def test_array_variable_expression(self, parse_input_using_mocked_device):
+    def test_array_variable_expression(self, parse_input_mocked_metadata):
         """Test that a variable expression containing arrays is correctly parsed"""
-        bb = parse_input_using_mocked_device("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2")
+        bb = parse_input_mocked_metadata("complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2")
         A = np.array([[-1.0+1.0j, 2.7e5+0.2e-5j], [-0.1-2j, 0.2-0.1j]])
         assert np.all(bb.var['res'] == (2.0*np.cos(A*np.pi)+1)**2)
 
@@ -184,53 +194,53 @@ class TestParsingVariables:
 class TestParsingQuantumPrograms:
     """Tests for parsing quantum programs"""
 
-    def test_operation_no_args(self, parse_input):
+    def test_operation_no_args(self, parse_input_mocked_metadata):
         """Test that an operation with no arguments is correctly parsed"""
-        bb = parse_input("with device:\n\tVac | 0\n")
+        bb = parse_input_mocked_metadata("Vac | 0\n")
         assert bb.queue == [{'modes': [0], 'op': 'Vac'}]
 
-    def test_measure_no_args(self, parse_input):
+    def test_measure_no_args(self, parse_input_mocked_metadata):
         """Test that a measurement with no args is correctly parsed"""
-        bb = parse_input("with device:\n\tMeasure | 0\n")
+        bb = parse_input_mocked_metadata("Measure | 0\n")
         assert bb.queue == [{'modes': [0], 'op': 'Measure'}]
 
     @pytest.mark.parametrize('modes', ['[0, 1, 2, 5]', '0, 1, 2, 5'])
-    def test_multiple_modes(self, parse_input, modes):
+    def test_multiple_modes(self, parse_input_mocked_metadata, modes):
         """Test that multiple modes are correctly parsed"""
-        bb = parse_input("with device:\n\tVac | {}\n".format(modes))
+        bb = parse_input_mocked_metadata("Vac | {}\n".format(modes))
         assert bb.queue == [{'modes': [0, 1, 2, 5], 'op': 'Vac'}]
 
     @pytest.mark.parametrize('arg', ['-0.3+2j', '0', '1e-3'])
-    def test_operation_single_arg(self, parse_input, arg):
+    def test_operation_single_arg(self, parse_input_mocked_metadata, arg):
         """Test that an operation with one argument is correctly parsed"""
-        bb = parse_input("with device:\n\tCoherent({}) | 0\n".format(arg))
+        bb = parse_input_mocked_metadata("Coherent({}) | 0\n".format(arg))
         assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [complex(arg)], 'kwargs': {}}]
 
-    def test_operation_multiple_arg(self, parse_input):
+    def test_operation_multiple_arg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple arguments is correctly parsed"""
-        bb = parse_input("with device:\n\tCoherent(-0.3+2j, 0, 1e-3) | 0\n")
+        bb = parse_input_mocked_metadata("Coherent(-0.3+2j, 0, 1e-3) | 0\n")
         assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [-0.3+2j, 0, 1e-3], 'kwargs': {}}]
 
-    def test_operation_kwarg(self, parse_input):
+    def test_operation_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with keyword arguments is correctly parsed"""
-        bb = parse_input("with device:\n\tCoherent(alpha=-0.3+2j) | 0\n")
+        bb = parse_input_mocked_metadata("Coherent(alpha=-0.3+2j) | 0\n")
         assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': [], 'kwargs': {'alpha':-0.3+2j}}]
 
-    def test_operation_multiple_kwarg(self, parse_input):
+    def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple keyword arguments is correctly parsed"""
-        bb = parse_input("with device:\n\tMeasureHomodyne(phi=0.23, b=1) | 0\n")
+        bb = parse_input_mocked_metadata("MeasureHomodyne(phi=0.23, b=1) | 0\n")
         assert bb.queue == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [], 'kwargs': {'phi':0.23, 'b':1}}]
 
     # @pytest.mark.skip()
     # def test_operation_args_and_kwarg(self, parse_input):
     #     """Test that an operation with multiple args/keyword arguments is correctly parsed
     #     NOTE: This is currently not supported by the parser."""
-    #     bb = parse_input("with device:\n\tMeasureHomodyne(0.23, post_select=0.41) | 0\n")
+    #     bb = parse_input("MeasureHomodyne(0.23, post_select=0.41) | 0\n")
     #     assert bb.queue == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [0.23], 'kwargs': {'post_select':0.41}}]
 
-    def test_operation_arg_expressions(self, parse_input):
+    def test_operation_arg_expressions(self, parse_input_mocked_metadata):
         """Test that expressions inside arguments are properly evaluated"""
-        bb = parse_input("float alpha = 0.5\nfloat Delta=sqrt(2)\nwith device:\n\tCoherent(alpha**2.0, Delta*sqrt(pi), 0.2*10) | 0\n")
+        bb = parse_input_mocked_metadata("float alpha = 0.5\nfloat Delta=sqrt(2)\nCoherent(alpha**2.0, Delta*sqrt(pi), 0.2*10) | 0\n")
 
         alpha = 0.5
         Delta = np.sqrt(2)
@@ -238,24 +248,24 @@ class TestParsingQuantumPrograms:
 
         assert bb.queue == [{'modes': [0], 'op': 'Coherent', 'args': expected, 'kwargs': {}}]
 
-    def test_operation_arg_array(self, parse_input):
+    def test_operation_arg_array(self, parse_input_mocked_metadata):
         """Test that arrays inside arguments are properly evaluated"""
-        bb = parse_input("float array A =\n\t1, 5\nwith device:\n\tGaussian(means=A) | 0\n")
+        bb = parse_input_mocked_metadata("float array A =\n\t1, 5\nGaussian(means=A) | 0\n")
         assert np.all(bb.queue[0]['kwargs']['means'] == np.array([[1, 5]]))
 
 
-class TestParsingDevice:
+class TestParsingMetadata:
     """Tests for parsing quantum devices"""
 
-    def test_device_name(self, parse_input):
+    def test_target_name(self, parse_input):
         """Test that device name is extracted"""
-        bb = parse_input("with example:\n\tVac | 0\n")
-        assert bb.device['name'] == "example"
+        bb = parse_input("name testname\nversion 1.0\ntarget example")
+        assert bb.target['name'] == "example"
 
     def test_device_kwarg(self, parse_input):
         """Test that an device with keyword arguments is correctly parsed"""
-        bb = parse_input("with example(shots=10, hbar=0.2):\n\tVac | 0\n")
-        assert bb.device['kwargs'] == {"shots": 10, "hbar": 0.2}
+        bb = parse_input("name testname\nversion 1.0\ntarget example (shots=10, hbar=0.2)")
+        assert bb.target['options'] == {"shots": 10, "hbar": 0.2}
 
 
 class TestRegRefTransform:
@@ -304,8 +314,8 @@ class TestParseFunction:
 
         assert bb.var == {"alpha": 0.3423}
 
-        expected = {"name": 'fock', 'kwargs': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}, 'args':[]}
-        assert bb.device == expected
+        expected = {"name": 'fock', 'options': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}}
+        assert bb.target == expected
 
         expected = [
             {'op': 'Coherent', 'args': [0.3423, np.sqrt(np.pi)], 'kwargs':{}, 'modes': [0]},

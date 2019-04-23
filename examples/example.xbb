@@ -19,6 +19,9 @@
 # Newlines at the same indentation level indicate
 # the end of a statement.
 # Like Python, we use # for comments.
+name example
+version 1.0
+target Chip0 (shots=10)
 
 # -------------------------------------------
 # Variable declarations
@@ -49,7 +52,7 @@ complex z = +0.43e-4-0.912j
 
 bool flag = True
 bool flag2 = False
-str name = "program1"
+str name0 = "program1"
 
 # Blackbird allows expressions using the operators:
 #   +, -, *, /, ** (exponentiation)
@@ -71,12 +74,47 @@ complex array A =
     -1.0+1.0j, 2.7e5+0.2e-5j
     -0.1-2j, 0.2-0.1j
 
-float array B =
+float array B[2, 2] =
     -1.0, 2.7e5
     -0.1, 0.2
 
 float array C =
     -0.1, 0.2
+
+# -------------------------------------------
+# Quantum program
+# -------------------------------------------
+
+# Statements have the following form:
+#   Operation(parameters) | modes
+# Depending on the operation, parameters may be optional
+# Parameters can be variables of literals or expressions
+
+Vac | 1
+Fock(2) | 0
+
+Coherent(beta) | 2
+Coherent(alpha**2.0, Delta*sqrt(pi)) | 2
+
+Squeezed(alpha**2.0, Delta*sqrt(pi)) | 2
+
+Thermal(alpha) | 2
+Thermal(0.5) | 2
+
+DisplacedSqueezed(0.4+0.1j, 0.5*3.0, 0.1/2.0) | 0
+
+Catstate(0.4+0.1j) | 0
+Catstate(0.4+0.1j, 1.0) | 0
+
+
+Dgate(0.43, 0.12) | 3
+Dgate(1+2j) | 1
+Sgate(0.43, -0.123) | 2
+Sgate(0.432) | 3
+Rgate(pi) | 2
+Fouriergate | 0
+
+# Multiple modes are specified by comma separated integers
 
 complex array U4[4, 4] =
     -0.23191638+0.17828953j,  0.58457815+0.41415933j, -0.05795454-0.46965132j,  0.37146591+0.19811629j
@@ -84,51 +122,14 @@ complex array U4[4, 4] =
     -0.02396850+0.64301446j,  0.09918161+0.36797446j,  0.26993055+0.30341975j, -0.20673325-0.4827536j
     -0.03456721+0.05347453j, -0.01895343-0.40080457j,  0.75577423-0.06297101j,  0.50490422-0.06966875j
 
-# -------------------------------------------
-# Quantum program
-# -------------------------------------------
+Interferometer(U4) | [0, 1, 2, 3]
 
-# 'with' statement indicates the device to run the program on.
-# Inside the indented 'with' block, all operations are queued
-# to be executed on the device, in the order they appear
-with Chip0(shots=10):
-    # Statements within the 'with' block have the following form:
-    #   Operation(parameters) | modes
-    # Depending on the operation, parameters may be optional
-    # Parameters can be variables of literals or expressions
+GaussianTransform(B) | [0]
+Gaussian(B, C) | [0]
+Gaussian(B) | [0]
 
-    Vac | 1
-    Fock(2) | 0
-
-    Coherent(beta) | 2
-    Coherent(alpha**2.0, Delta*sqrt(pi)) | 2
-
-    Squeezed(alpha**2.0, Delta*sqrt(pi)) | 2
-
-    Thermal(alpha) | 2
-    Thermal(0.5) | 2
-
-    DisplacedSqueezed(0.4+0.1j, 0.5*3.0, 0.1/2.0) | 0
-
-    Catstate(0.4+0.1j) | 0
-    Catstate(0.4+0.1j, 1.0) | 0
-
-
-    Dgate(0.43, 0.12) | 3
-    Dgate(1+2j) | 1
-    Sgate(0.43, -0.123) | 2
-    Sgate(0.432) | 3
-    Rgate(pi) | 2
-    Fouriergate | 0
-
-    # Multiple modes are specified by comma separated integers
-    Interferometer(U4) | [0, 1, 2, 3]
-    GaussianTransform(B) | [0]
-    Gaussian(B, C) | [0]
-    Gaussian(B) | [0]
-
-    # Finish with measurements
-    MeasureFock() | 5
-    Measure | 1
-    MeasureHomodyne(0.32) | 2
-    MeasureP | 3
+# Finish with measurements
+MeasureFock() | 5
+Measure | 1
+MeasureHomodyne(0.32) | 2
+MeasureP | 3

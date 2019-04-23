@@ -1,37 +1,31 @@
-# Copyright 2019 Xanadu Quantum Technologies Inc.
+# required metadata at the top of the file
+name StateTeleportation
+# required blackbird/cloud API version it targets
+version 1.0
+# optional 'requires' specifies the device the blackbird
+# program was compiled for, as well as any other device
+# metadata/options
+target gaussian (shots=1000)
 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# state to be teleported:
 complex alpha = 1+0.5j
+Coherent(alpha) | 0
 
-with gaussian(num_subsystems=3):
-    # state to be teleported:
-    Coherent(alpha) | 0
+# maximally entangled states
+Squeezed(-4) | 1
+Squeezed(4) | 2
+BSgate(pi/4, 0) | (1, 2)
 
-    # maximally entangled states
-    Squeezed(-4) | 1
-    Squeezed(4) | 2
-    BSgate(pi/4, 0) | (1, 2)
+# Alice performs the joint measurement
+# in the maximally entangled basis
+int b = 5
+BSgate(pi/4, b) | (0, 1)
+MeasureX | 0
+MeasureP | 1
 
-    # Alice performs the joint measurement
-    # in the maximally entangled basis
-    BSgate(pi/4, 0) | (0, 1)
-    MeasureX | 0
-    MeasureP | 1
+# Bob conditionally displaces his mode
+# based on Alice's measurement result
+Xgate(sqrt(2)*q0) | 2
+Zgate(sqrt(2)*q1) | 2
 
-    # Bob conditionally displaces his mode
-    # based on Alice's measurement result
-    Xgate(sqrt(2)*q0) | 2
-    Zgate(sqrt(2)*q1) | 2
-
-    MeasureHeterodyne() | 2
+MeasureHeterodyne() | 2

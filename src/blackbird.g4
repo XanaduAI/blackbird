@@ -4,17 +4,39 @@ grammar blackbird;
  * Parser Rules
  */
 
-start               : varblock program NEWLINE* EOF;
+start               : NEWLINE* metadatablock NEWLINE* program NEWLINE* EOF;
+
+
+// Metadata
+metadatablock       : declarename NEWLINE+ version NEWLINE+ target?;
+
+declarename         : PROGNAME programname;
+
+programname         : NAME;
+
+version             : VERSION versionnumber;
+
+versionnumber       : FLOAT;
+
+target              : TARGET device arguments?;
+
+device              : (NAME | DEVICE);
+
+
 
 // Variable declaration
 
-varblock            : (NEWLINE | var_list+=expressionvar | array_list+=arrayvar)*;
+program             : (NEWLINE | var_list+=expressionvar | array_list+=arrayvar | statement_list+=statement)*;
 
 expressionvar       : vartype name ASSIGN (expression | nonnumeric);
 
 arrayvar            : vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval;
 
-name                : (REGREF | NAME);
+name                : (invalid | NAME);
+
+invalid             : (REGREF | reserved);
+
+reserved            : (PROGNAME | VERSION | TARGET);
 
 vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL);
 
@@ -26,19 +48,16 @@ arrayval            : (TAB row_list+=arrayrow NEWLINE)*;
 
 arrayrow            : expression (COMMA expression)*;
 
-// Blackbird program
-
-program             : WITH device arguments? COLON NEWLINE (statement_list+=statement | NEWLINE | TAB NEWLINE)*;
-
-device              : (NAME|DEVICE);
-
-statement           : TAB (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE;
+statement           : (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE*;
 
 operation           : NAME;
 
 measure             : MEASURE;
 
-// arguments           : (LBRAC (val|kwarg) (COMMA (val|kwarg))* RBRAC);
+
+
+//  function arguments
+
 arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
 kwarg               : NAME ASSIGN val;
@@ -46,6 +65,8 @@ kwarg               : NAME ASSIGN val;
 val                 : (nonnumeric | expression);
 
 modes               : INT (COMMA INT)*;
+
+
 
 // Expressions
 
@@ -95,7 +116,9 @@ TAB                 : ('\t'  | '    ') ;
 SPACE               : [ \t]+ -> skip;
 
 // Keywords
-WITH                : 'with';
+PROGNAME            : 'name';
+VERSION             : 'version';
+TARGET              : 'target';
 
 // Functions
 SQRT                : 'sqrt' ;

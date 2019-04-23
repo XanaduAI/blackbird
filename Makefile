@@ -78,7 +78,7 @@ test-grammar: src/$(GRAMMAR)
 	mkdir -p _test
 	cd src && $(ANTLR4) $(GRAMMAR) -o ../_test
 	cd _test && javac *.java
-	cd _test && $(GRUN) blackbird start ../examples/example.xbb -gui
+	cd _test && $(GRUN) blackbird start ../examples/state_teleportation.xbb -gui
 	rm -rf _test
 
 coverage:

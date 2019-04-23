@@ -30,7 +30,7 @@
 #   that the quantum program has been compiled for.
 #
 # In addition, keyword options can be provided for the
-# target using the syntax (option1=0.34, option2=True)
+# target using the syntax `(option1=0.34, option2=True)`.
 
 name example
 version 1.0

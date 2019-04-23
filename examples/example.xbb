@@ -40,7 +40,7 @@ target Chip0 (shots=10)
 # -------------------------------------------
 # Variable declarations
 # -------------------------------------------
-# Variable can be defined anywhere in the file.
+# Variables can be defined anywhere in the file.
 
 # Format for defining variables:
 #   type name = expression

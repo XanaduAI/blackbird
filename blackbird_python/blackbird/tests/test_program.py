@@ -13,8 +13,10 @@
 # limitations under the License.
 
 """Tests for the program module"""
-import pytest
 from textwrap import dedent
+from collections import OrderedDict
+
+import pytest
 
 import numpy as np
 
@@ -81,13 +83,15 @@ class TestBlackbirdProgram:
         assert res == "name prog\nversion 1.0\n"
 
     def test_serialize_target(self):
-        """Test serialization of an empty program"""
+        """Test target serialization"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._target["name"] = "chip0"
         res = bb.serialize()
         assert res == "name prog\nversion 1.0\ntarget chip0\n"
 
-        bb._target["options"] = {"shots": 100, "hbar": 0.2, "real": True, "str": "hi"}
+        bb._target["options"] = OrderedDict(
+            [("shots", 100), ("hbar", 0.2), ("real", True), ("str", "hi")]
+        )
         res = bb.serialize()
         assert res == dedent(
             """\
@@ -98,7 +102,7 @@ class TestBlackbirdProgram:
         )
 
     def test_serialize_operation_no_args(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with no args"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append({"op": "Vac", "modes": [0]})
         res = bb.serialize()
@@ -113,7 +117,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_args(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with 1 arg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {"op": "Dgate", "modes": [0], "args": [0.43 - 0.543j], "kwargs": {}}
@@ -130,7 +134,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_multiple_args(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with many args"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {"op": "Sgate", "modes": [0], "args": [0.43, 0.5432], "kwargs": {}}
@@ -147,7 +151,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_kwargs(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with a kwarg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {"op": "MeasureFock", "modes": [0], "args": [], "kwargs": {"select": 2}}
@@ -164,7 +168,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_multiple_kwargs(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with many kwargs"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {
@@ -186,7 +190,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_args_kwargs(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with args and kwargs raises an error"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {
@@ -203,7 +207,7 @@ class TestBlackbirdProgram:
             bb.serialize()
 
     def test_serialize_operation_multimode(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation on multiple modes"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append({"op": "Vac", "modes": [0, 1, 2]})
         res = bb.serialize()
@@ -218,7 +222,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_array_arg(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with an array arg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         U = np.identity(2)
 
@@ -242,7 +246,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_array_kwarg(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with an array kwarg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         U = np.identity(2)
 
@@ -266,7 +270,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_string_arg(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with a string arg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append({"op": "Dgate", "modes": [0], "args": ["hi"], "kwargs": {}})
         res = bb.serialize()
@@ -281,7 +285,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_string_kwarg(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with a string kwarg"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {"op": "Dgate", "modes": [0], "args": [], "kwargs": {"key": "val"}}
@@ -298,7 +302,7 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_multiple_arrays(self):
-        """Test serialization of an empty program"""
+        """Test serialization of an operation with multiple array args"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         U = np.identity(2)
         U2 = np.array([[1, 2j], [-2j, 3]])

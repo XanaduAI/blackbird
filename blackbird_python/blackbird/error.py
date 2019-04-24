@@ -90,7 +90,19 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
             # is returned from the parser. Instead, we can get the context from the parser itself.
             ctx = recognizer._ctx
 
-        if offendingSymbol.text in {";", "[", "]", "\\", "$", "@", "&", "%", "~", "`", "?"}:
+        if offendingSymbol.text in {
+            ";",
+            "[",
+            "]",
+            "\\",
+            "$",
+            "@",
+            "&",
+            "%",
+            "~",
+            "`",
+            "?",
+        }:
             # inform the user of invalid symbol usage
             error_msg = (
                 "Blackbird SyntaxError (line {}:{}): {} is not a valid Blackbird symbol."

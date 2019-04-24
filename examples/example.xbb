@@ -30,7 +30,7 @@
 #   that the quantum program has been compiled for.
 #
 # In addition, keyword options can be provided for the
-# target using the syntax (option1=0.34, option2=True)
+# target using the syntax `(option1=0.34, option2=True)`.
 
 name example
 version 1.0
@@ -40,7 +40,7 @@ target Chip0 (shots=10)
 # -------------------------------------------
 # Variable declarations
 # -------------------------------------------
-# Variable can be defined anywhere in the file.
+# Variables can be defined anywhere in the file.
 
 # Format for defining variables:
 #   type name = expression
@@ -129,7 +129,7 @@ Sgate(0.432) | 3
 Rgate(pi) | 2
 Fouriergate | 0
 
-# Multiple modes are specified by comma separated integers
+# Multiple modes are specified by comma-separated integers
 
 complex array U4[4, 4] =
     -0.23191638+0.17828953j,  0.58457815+0.41415933j, -0.05795454-0.46965132j,  0.37146591+0.19811629j

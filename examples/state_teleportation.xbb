@@ -1,6 +1,6 @@
 # required metadata at the top of the file
 name StateTeleportation
-# required blackbird/cloud API version it targets
+# required blackbird API version it targets
 version 1.0
 # optional 'target' specifies the device the blackbird
 # program was compiled for, as well as any other device

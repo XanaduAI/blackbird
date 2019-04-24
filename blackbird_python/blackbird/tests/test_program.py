@@ -175,7 +175,7 @@ class TestBlackbirdProgram:
                 "op": "Dgate",
                 "modes": [0],
                 "args": [],
-                "kwargs": {"alpha": 0.43 - 0.543j, "phi": 0.54},
+                "kwargs": OrderedDict([("alpha", 0.43 - 0.543j), ("phi", 0.54)]),
             }
         )
         res = bb.serialize()
@@ -316,7 +316,6 @@ class TestBlackbirdProgram:
         )
 
         res = bb.serialize()
-        print(res)
         expected = dedent(
             """\
             name prog

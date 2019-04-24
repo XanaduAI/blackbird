@@ -36,11 +36,14 @@ Summary
     NUMPY_TYPES
     RegRefTransform
     BlackbirdListener
-    parse_blackbird
+    parse
 
 Code details
 ~~~~~~~~~~~~
 """
+# pylint: disable=protected-access
+import warnings
+
 import antlr4
 
 import numpy as np
@@ -52,6 +55,7 @@ from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener, BlackbirdSyntaxError
 from .auxiliary import _expression, _get_arguments, _literal, _VAR
+from .program import BlackbirdProgram
 
 
 PYTHON_TYPES = {
@@ -116,52 +120,23 @@ class RegRefTransform:
 
 
 class BlackbirdListener(blackbirdListener):
-    """Listener to run a Blackbird program and extract the program queue and target information."""
+    """Listener to run a Blackbird program and extract the program queue and target information.
+
+    On initialization, an empty :class:`~.BlackbirdProgram` object is initialized.
+    Over the course of the parsing, the program details are filled in according to the
+    parsed script.
+
+    Once parsing is complete, the :class:`~.BlackbirdProgram` object can be returned
+    via the :attr:`program` attribute.
+    """
 
     def __init__(self):
-        """On initialization, the Blackbird listener creates the following empty attributes:
+        self._program = BlackbirdProgram()
 
-        * :attr:`name = "" <name>`
-        * :attr:`version = None <version>`
-        * :attr:`var = {} <var>`
-        * :attr:`target = None <target>`
-        * :attr:`queue = [] <queue>`
-        """
-        self.name = ""
-        """str: Name of the Blackbird program"""
-
-        self.version = None
-        """float: Version of the Blackbird parser the script targets"""
-
-        self.active_modes = set()
-        """set[int]: A set of non-negative integers specifying the modes the program manipulates."""
-
-        self.var = {}
-        """dict[str->[int, float, complex, str, bool, numpy.ndarray]]: Mapping from the
-        variable names in the Blackbird script to their declared values."""
-
-        self.target = None
-        """dict[str->[str, dict]]: Contains information regarding the target device of the quantum
-        program (i.e., the target device the Blackbird script is compiled for).
-
-        Important keys include:
-
-        * ``'name'`` (str): the name of the device the Blackbird script requests to be run on
-        * ``'options'`` (dict): a dictionary of keyword arguments for the target device
-        """
-
-        self.queue = []
-        """list[dict]: List of operations to apply to the device, in temporal order.
-        Each operation is contained as a dictionary, with the following keys:
-
-        * ``'op'`` (str): the name of the operation
-        * ``'args'`` (list): a list of positional arguments for the operation
-        * ``'kwargs'`` (dict): a dictionary of keyword arguments for the operation
-        * ``'modes'`` (list[int]): modes the operation applies to
-
-        Note that, depending on the operation, both ``'args'`` and ``'kwargs'``
-        might be empty.
-        """
+    @property
+    def program(self):
+        """Returns the parsed blackbird program"""
+        return self._program
 
     def exitDeclarename(self, ctx: blackbirdParser.DeclarenameContext):
         """Run after exiting program name metadata.
@@ -169,7 +144,7 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: DeclarenameContext
         """
-        self.name = ctx.programname().getText()
+        self._program._name = ctx.programname().getText()
 
     def exitVersion(self, ctx: blackbirdParser.VersionContext):
         """Run after exiting version metadata.
@@ -177,7 +152,7 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: VersionContext
         """
-        self.version = ctx.versionnumber().getText()
+        self._program._version = ctx.versionnumber().getText()
 
     def exitTarget(self, ctx: blackbirdParser.TargetContext):
         """Run after exiting target metadata.
@@ -185,15 +160,22 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: TargetContext
         """
-        self.target = {"name": ctx.device().getText()}
+        self._program._target["name"] = ctx.device().getText()
 
-        args = []
         kwargs = {}
 
         if ctx.arguments():
             args, kwargs = _get_arguments(ctx.arguments())
 
-        self.target["options"] = kwargs
+            if args:
+                warnings.warn(
+                    "Target devices only accept keyword options of the form "
+                    "option=value. All positional arguments without a named "
+                    "option will be ignored.",
+                    SyntaxWarning,
+                )
+
+        self._program._target["options"] = kwargs
 
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
@@ -320,7 +302,7 @@ class BlackbirdListener(blackbirdListener):
             op = ctx.measure().getText()
 
         modes = [int(i) for i in ctx.modes().getText().split(",")]
-        self.active_modes |= set(modes)
+        self._program._modes |= set(modes)
 
         if ctx.arguments():
             op_args, op_kwargs = _get_arguments(ctx.arguments())
@@ -328,9 +310,11 @@ class BlackbirdListener(blackbirdListener):
             # convert any sympy expressions into regref transforms
             op_args = [RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args]
 
-            self.queue.append({"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes})
+            self._program._operations.append(
+                {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
+            )
         else:
-            self.queue.append({"op": op, "modes": modes})
+            self._program._operations.append({"op": op, "modes": modes})
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
@@ -338,24 +322,23 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: program context
         """
-        self.var.update(_VAR)
+        self._program._var.update(_VAR)
         _VAR.clear()
 
 
-def parse_blackbird(file, listener=BlackbirdListener):
-    """Parse a blackbird program.
+def parse(data, listener=BlackbirdListener):
+    """Parse a blackbird data stream.
 
     Args:
-        file (str): location of the .xbb blackbird file to run
+        data (antlr4.InputStream): ANTLR4 data stream of the Blackbird script
         Listener (BlackbirdListener): an Blackbird listener to use to walk the AST.
             By default, the basic :class:`~.BlackbirdListener` defined above
             is used.
 
     Returns:
-        BlackbirdListener: returns the Blackbird listener instance after
+        BlackbirdProgram: returns an instance of the :class:`BlackbirdProgram` class after
         parsing the abstract syntax tree
     """
-    data = antlr4.FileStream(file)
     lexer = blackbirdLexer(data)
     stream = antlr4.CommonTokenStream(lexer)
 
@@ -368,4 +351,4 @@ def parse_blackbird(file, listener=BlackbirdListener):
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 
-    return blackbird
+    return blackbird.program

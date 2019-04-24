@@ -247,7 +247,6 @@ Quantum program
 
 The ``|`` operator is used to apply intrinsic quantum operations to quantum registers.
 
-
 For example:
 
 .. code-block:: python

@@ -51,7 +51,7 @@ def numpy_to_blackbird(A, var_name):
             Blackbird array variable declaration
     """
 
-    if np.any(np.iscomplex(A)):
+    if np.issubdtype(A.dtype, np.complexfloating):
         # complex array
         script = ["complex array {}[{}, {}] =".format(var_name, *A.shape)]
         for row in A:
@@ -60,19 +60,23 @@ def numpy_to_blackbird(A, var_name):
             )
             script.append(row_str)
 
-    elif np.all(np.mod(A, 1) == 0):
+    elif np.issubdtype(A.dtype, np.integer):
         # integer array
         script = ["int array {}[{}, {}] =".format(var_name, *A.shape)]
         for row in A:
             row_str = "    " + ", ".join(["{}".format(int(n)) for n in row])
             script.append(row_str)
 
-    elif not np.any(np.iscomplex(A)):
+    elif np.issubdtype(A.dtype, np.floating):
         # real array
         script = ["float array {}[{}, {}] =".format(var_name, *A.shape)]
         for row in A:
             row_str = "    " + ", ".join(["{}".format(n) for n in row])
             script.append(row_str)
+
+    else:
+        # unknown array type
+        raise ValueError("Array {} is of unsupported type {}".format(A, A.dtype))
 
     script.append("")
 
@@ -126,7 +130,7 @@ class BlackbirdProgram:
 
         Important keys include:
 
-        * ``'name'`` (str): the name of the device the Blackbird script requests to be
+        * ``'name'`` (Union[str, None]): the name of the device the Blackbird script requests to be
             run on. If no target is requested, the returned value will be ``None``.
         * ``'options'`` (dict): a dictionary of keyword arguments for the target device
 
@@ -183,9 +187,7 @@ class BlackbirdProgram:
                 # if the target has options, compile them into
                 # the expected syntax
                 option_strings = [
-                    "{}={}".format(k, v)
-                    if not isinstance(v, str)
-                    else '{}="{}"'.format(k, v)
+                    "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
                     for k, v in self.target["options"].items()
                 ]
                 options = " ({})".format(", ".join(option_strings))
@@ -195,7 +197,6 @@ class BlackbirdProgram:
 
         # line break
         script.append("")
-
 
         # loop through each quantum operation
         for op in self.operations:
@@ -232,11 +233,11 @@ class BlackbirdProgram:
 
                     elif isinstance(v, complex):
                         # argument is a complex type
-                        args.append(
-                            "{}{}{}j".format(v.real, "+-"[int(v.imag < 0)], np.abs(v.imag))
-                        )
+                        args.append("{}{}{}j".format(v.real, "+-"[int(v.imag < 0)], np.abs(v.imag)))
 
                     else:
+                        # anything that doesn't need to be dealt with as a special case,
+                        # i.e., booleans, ints, floats.
                         args.append("{}".format(v))
 
                 # loop through keyword argument
@@ -246,7 +247,7 @@ class BlackbirdProgram:
                     if isinstance(v, np.ndarray):
                         # create an array variable
                         var_name = "A{}".format(var_count)
-                        kwargs.append('{}={}'.format(k, var_name))
+                        kwargs.append("{}={}".format(k, var_name))
                         var_count += 1
 
                         # add array declaration to script
@@ -281,6 +282,7 @@ class BlackbirdProgram:
 
                 script.append("{}{} | {}".format(op["op"], arguments, modes))
             else:
+                # operation has no arguments
                 script.append("{} | {}".format(op["op"], modes))
 
         if script[-1] != "":

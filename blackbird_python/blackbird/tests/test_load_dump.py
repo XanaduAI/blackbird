@@ -37,22 +37,22 @@ MeasureFock() | 0
 @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
 def test_load(tmpdir):
     """Test that a Blackbird script is deserialized from a file"""
-    filename = tmpdir.join('test.xbb')
+    filename = tmpdir.join("test.xbb")
 
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.write(test_script)
 
     bb = load(filename)
 
     assert bb._var == {"alpha": 0.3423}
 
-    expected = {"name": 'fock', 'options': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}}
+    expected = {"name": "fock", "options": {"num_subsystems": 1, "cutoff_dim": 7, "shots": 10}}
     assert bb.target == expected
 
     expected = [
-        {'op': 'Coherent', 'args': [0.3423, np.sqrt(np.pi)], 'kwargs':{}, 'modes': [0]},
-        {'op': 'MeasureFock', 'args': [], 'kwargs':{}, 'modes': [0]}
-        ]
+        {"op": "Coherent", "args": [0.3423, np.sqrt(np.pi)], "kwargs": {}, "modes": [0]},
+        {"op": "MeasureFock", "args": [], "kwargs": {}, "modes": [0]},
+    ]
 
     assert bb.operations == expected
 
@@ -63,13 +63,13 @@ def test_loads():
 
     assert bb._var == {"alpha": 0.3423}
 
-    expected = {"name": 'fock', 'options': {'num_subsystems':1, 'cutoff_dim':7, 'shots':10}}
+    expected = {"name": "fock", "options": {"num_subsystems": 1, "cutoff_dim": 7, "shots": 10}}
     assert bb.target == expected
 
     expected = [
-        {'op': 'Coherent', 'args': [0.3423, np.sqrt(np.pi)], 'kwargs':{}, 'modes': [0]},
-        {'op': 'MeasureFock', 'args': [], 'kwargs':{}, 'modes': [0]}
-        ]
+        {"op": "Coherent", "args": [0.3423, np.sqrt(np.pi)], "kwargs": {}, "modes": [0]},
+        {"op": "MeasureFock", "args": [], "kwargs": {}, "modes": [0]},
+    ]
 
     assert bb.operations == expected
 
@@ -78,13 +78,13 @@ def test_loads():
 def test_dump(tmpdir):
     """Test that a Blackbird script is serialized to a file"""
     bb = loads(test_script)
-    filename = tmpdir.join('test.xbb')
+    filename = tmpdir.join("test.xbb")
 
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         dump(bb, f)
 
     # read from file
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         res = "".join(f.readlines())
 
     expected = dedent(
@@ -95,7 +95,9 @@ def test_dump(tmpdir):
 
         Coherent(0.3423, {}) | 0
         MeasureFock() | 0
-        """.format(np.sqrt(np.pi))
+        """.format(
+            np.sqrt(np.pi)
+        )
     )
 
     assert res == expected
@@ -115,7 +117,9 @@ def test_dumps(tmpdir):
 
         Coherent(0.3423, {}) | 0
         MeasureFock() | 0
-        """.format(np.sqrt(np.pi))
+        """.format(
+            np.sqrt(np.pi)
+        )
     )
 
     assert res == expected

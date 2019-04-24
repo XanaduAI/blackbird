@@ -47,7 +47,7 @@ Summary
 Code details
 ~~~~~~~~~~~~
 """
-#pylint: disable=too-many-statements, protected-access
+# pylint: disable=too-many-statements, protected-access
 import sys
 import antlr4
 
@@ -63,7 +63,7 @@ class NoTraceBack(Exception):
         Args:
             msg (str): message to be printed in the traceback
         """
-        #pylint: disable=super-init-not-called,unused-argument
+        # pylint: disable=super-init-not-called,unused-argument
         try:
             _ = sys.exc_info()[-1].tb_lineno
         except AttributeError:
@@ -90,23 +90,9 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
             # is returned from the parser. Instead, we can get the context from the parser itself.
             ctx = recognizer._ctx
 
-        if offendingSymbol.text in {
-            ";",
-            "[",
-            "]",
-            "\\",
-            "$",
-            "@",
-            "&",
-            "%",
-            "~",
-            "`",
-            "?",
-        }:
+        if offendingSymbol.text in {";", "[", "]", "\\", "$", "@", "&", "%", "~", "`", "?"}:
             # inform the user of invalid symbol usage
-            error_msg = (
-                "Blackbird SyntaxError (line {}:{}): {} is not a valid Blackbird symbol."
-            )
+            error_msg = "Blackbird SyntaxError (line {}:{}): {} is not a valid Blackbird symbol."
             raise BlackbirdSyntaxError(
                 error_msg.format(line, column + 1, offendingSymbol.text)
             ) from None
@@ -119,19 +105,13 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
 
             if not ctx.ASSIGN():
                 # equal sign was not found
-                error_msg = (
-                    "Blackbird SyntaxError (line {}:{}): variable {} missing an assignment."
-                )
-                raise BlackbirdSyntaxError(
-                    error_msg.format(line, column + 1, var_name)
-                ) from None
+                error_msg = "Blackbird SyntaxError (line {}:{}): variable {} missing an assignment."
+                raise BlackbirdSyntaxError(error_msg.format(line, column + 1, var_name)) from None
 
             if offendingSymbol.text == "\n":
                 # expression terminated midway by a new line
                 error_msg = "Blackbird SyntaxError (line {}:{}): variable {} has an incomplete value or expression"
-                raise BlackbirdSyntaxError(
-                    error_msg.format(line, column + 1, var_name)
-                ) from None
+                raise BlackbirdSyntaxError(error_msg.format(line, column + 1, var_name)) from None
 
             # otherwise, return a more generic variable error
             syntax_msg = (
@@ -139,9 +119,7 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
                 "symbol {} which is not a valid {}."
             )
             raise BlackbirdSyntaxError(
-                syntax_msg.format(
-                    line, column + 1, var_name, offendingSymbol.text, var_type
-                )
+                syntax_msg.format(line, column + 1, var_name, offendingSymbol.text, var_type)
             ) from None
 
         if isinstance(ctx, blackbirdParser.ArrayvarContext):
@@ -154,9 +132,7 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
                     "Blackbird SyntaxError (line {}:{}): array declaration requires a new line after '=', "
                     "followed by the indented and comma-separated array values."
                 )
-                raise BlackbirdSyntaxError(
-                    error_msg.format(line, column + 1, var_name)
-                ) from None
+                raise BlackbirdSyntaxError(error_msg.format(line, column + 1, var_name)) from None
 
         # iterate up through the tree, and determine if we are in an array declaration
         parent_ctx = ctx
@@ -170,9 +146,7 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
                 var_name = parent_ctx.name().getText()
                 syntax_msg = "Blackbird SyntaxError (line {}:{}): - array {} contains the symbol {} is not a valid {}."
                 raise BlackbirdSyntaxError(
-                    syntax_msg.format(
-                        line, column + 1, var_name, offendingSymbol.text, var_type
-                    )
+                    syntax_msg.format(line, column + 1, var_name, offendingSymbol.text, var_type)
                 ) from None
 
         if isinstance(ctx, blackbirdParser.StatementContext):
@@ -184,12 +158,8 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
 
             if msg == "mismatched input '\\n' expecting {INT, '(', '['}":
                 # there are no modes provided, raise an error
-                error_msg = (
-                    "Blackbird SyntaxError (line {}:{}): statement {} is missing modes."
-                )
-                raise BlackbirdSyntaxError(
-                    error_msg.format(line, column + 1, op_name)
-                ) from None
+                error_msg = "Blackbird SyntaxError (line {}:{}): statement {} is missing modes."
+                raise BlackbirdSyntaxError(error_msg.format(line, column + 1, op_name)) from None
 
             if "expecting {NEWLINE, ')', ']'}" in msg:
                 # there are additional integer mode numbers provided, but they are not comma separated,
@@ -203,13 +173,17 @@ class BlackbirdErrorListener(antlr4.error.ErrorListener.ErrorListener):
         if isinstance(ctx, blackbirdParser.StartContext):
             if "expecting {NEWLINE, 'name'}" in msg:
                 # no name metadata
-                error_msg = "Blackbird SyntaxError (line {}:{}): blackbird 'name' statement is missing."
+                error_msg = (
+                    "Blackbird SyntaxError (line {}:{}): blackbird 'name' statement is missing."
+                )
                 raise BlackbirdSyntaxError(error_msg.format(line, column + 1)) from None
 
         if isinstance(ctx, blackbirdParser.MetadatablockContext):
             if "expecting {NEWLINE, 'version'}" in msg:
                 # no name metadata
-                error_msg = "Blackbird SyntaxError (line {}:{}): blackbird 'version' statement is missing."
+                error_msg = (
+                    "Blackbird SyntaxError (line {}:{}): blackbird 'version' statement is missing."
+                )
                 raise BlackbirdSyntaxError(error_msg.format(line, column + 1)) from None
 
         # otherwise, return a general syntax error, and pass through the original ANTLR4 error message.

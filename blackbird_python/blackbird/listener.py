@@ -41,7 +41,9 @@ Summary
 Code details
 ~~~~~~~~~~~~
 """
-#pylint: disable=protected-access
+# pylint: disable=protected-access
+import warnings
+
 import antlr4
 
 import numpy as np
@@ -163,7 +165,15 @@ class BlackbirdListener(blackbirdListener):
         kwargs = {}
 
         if ctx.arguments():
-            _, kwargs = _get_arguments(ctx.arguments())
+            args, kwargs = _get_arguments(ctx.arguments())
+
+            if args:
+                warnings.warn(
+                    "Target devices only accept keyword options of the form "
+                    "option=value. All positional arguments without a named "
+                    "option will be ignored.",
+                    SyntaxWarning,
+                )
 
         self._program._target["options"] = kwargs
 
@@ -298,9 +308,7 @@ class BlackbirdListener(blackbirdListener):
             op_args, op_kwargs = _get_arguments(ctx.arguments())
 
             # convert any sympy expressions into regref transforms
-            op_args = [
-                RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args
-            ]
+            op_args = [RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args]
 
             self._program._operations.append(
                 {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}

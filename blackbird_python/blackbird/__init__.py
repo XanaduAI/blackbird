@@ -65,7 +65,7 @@ Modules
 Serializing and deserializing Blackbird
 ---------------------------------------
 
-The following functions are provided to easily 
+The following functions are provided to easily
 
 * :func:`~.load`: a utility function that automates
   the de-serialization of the Blackbird script
@@ -128,11 +128,7 @@ Code details
 """
 import antlr4
 
-from .listener import (
-    BlackbirdListener,
-    RegRefTransform,
-    parse
-)
+from .listener import BlackbirdListener, RegRefTransform, parse
 from .program import BlackbirdProgram
 from ._version import __version__
 
@@ -159,7 +155,7 @@ def loads(string):
         string (str): string containing a valid Blackbird program
 
     Returns:
-        BlackbirdProgram: returns a :class:`BlackbirdProgram` object
+        BlackbirdProgram: parsed representation of the program
     """
     data = antlr4.InputStream(string)
     return parse(data)

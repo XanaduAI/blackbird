@@ -167,38 +167,6 @@ class BlackbirdListener(blackbirdListener):
 
         self._program._target["options"] = kwargs
 
-    def exitDeclarename(self, ctx: blackbirdParser.DeclarenameContext):
-        """Run after exiting program name metadata.
-
-        Args:
-            ctx: DeclarenameContext
-        """
-        self.name = ctx.programname().getText()
-
-    def exitVersion(self, ctx: blackbirdParser.VersionContext):
-        """Run after exiting version metadata.
-
-        Args:
-            ctx: VersionContext
-        """
-        self.version = ctx.versionnumber().getText()
-
-    def exitTarget(self, ctx: blackbirdParser.TargetContext):
-        """Run after exiting target metadata.
-
-        Args:
-            ctx: TargetContext
-        """
-        self.target = {"name": ctx.device().getText()}
-
-        args = []
-        kwargs = {}
-
-        if ctx.arguments():
-            args, kwargs = _get_arguments(ctx.arguments())
-
-        self.target["options"] = kwargs
-
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
 

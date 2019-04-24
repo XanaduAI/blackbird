@@ -35,7 +35,7 @@ MeasureFock() | 0
 
 
 @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
-def test_load( tmpdir):
+def test_load(tmpdir):
     """Test that a Blackbird script is deserialized from a file"""
     filename = tmpdir.join('test.xbb')
 

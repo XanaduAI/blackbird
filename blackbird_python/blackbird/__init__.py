@@ -145,7 +145,7 @@ def load(filename):
         filename (str): file location of a valid Blackbird program
 
     Returns:
-        BlackbirdProgram: returns a :class:`BlackbirdProgram` object
+        BlackbirdProgram: parsed representation of the program
     """
     data = antlr4.FileStream(filename)
     return parse(data)

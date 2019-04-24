@@ -3,15 +3,16 @@
 Installation
 ============
 
+Installing the Blackbird Python parser is easy; the parser and all
+dependencies can be installed via ``pip``:
 
-.. note:: Update once uploaded to the PyPI repository
+.. code-block:: console
+
+	$ pip install quantum-blackbird
 
 
-Installing the Python Parser
-----------------------------
-
-The Python Blackbird listener requires NumPy and the Python antlr4 runtime, which can be
-installed via pip:
+Alternatively, you can install the latest development version directly
+from GitHub as follows. The Python Blackbird listener requires NumPy and the Python antlr4 runtime, which can be installed via pip:
 
 .. code-block:: console
 

@@ -62,8 +62,31 @@ Modules
 * :mod:`blackbird.auxiliary`: auxiliary parsing functions.
 
 
-Main components
----------------
+Serializing and deserializing Blackbird
+---------------------------------------
+
+The following functions are provided to easily 
+
+* :func:`~.load`: a utility function that automates
+  the de-serialization of the Blackbird script
+  from a file (specified by file location),
+  returning a :class:`~.BlackbirdProgram` object.
+
+* :func:`~.loads`: a utility function that automates
+  the de-serialization of the Blackbird script
+  from a string, returning a :class:`~.BlackbirdProgram` object.
+
+* :func:`~.dump`: a utility function that automates
+  the serialization of a :class:`~.BlackbirdProgram` object
+  to a `.write()`-supporting file-like object.
+
+* :func:`~.dumps`: a utility function that automates
+  the serialization of a :class:`~.BlackbirdProgram` object
+  to a string.
+
+
+Main classes
+------------
 
 * :class:`~.BlackbirdProgram`: a class that encapsulates a Blackbird
   program, using standard Python data structures accessible via attributes.
@@ -81,17 +104,6 @@ Main components
   If the operation argument you are parsing is an instance of this class,
   that indicates that a register transform is required.
 
-* :func:`~.parse_blackbird`: a utility function that automates
-  the parsing of the Blackbird abstract syntax tree from a file.
-  Use this function, either with the default parser
-  :class:`~.BlackbirdListener` or a custom derived class, to parse
-  arbitrary Blackbird code given a file location.
-
-* :func:`~.parse_blackbird_string`: a utility function that automates
-  the parsing of the Blackbird abstract syntax tree from a string.
-  Use this function, either with the default parser
-  :class:`~.BlackbirdListener` or a custom derived class, to parse
-  arbitrary Blackbird code given a string containing valid Blackbird code.
 
 .. note::
 
@@ -100,14 +112,77 @@ Main components
 
   .. code-block:: python
 
-    from blackbird import BlackbirdListener, parse_blackbird, BlackbirdProgram
+    from blackbird import BlackbirdListener, load, BlackbirdProgram
+
+Summary
+-------
+
+.. autosummary::
+    load
+    loads
+    dump
+    dumps
+
+Code details
+^^^^^^^^^^^^
 """
+import antlr4
 
 from .listener import (
     BlackbirdListener,
     RegRefTransform,
-    parse_blackbird,
-    parse_blackbird_string,
+    parse
 )
 from .program import BlackbirdProgram
 from ._version import __version__
+
+
+def load(filename):
+    """Deserialize a blackbird program from a file to a
+    :class:`BlackbirdProgram` object.
+
+    Args:
+        filename (str): file location of a valid Blackbird program
+
+    Returns:
+        BlackbirdProgram: returns a :class:`BlackbirdProgram` object
+    """
+    data = antlr4.FileStream(filename)
+    return parse(data)
+
+
+def loads(string):
+    """Deserialize a blackbird program from a string to a
+    :class:`BlackbirdProgram` object.
+
+    Args:
+        string (str): string containing a valid Blackbird program
+
+    Returns:
+        BlackbirdProgram: returns a :class:`BlackbirdProgram` object
+    """
+    data = antlr4.InputStream(string)
+    return parse(data)
+
+
+def dump(blackbird, f):
+    """Serialize a blackbird program to a `.write()`-supporting file-like object.
+
+    Args:
+        blackbird (BlackbirdProgram): a :class:`BlackbirdProgram` object
+        f (file-like): a `.write()`-supporting file-like object.
+    """
+    text = blackbird.serialize()
+    f.write(text)
+
+
+def dumps(blackbird):
+    """Serialize a blackbird program to a string.
+
+    Args:
+        blackbird (BlackbirdProgram): a :class:`BlackbirdProgram` object
+
+    Returns:
+        str: the serialized Blackbird program
+    """
+    return blackbird.serialize()

@@ -21,7 +21,7 @@ import numpy as np
 import strawberryfields as sf
 import strawberryfields.ops as sfo
 
-from blackbird import BlackbirdListener, RegRefTransform, parse_blackbird
+from blackbird import BlackbirdListener, RegRefTransform, parse
 
 
 class StrawberryFieldsListener(BlackbirdListener):
@@ -94,7 +94,7 @@ def run(file):
         list: list of size ``[shots, num_subsystems]``, representing
         the measured qumode values for each shot
     """
-    simulation = parse_blackbird(file, listener=StrawberryFieldsListener)
+    simulation = parse(antlr4.FileStream(file), listener=StrawberryFieldsListener)
     simulation.run()
     simulation.print_results()
 

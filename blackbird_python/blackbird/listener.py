@@ -36,7 +36,7 @@ Summary
     NUMPY_TYPES
     RegRefTransform
     BlackbirdListener
-    parse_blackbird
+    parse
 
 Code details
 ~~~~~~~~~~~~
@@ -318,49 +318,19 @@ class BlackbirdListener(blackbirdListener):
         _VAR.clear()
 
 
-def parse_blackbird(file, listener=BlackbirdListener):
-    """Parse a blackbird program from a file.
+def parse(data, listener=BlackbirdListener):
+    """Parse a blackbird data stream.
 
     Args:
-        file (str): location of the .xbb blackbird file to run
+        data (antlr4.InputStream): ANTLR4 data stream of the Blackbird script
         Listener (BlackbirdListener): an Blackbird listener to use to walk the AST.
             By default, the basic :class:`~.BlackbirdListener` defined above
             is used.
 
     Returns:
-        BlackbirdListener: returns the Blackbird listener instance after
+        BlackbirdProgram: returns an instance of the :class:`BlackbirdProgram` class after
         parsing the abstract syntax tree
     """
-    data = antlr4.FileStream(file)
-    lexer = blackbirdLexer(data)
-    stream = antlr4.CommonTokenStream(lexer)
-
-    parser = blackbirdParser(stream)
-    parser.removeErrorListeners()
-    parser.addErrorListener(BlackbirdErrorListener())
-    tree = parser.start()
-
-    blackbird = listener()
-    walker = antlr4.ParseTreeWalker()
-    walker.walk(blackbird, tree)
-
-    return blackbird.program
-
-
-def parse_blackbird_string(string, listener=BlackbirdListener):
-    """Parse a blackbird program from a string.
-
-    Args:
-        string (str): string containing a valid Blackbird program.
-        Listener (BlackbirdListener): an Blackbird listener to use to walk the AST.
-            By default, the basic :class:`~.BlackbirdListener` defined above
-            is used.
-
-    Returns:
-        BlackbirdListener: returns the Blackbird listener instance after
-        parsing the abstract syntax tree
-    """
-    data = antlr4.InputStream(string)
     lexer = blackbirdLexer(data)
     stream = antlr4.CommonTokenStream(lexer)
 

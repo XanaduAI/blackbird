@@ -23,7 +23,8 @@ Blackbird Program class
 This module contains a Python class representing a Blackbird
 program using standard Python data types.
 
-The :func:`parse_blackbird`
+The functions :func:`~.load`, and :func:`~.loads` will read Blackbird scripts
+and return an instance of the :class:`BlackbirdProgram` class.
 
 Summary
 -------
@@ -55,7 +56,7 @@ def numpy_to_blackbird(A, var_name):
         script = ["complex array {}[{}, {}] =".format(var_name, *A.shape)]
         for row in A:
             row_str = "    " + ", ".join(
-                ["{0}{1}{2}j".format(n.real, "+-"[n.imag < 0], abs(n.imag)) for n in row]
+                ["{0}{1}{2}j".format(n.real, "+-"[int(n.imag < 0)], abs(n.imag)) for n in row]
             )
             script.append(row_str)
 
@@ -232,7 +233,7 @@ class BlackbirdProgram:
                     elif isinstance(v, complex):
                         # argument is a complex type
                         args.append(
-                            "{}{}{}j".format(v.real, "+-"[v.imag < 0], np.abs(v.imag))
+                            "{}{}{}j".format(v.real, "+-"[int(v.imag < 0)], np.abs(v.imag))
                         )
 
                     else:
@@ -260,7 +261,7 @@ class BlackbirdProgram:
 
                     elif isinstance(v, complex):
                         kwargs.append(
-                            "{}={}{}{}j".format(k, v.real, "+-"[v.imag < 0], np.abs(v.imag))
+                            "{}={}{}{}j".format(k, v.real, "+-"[int(v.imag < 0)], np.abs(v.imag))
                         )
 
                     else:

@@ -28,8 +28,7 @@ from blackbird.blackbirdParser import blackbirdParser
 from blackbird.listener import (
     BlackbirdListener,
     RegRefTransform,
-    parse_blackbird,
-    parse_blackbird_string
+    parse
 )
 
 
@@ -312,7 +311,7 @@ class TestRegRefTransform:
 
 
 class TestParseFunction:
-    """Tests for the `parse_blackbird` convenience parsing function"""
+    """Tests for the `parse` convenience parsing function"""
 
     @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_parse_file(self, tmpdir):
@@ -322,7 +321,7 @@ class TestParseFunction:
         with open(filename, 'w') as f:
             f.write(test_file)
 
-        bb = parse_blackbird(filename)
+        bb = parse(antlr4.FileStream(filename))
 
         assert bb._var == {"alpha": 0.3423}
 
@@ -336,9 +335,9 @@ class TestParseFunction:
 
         assert bb.operations == expected
 
-    def test_parse_string(self, tmpdir):
+    def test_parse_string(self):
         """Test that device name is extracted"""
-        bb = parse_blackbird_string(test_file)
+        bb = parse(antlr4.InputStream(test_file))
 
         assert bb._var == {"alpha": 0.3423}
 

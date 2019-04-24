@@ -50,28 +50,28 @@ from .blackbirdLexer import blackbirdLexer
 from .blackbirdParser import blackbirdParser
 from .blackbirdListener import blackbirdListener
 
-from .error import BlackbirdErrorListener
+from .error import BlackbirdErrorListener, BlackbirdSyntaxError
 from .auxiliary import _expression, _get_arguments, _literal, _VAR
 
 
 PYTHON_TYPES = {
-    'array': np.ndarray,
-    'float': float,
-    'complex': complex,
-    'int': int,
-    'str': str,
-    'bool': bool
+    "array": np.ndarray,
+    "float": float,
+    "complex": complex,
+    "int": int,
+    "str": str,
+    "bool": bool,
 }
 """dict[str->type]: Mapping from the allowed Blackbird types
 to the equivalent Python/NumPy types."""
 
 
 NUMPY_TYPES = {
-    'float': np.float64,
-    'complex': np.complex128,
-    'int': np.int64,
-    'str': np.str,
-    'bool': np.bool
+    "float": np.float64,
+    "complex": np.complex128,
+    "int": np.int64,
+    "str": np.str,
+    "bool": np.bool,
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""
@@ -83,6 +83,7 @@ class RegRefTransform:
     Args:
         expr (sympy.Expr): a SymPy expression representing the RegRef transform
     """
+
     def __init__(self, expr):
         """After initialization, the RegRefTransform has three attributes
         which may be inspected to translate the Blackbird program to a
@@ -115,25 +116,38 @@ class RegRefTransform:
 
 
 class BlackbirdListener(blackbirdListener):
-    """Listener to run a Blackbird program and extract the program queue and device information."""
-    def __init__(self):
-        """On initialization, the Blackbird listener creates three empty attributes:
+    """Listener to run a Blackbird program and extract the program queue and target information."""
 
+    def __init__(self):
+        """On initialization, the Blackbird listener creates the following empty attributes:
+
+        * :attr:`name = "" <name>`
+        * :attr:`version = None <version>`
         * :attr:`var = {} <var>`
-        * :attr:`device = None <var>`
-        * :attr:`queue = [] <var>`
+        * :attr:`target = None <target>`
+        * :attr:`queue = [] <queue>`
         """
+        self.name = ""
+        """str: Name of the Blackbird program"""
+
+        self.version = None
+        """float: Version of the Blackbird parser the script targets"""
+
+        self.active_modes = set()
+        """set[int]: A set of non-negative integers specifying the modes the program manipulates."""
+
         self.var = {}
         """dict[str->[int, float, complex, str, bool, numpy.ndarray]]: Mapping from the
         variable names in the Blackbird script to their declared values."""
 
-        self.device = None
-        """dict[str->[str, list, dict]]: Contains information regarding the quantum
-        program/device/simulation. Important keys include:
+        self.target = None
+        """dict[str->[str, dict]]: Contains information regarding the target device of the quantum
+        program (i.e., the target device the Blackbird script is compiled for).
+
+        Important keys include:
 
         * ``'name'`` (str): the name of the device the Blackbird script requests to be run on
-        * ``'args'`` (list): a list of positional arguments for the device
-        * ``'kwargs'`` (dict): a dictionary of keyword arguments for the device
+        * ``'options'`` (dict): a dictionary of keyword arguments for the target device
         """
 
         self.queue = []
@@ -149,6 +163,38 @@ class BlackbirdListener(blackbirdListener):
         might be empty.
         """
 
+    def exitDeclarename(self, ctx: blackbirdParser.DeclarenameContext):
+        """Run after exiting program name metadata.
+
+        Args:
+            ctx: DeclarenameContext
+        """
+        self.name = ctx.programname().getText()
+
+    def exitVersion(self, ctx: blackbirdParser.VersionContext):
+        """Run after exiting version metadata.
+
+        Args:
+            ctx: VersionContext
+        """
+        self.version = ctx.versionnumber().getText()
+
+    def exitTarget(self, ctx: blackbirdParser.TargetContext):
+        """Run after exiting target metadata.
+
+        Args:
+            ctx: TargetContext
+        """
+        self.target = {"name": ctx.device().getText()}
+
+        args = []
+        kwargs = {}
+
+        if ctx.arguments():
+            args, kwargs = _get_arguments(ctx.arguments())
+
+        self.target["options"] = kwargs
+
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
 
@@ -158,8 +204,23 @@ class BlackbirdListener(blackbirdListener):
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
 
-        if ctx.name().REGREF():
-            raise NameError("Variable name {} is reserved for register references".format(name))
+        if ctx.name().invalid():
+            child = ctx.name().invalid()
+            line = child.start.line
+            col = child.start.column
+
+            if child.REGREF():
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Variable name '{}' is reserved for register references".format(
+                        line, col, name
+                    )
+                )
+            if child.reserved():
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Variable name '{}' is a reserved Blackbird keyword".format(
+                        line, col, name
+                    )
+                )
 
         if ctx.expression():
             value = _expression(ctx.expression())
@@ -175,7 +236,9 @@ class BlackbirdListener(blackbirdListener):
                 final_value = NUMPY_TYPES[vartype](value)
             except:
                 # nope
-                raise TypeError("Var {} = {} is not of declared type {}".format(name, value, vartype)) from None
+                raise TypeError(
+                    "Var {} = {} is not of declared type {}".format(name, value, vartype)
+                ) from None
 
         _VAR[name] = final_value
 
@@ -188,12 +251,27 @@ class BlackbirdListener(blackbirdListener):
         name = ctx.name().getText()
         vartype = ctx.vartype().getText()
 
-        if ctx.name().REGREF():
-            raise NameError("Variable name {} is reserved for register references".format(name))
+        if ctx.name().invalid():
+            child = ctx.name().invalid()
+            line = child.start.line
+            col = child.start.column
+
+            if child.REGREF():
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Variable name '{}' is reserved for register references".format(
+                        line, col, name
+                    )
+                )
+            if child.reserved():
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Variable name '{}' is a reserved Blackbird keyword".format(
+                        line, col, name
+                    )
+                )
 
         shape = None
         if ctx.shape():
-            shape = tuple([int(i) for i in ctx.shape().getText().split(',')])
+            shape = tuple([int(i) for i in ctx.shape().getText().split(",")])
 
         value = []
         # loop through all children of the 'arrayval' branch
@@ -204,19 +282,29 @@ class BlackbirdListener(blackbirdListener):
                 value.append([])
                 for j in i.getChildren():
                     # Check if the child is not the column delimiter ','
-                    if j.getText() != ',':
+                    if j.getText() != ",":
                         value[-1].append(_expression(j))
 
         try:
             final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
         except:
-            raise TypeError("Array var {} is not of declared type {}".format(name, vartype)) from None
+            line = ctx.start.line
+            col = ctx.start.column
+            raise BlackbirdSyntaxError(
+                "Blackbird SyntaxError (line {}:{}): Array var {} is not of declared type {}".format(
+                    line, col, name, vartype
+                )
+            )
 
         if shape is not None:
             actual_shape = final_value.shape
             if actual_shape != shape:
-                raise TypeError("Array var {} has declared shape {} "
-                                "but actual shape {}".format(name, shape, actual_shape)) from None
+                line = ctx.start.line
+                col = ctx.start.column
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Array var {} has declared shape {} "
+                    "but actual shape {}".format(line, col, name, shape, actual_shape)
+                )
 
         _VAR[name] = final_value
 
@@ -231,7 +319,8 @@ class BlackbirdListener(blackbirdListener):
         elif ctx.measure():
             op = ctx.measure().getText()
 
-        modes = [int(i) for i in ctx.modes().getText().split(',')]
+        modes = [int(i) for i in ctx.modes().getText().split(",")]
+        self.active_modes |= set(modes)
 
         if ctx.arguments():
             op_args, op_kwargs = _get_arguments(ctx.arguments())
@@ -239,14 +328,9 @@ class BlackbirdListener(blackbirdListener):
             # convert any sympy expressions into regref transforms
             op_args = [RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args]
 
-            self.queue.append({
-                'op': op,
-                'args': op_args,
-                'kwargs': op_kwargs,
-                'modes': modes
-            })
+            self.queue.append({"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes})
         else:
-            self.queue.append({'op': op, 'modes': modes})
+            self.queue.append({"op": op, "modes": modes})
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
@@ -255,16 +339,6 @@ class BlackbirdListener(blackbirdListener):
             ctx: program context
         """
         self.var.update(_VAR)
-        self.device = {'name': ctx.device().getText()}
-
-        args = []
-        kwargs = {}
-
-        if ctx.arguments():
-            args, kwargs = _get_arguments(ctx.arguments())
-
-        self.device['args'] = args
-        self.device['kwargs'] = kwargs
         _VAR.clear()
 
 

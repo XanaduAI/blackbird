@@ -17,12 +17,75 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#varblock.
-    def enterVarblock(self, ctx:blackbirdParser.VarblockContext):
+    # Enter a parse tree produced by blackbirdParser#metadatablock.
+    def enterMetadatablock(self, ctx:blackbirdParser.MetadatablockContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#varblock.
-    def exitVarblock(self, ctx:blackbirdParser.VarblockContext):
+    # Exit a parse tree produced by blackbirdParser#metadatablock.
+    def exitMetadatablock(self, ctx:blackbirdParser.MetadatablockContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#declarename.
+    def enterDeclarename(self, ctx:blackbirdParser.DeclarenameContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#declarename.
+    def exitDeclarename(self, ctx:blackbirdParser.DeclarenameContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#programname.
+    def enterProgramname(self, ctx:blackbirdParser.ProgramnameContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#programname.
+    def exitProgramname(self, ctx:blackbirdParser.ProgramnameContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#version.
+    def enterVersion(self, ctx:blackbirdParser.VersionContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#version.
+    def exitVersion(self, ctx:blackbirdParser.VersionContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#versionnumber.
+    def enterVersionnumber(self, ctx:blackbirdParser.VersionnumberContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#versionnumber.
+    def exitVersionnumber(self, ctx:blackbirdParser.VersionnumberContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#target.
+    def enterTarget(self, ctx:blackbirdParser.TargetContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#target.
+    def exitTarget(self, ctx:blackbirdParser.TargetContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#device.
+    def enterDevice(self, ctx:blackbirdParser.DeviceContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#device.
+    def exitDevice(self, ctx:blackbirdParser.DeviceContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#program.
+    def enterProgram(self, ctx:blackbirdParser.ProgramContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#program.
+    def exitProgram(self, ctx:blackbirdParser.ProgramContext):
         pass
 
 
@@ -50,6 +113,24 @@ class blackbirdListener(ParseTreeListener):
 
     # Exit a parse tree produced by blackbirdParser#name.
     def exitName(self, ctx:blackbirdParser.NameContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#invalid.
+    def enterInvalid(self, ctx:blackbirdParser.InvalidContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#invalid.
+    def exitInvalid(self, ctx:blackbirdParser.InvalidContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#reserved.
+    def enterReserved(self, ctx:blackbirdParser.ReservedContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#reserved.
+    def exitReserved(self, ctx:blackbirdParser.ReservedContext):
         pass
 
 
@@ -95,24 +176,6 @@ class blackbirdListener(ParseTreeListener):
 
     # Exit a parse tree produced by blackbirdParser#arrayrow.
     def exitArrayrow(self, ctx:blackbirdParser.ArrayrowContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#program.
-    def enterProgram(self, ctx:blackbirdParser.ProgramContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#program.
-    def exitProgram(self, ctx:blackbirdParser.ProgramContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#device.
-    def enterDevice(self, ctx:blackbirdParser.DeviceContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#device.
-    def exitDevice(self, ctx:blackbirdParser.DeviceContext):
         pass
 
 

@@ -44,6 +44,7 @@ import numpy as np
 from sympy import Symbol
 
 from .blackbirdParser import blackbirdParser
+from .error import BlackbirdSyntaxError
 
 
 _VAR = {}
@@ -67,7 +68,7 @@ def _literal(nonnumeric):
         str or bool
     """
     if nonnumeric.STR():
-        return str(nonnumeric.getText().replace('"', ''))
+        return str(nonnumeric.getText().replace('"', ""))
 
     if nonnumeric.BOOL():
         val = nonnumeric.getText()
@@ -148,7 +149,14 @@ def _expression(expr):
             return Symbol(expr.getText())
 
         if expr.getText() not in _VAR:
-            raise NameError("name '{}' is not defined".format(expr.getText()))
+            token = expr.start
+            line = token.line
+            col = token.column
+            raise BlackbirdSyntaxError(
+                "Blackbird SyntaxError (line {}:{}): name '{}' is not defined".format(
+                    line, col, expr.getText()
+                )
+            )
 
         return _VAR[expr.getText()]
 
@@ -217,7 +225,14 @@ def _get_arguments(arguments):
                 if name in _VAR:
                     args.append(_VAR[name])
                 else:
-                    raise NameError("name '{}' is not defined".format(name))
+                    token = arg.start
+                    line = token.line
+                    col = token.column
+                    raise BlackbirdSyntaxError(
+                        "Blackbird SyntaxError (line {}:{}): name '{}' is not defined".format(
+                            line, col, name
+                        )
+                    )
 
         elif isinstance(arg, blackbirdParser.KwargContext):
             name = arg.NAME().getText()

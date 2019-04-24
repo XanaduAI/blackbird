@@ -35,16 +35,15 @@ class StrawberryFieldsListener(BlackbirdListener):
         self.result = []
 
     def run(self):
-        if 'num_subsystems' not in self.device['kwargs']:
-            raise ValueError("Must specify the number of subsystems")
+        if self.target is None:
+            raise ValueError("Blackbird program has no target backend")
 
         self.eng, self.q = sf.Engine(
-            self.device['kwargs']['num_subsystems'],
-            hbar=self.device['kwargs'].get('hbar', 2)
+            len(self.active_modes),
+            hbar=self.target['options'].get('hbar', 2)
         )
 
-        self.device['kwargs'].pop('num_subsystems')
-        self.device['kwargs'].pop('hbar', None)
+        self.target['options'].pop('hbar', None)
 
         with self.eng:
             for statement in self.queue:
@@ -65,11 +64,12 @@ class StrawberryFieldsListener(BlackbirdListener):
 
                 op | [self.q[i] for i in modes] #pylint:disable=pointless-statement
 
-        shots = self.device['kwargs'].get('shots', 1)
+        shots = self.target['options'].get('shots', 1)
+        self.target['options'].pop('shots', None)
 
         for _ in range(shots):
             self.eng.reset(keep_history=True)
-            self.state = self.eng.run(self.device['name'], *self.device['args'], **self.device['kwargs'])
+            self.state = self.eng.run(self.target['name'], **self.target['options'])
             self.result.append([q.val for q in self.q])
 
     def print_results(self):

@@ -53,11 +53,7 @@ the following:
 
 .. 
 
-* Newlines at the same indentation level indicate the end of a statement.
-
-.. 
-
-* Indentation is used to denote programmatic 'blocks'.
+* Newlines indicate the end of a statement.
 
 .. 
 
@@ -65,7 +61,7 @@ the following:
 
 .. 
 
-* The ``with`` statement is used to denote the quantum device used to execute operations.
+* The ``|`` operator is used to apply intrinsic quantum operations to quantum registers.
 
 .. 
 
@@ -83,12 +79,6 @@ Contrary to Python, however, we also introduce the following restrictions,
 to enable Blackbird to function as a quantum assembly language across
 a wide array of quantum hardware:
 
-* All Blackbird scripts are separated into two main sections;
-
-  - Variable declarations (optional)
-  - The quantum program, denoted by the ``with`` statement (required)
-
-.. 
 
 * Statically typed - you must declare the variable type, and variables
   and arguments of conflicting types are **not** automatically cast to the correct type.
@@ -98,10 +88,44 @@ a wide array of quantum hardware:
 * Array variables may be declared, but Blackbird does not support array manipulation.
 
 
+Metadata
+--------
+
+All Blackbird programs must begin with a required metadata block as follows:
+
+.. code-block:: python
+
+    name progam_name
+    version 1.0
+
+The ``name`` and the ``version`` keywords must be given in the order above and
+are *mandatory*. The name simply specifies the name of your Blackbird program,
+while the version number is the version number of the Blackbird spec it is written
+for.
+
+In addition, you may specify an optional ``target`` keyword:
+
+.. code-block:: python
+
+    target chip0
+
+This indicates the device or simulator the Blackbird program targets --- that is,
+you are specifying that the contained Blackbird code is compiled for the targeted
+device/simulator.
+
+The target keyword also accepts keyword options, using the syntax
+``(option1=0.32, option2=40)``. For example:
+
+
+.. code-block:: python
+
+    target chip0 (shots=100)
+
+
 Variable declarations
 ---------------------
 
-Variable may be optionally defined at the top of a Blackbird script, prior to the quantum program.
+Variable may be optionally defined on any new line in the blackbird script.
 
 The syntax for defining variables is as follows:
 
@@ -221,29 +245,27 @@ columns separated by commas.
 Quantum program
 ---------------
 
-The ``with`` statement indicates the device to run the program on,
-as well as providing device-specific options.
+The ``|`` operator is used to apply intrinsic quantum operations to quantum registers.
 
-Inside the indented ``with`` block, all operations are queued
-to be executed on the device, in the order they appear.
 
 For example:
 
 .. code-block:: python
 
-    with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
-        # Statements within the 'with' block have the following form:
-        Operation(parameters) | modes
+    # Statements have the following form:
+    Operation(parameters) | modes
 
-        # Depending on the operation, parameters may be optional
-        # Parameters can be variables of literals or expressions
-        Coherent(alpha**2, Delta*sqrt(pi)) | 0
+    # Depending on the operation, parameters may be optional
+    # Parameters can be variables of literals or expressions
+    complex alpha = 0.5+0.2
+    float delta = 0.5423
+    Coherent(alpha**2, Delta*sqrt(pi)) | 0
 
-        # Multiple modes are specified by comma separated integers
-        Interferometer(U) | [0, 1, 2, 3]
+    # Multiple modes are specified by comma separated integers
+    Interferometer(U) | [0, 1, 2, 3]
 
-        # Finish with measurements
-        MeasureFock() | 0
+    # Finish with measurements
+    MeasureFock() | 0
 
 Currently, the device always accepts keyword arguments, and operations always accept
 positional arguments.
@@ -253,11 +275,10 @@ variables ``qX``, where ``X`` is an integer representing mode ``X``, as paramete
 
 .. code-block:: python
 
-    with fock(num_subsystems=1, cutoff_dim=7, shots=10000):
-        S2gate(0.43, 0.12) | [0, 1]
-        MeasureX | 0
-        MeasureP | 1
-        Xgate(sqrt(2)*q0+q1) | 2
+    S2gate(0.43, 0.12) | [0, 1]
+    MeasureX | 0
+    MeasureP | 1
+    Xgate(sqrt(2)*q0+q1) | 2
 
 After running a Blackbird program, the user should expect to receive the results
 as an array:

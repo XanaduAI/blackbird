@@ -24,12 +24,19 @@ from antlr4 import ParserRuleContext
 import blackbird
 from blackbird.blackbirdParser import blackbirdParser
 from blackbird.auxiliary import _literal, _number, _func, _expression, _get_arguments
+from blackbird.error import BlackbirdSyntaxError
 
 
 test_ints = [('-3', -3), ('0', 0), ('4', 4), ('15', 15)]
 test_floats = [('0.432', 0.432), ('-0.54321', -0.54321), ('32.432', 32.432), ('13.', 13), ('-1', -1), ('8.0', 8), ('89.23e-10', 8.923e-9)]
 test_complex = [('0+5j', 0+5j), ('8-1j', 8-1j), ('0.54+0.21j', 0.54+0.21j), ('8', 8), ('2j', 2j)]
 U = np.array([[3, 2], [1+1j, -0.5]])
+
+
+class start:
+    """Dummy location class for syntax errors"""
+    column = 2
+    line = 1
 
 
 @pytest.fixture
@@ -229,10 +236,11 @@ class TestExpression:
         """Test that an error is raised if the variable does not exist"""
         expr = blackbirdParser.VariableLabelContext(parser, ctx)
         expr.getText = lambda: "var2"
+        expr.start = start()
 
         with monkeypatch.context() as m:
             m.setattr(blackbird.auxiliary, "_VAR", {"var1": 5})
-            with pytest.raises(NameError, match="name 'var2' is not defined"):
+            with pytest.raises(SystemExit, match="name 'var2' is not defined"):
                 _expression(expr)
 
     @pytest.mark.parametrize('n1', test_complex)
@@ -552,9 +560,10 @@ class TestArguments:
         arg1 = blackbirdParser.ValContext(parser, ctx)
 
         arg1.NAME = lambda: var('U')
+        arg1.start = start()
         args.getChildren = lambda: [arg1]
 
-        with pytest.raises(NameError, match="name 'U' is not defined"):
+        with pytest.raises(SystemExit, match="name 'U' is not defined"):
             _get_arguments(args)
 
     def test_keyword_expression(self, parser, ctx, num):

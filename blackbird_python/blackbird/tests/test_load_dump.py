@@ -101,6 +101,7 @@ def test_dump(tmpdir):
     assert res == expected
 
 
+@pytest.mark.skipif(sys.version_info < (3, 6), reason="dictionary ordering is stochastic")
 def test_dumps(tmpdir):
     """Test that a Blackbird script is serialized to a string"""
     bb = loads(test_script)

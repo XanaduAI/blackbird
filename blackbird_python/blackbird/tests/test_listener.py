@@ -289,6 +289,19 @@ class TestParsingQuantumPrograms:
 class TestParsingMetadata:
     """Tests for parsing quantum devices"""
 
+    def test_name(self, parse_input):
+        """Test that device name is extracted"""
+        bb = parse_input("name testname\nversion 1.0")
+        assert bb.name == "testname"
+
+    def test_version(self, parse_input):
+        """Test that device name is extracted"""
+        bb = parse_input("name testname\nversion 1.0")
+        assert bb.version == "1.0"
+
+        bb = parse_input("name testname\nversion 1.12")
+        assert bb.version == "1.12"
+
     def test_target_name(self, parse_input):
         """Test that device name is extracted"""
         bb = parse_input("name testname\nversion 1.0\ntarget example")

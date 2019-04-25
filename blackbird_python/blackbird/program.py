@@ -86,7 +86,7 @@ def numpy_to_blackbird(A, var_name):
 class BlackbirdProgram:
     """Python representation of a Blackbird program."""
 
-    def __init__(self, name="blackbird_program", version=1.0):
+    def __init__(self, name="blackbird_program", version="1.0"):
         self._var = {}
         self._modes = set()
 
@@ -110,7 +110,7 @@ class BlackbirdProgram:
         """Version of the Blackbird parser the program targets
 
         Returns:
-            float: version number
+            str: version number
         """
         return self._version
 

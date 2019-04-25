@@ -82,7 +82,13 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
 
 number              : (INT|FLOAT|COMPLEX|PI);
 
-function            : (SIN | COS | SQRT | EXP);
+function            : SIN | COS | TAN
+                    | ARCSIN | ARCCOS | ARCTAN
+                    | SINH | COSH | TANH
+                    | ARCSINH | ARCCOSH | ARCTANH
+                    | SQRT
+                    | LOG | EXP
+                    ;
 
 /*
  * Lexer Rules
@@ -124,7 +130,18 @@ TARGET              : 'target';
 SQRT                : 'sqrt' ;
 SIN                 : 'sin' ;
 COS                 : 'cos' ;
+TAN                 : 'tan' ;
+ARCSIN              : 'arcsin' ;
+ARCCOS              : 'arccos' ;
+ARCTAN              : 'arctan' ;
+SINH                : 'sinh' ;
+COSH                : 'cosh' ;
+TANH                : 'tanh' ;
+ARCSINH             : 'arcsinh' ;
+ARCCOSH             : 'arccosh' ;
+ARCTANH             : 'arctanh' ;
 EXP                 : 'exp' ;
+LOG                 : 'log' ;
 
 // Punctuation and delimeters
 PERIOD              : '.' ;

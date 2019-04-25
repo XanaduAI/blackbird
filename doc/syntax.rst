@@ -201,10 +201,12 @@ Functions
 
 Blackbird also supports the intrinsic functions
 
-* ``exp()``
-* ``sin()``
-* ``cos()``
 * ``sqrt()``
+* ``exp()``, ``log``
+* ``sin()``, ``cos()``, ``tan()``
+* ``arcsin()``, ``arccos()``, ``arctan()``
+* ``sinh()``, ``cosh()``, ``tanh()``
+* ``arcsinh()``, ``arccosh()``, ``arctanh()``
 
 and the intrinsic constant
 

@@ -182,6 +182,14 @@ class TestFunction:
         assert _func(func, expression) == np.exp(expected)
 
     @pytest.mark.parametrize('n, expected', test_complex)
+    def test_function_log(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird log function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.LOG = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.log(expected)
+
+    @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_sin(self, parser, ctx, n, expected, num):
         """Test that a Blackbird sin function is properly called"""
         func = blackbirdParser.FunctionContext(parser, ctx)
@@ -196,6 +204,96 @@ class TestFunction:
         func.COS = lambda: True
         expression = num(n)
         assert _func(func, expression) == np.cos(expected)
+
+    @pytest.mark.parametrize('n, expected', test_floats)
+    def test_function_tan(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird tan function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.TAN = lambda: True
+        expression = num(n, num_type='float')
+        assert _func(func, expression) == np.tan(expected)
+
+    def test_function_arcsin(self, parser, ctx, num):
+        """Test that a Blackbird arcsin function is properly called"""
+        n = "0.543"
+        expected = float(n)
+
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCSIN = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.arcsin(expected)
+
+    def test_function_arccos(self, parser, ctx, num):
+        """Test that a Blackbird arccos function is properly called"""
+        n = "0.543"
+        expected = float(n)
+
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCCOS = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.arccos(expected)
+
+    def test_function_arctan(self, parser, ctx, num):
+        """Test that a Blackbird arctan function is properly called"""
+        n = "0.543"
+        expected = float(n)
+
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCTAN = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.arctan(expected)
+
+    @pytest.mark.parametrize('n, expected', test_complex)
+    def test_function_sinh(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird sinh function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.SINH = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.sinh(expected)
+
+    @pytest.mark.parametrize('n, expected', test_complex)
+    def test_function_cosh(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird cosh function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.COSH = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.cosh(expected)
+
+    def test_function_tanh(self, parser, ctx, num):
+        """Test that a Blackbird tanh function is properly called"""
+        n = "0.543"
+        expected = float(n)
+
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.TANH = lambda: True
+        expression = num(n, num_type='float')
+        assert _func(func, expression) == np.tanh(expected)
+
+    @pytest.mark.parametrize('n, expected', test_complex)
+    def test_function_arcsinh(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird arcsinh function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCSINH = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.arcsinh(expected)
+
+    @pytest.mark.parametrize('n, expected', test_complex)
+    def test_function_arccosh(self, parser, ctx, n, expected, num):
+        """Test that a Blackbird arccosh function is properly called"""
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCCOSH = lambda: True
+        expression = num(n)
+        assert _func(func, expression) == np.arccosh(expected)
+
+    def test_function_arctanh(self, parser, ctx, num):
+        """Test that a Blackbird arctanh function is properly called"""
+        n = "0.543"
+        expected = float(n)
+
+        func = blackbirdParser.FunctionContext(parser, ctx)
+        func.ARCTANH = lambda: True
+        expression = num(n, num_type='float')
+        assert _func(func, expression) == np.arctanh(expected)
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_sqrt(self, parser, ctx, n, expected, num):

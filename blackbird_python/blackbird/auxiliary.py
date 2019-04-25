@@ -30,12 +30,12 @@ Summary
 -------
 
 .. autosummary::
-	_expression
-	_func
-	_get_arguments
-	_literal
-	_number
-	_VAR
+    _expression
+    _func
+    _get_arguments
+    _literal
+    _number
+    _VAR
 
 Code details
 ~~~~~~~~~~~~
@@ -115,15 +115,54 @@ def _func(function, arg):
     Returns:
         int or float or complex
     """
+    # exponential functions
     if function.EXP():
         return np.exp(_expression(arg))
 
+    if function.LOG():
+        return np.log(_expression(arg))
+
+    # trig functions
     if function.SIN():
         return np.sin(_expression(arg))
 
     if function.COS():
         return np.cos(_expression(arg))
 
+    if function.TAN():
+        return np.tan(_expression(arg))
+
+    # trig inverses
+    if function.ARCSIN():
+        return np.arcsin(_expression(arg))
+
+    if function.ARCCOS():
+        return np.arccos(_expression(arg))
+
+    if function.ARCTAN():
+        return np.arctan(_expression(arg))
+
+    # hyperbolic trig
+    if function.SINH():
+        return np.sinh(_expression(arg))
+
+    if function.COSH():
+        return np.cosh(_expression(arg))
+
+    if function.TANH():
+        return np.tanh(_expression(arg))
+
+    # hyperbolic trig inverses
+    if function.ARCSINH():
+        return np.arcsinh(_expression(arg))
+
+    if function.ARCCOSH():
+        return np.arccosh(_expression(arg))
+
+    if function.ARCTANH():
+        return np.arctanh(_expression(arg))
+
+    # other
     if function.SQRT():
         return np.sqrt(_expression(arg))
 

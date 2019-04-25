@@ -261,12 +261,17 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "MeasureHomodyne", "args": [], "kwargs": {"phi": 0.23, "b": 1}}
         ]
 
-    # @pytest.mark.skip()
-    # def test_operation_args_and_kwarg(self, parse_input):
-    #     """Test that an operation with multiple args/keyword arguments is correctly parsed
-    #     NOTE: This is currently not supported by the parser."""
-    #     bb = parse_input("MeasureHomodyne(0.23, post_select=0.41) | 0\n")
-    #     assert bb.operations == [{'modes': [0], 'op': 'MeasureHomodyne', 'args': [0.23], 'kwargs': {'post_select':0.41}}]
+    def test_operation_args_and_kwarg(self, parse_input_mocked_metadata):
+        """Test that an operation with multiple args/keyword arguments is correctly parsed"""
+        bb = parse_input_mocked_metadata('MeasureHomodyne(0.23, 0.54, select=0.41, hi="yes") | 0\n')
+        assert bb.operations == [
+            {
+                "modes": [0],
+                "op": "MeasureHomodyne",
+                "args": [0.23, 0.54],
+                "kwargs": {"select": 0.41, "hi": "yes"},
+            }
+        ]
 
     def test_operation_arg_expressions(self, parse_input_mocked_metadata):
         """Test that expressions inside arguments are properly evaluated"""

@@ -269,12 +269,7 @@ class BlackbirdProgram:
                         kwargs.append("{}={}".format(k, v))
 
                 if args and kwargs:
-                    # arguments = "({}, {})".format(", ".join(args), ", ".join(kwargs))
-                    raise ValueError(
-                        "Blackbird currently doesn't support operations "
-                        "which contain both positional and keyword arguments. "
-                        "\nPlease provide all operation arguments as keyword arguments for now."
-                    )
+                    arguments = "({}, {})".format(", ".join(args), ", ".join(kwargs))
                 elif not kwargs:
                     arguments = "({})".format(", ".join(args))
                 elif not args:

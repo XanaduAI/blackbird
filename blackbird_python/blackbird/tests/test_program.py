@@ -189,19 +189,27 @@ class TestBlackbirdProgram:
         assert res == expected
 
     def test_serialize_operation_args_kwargs(self):
-        """Test serialization of an operation with args and kwargs raises an error"""
+        """Test serialization of an operation with args and kwargs"""
         bb = BlackbirdProgram(name="prog", version=1.0)
         bb._operations.append(
             {
-                "op": "Dgate",
+                "op": "MeasureHomodyne",
                 "modes": [0],
-                "args": [0.54],
-                "kwargs": {"alpha": 0.43 - 0.543j, "phi": 0.54},
+                "args": [0.54, -1],
+                "kwargs": {"select": 5.43, "phi": 0.54},
             }
         )
 
-        with pytest.raises(ValueError, match="contain both positional and keyword arguments"):
-            bb.serialize()
+        res = bb.serialize()
+        expected = dedent(
+            """\
+            name prog
+            version 1.0
+
+            MeasureHomodyne(0.54, -1, select=5.43, phi=0.54) | 0
+            """
+        )
+        assert res == expected
 
     def test_serialize_operation_multimode(self):
         """Test serialization of an operation on multiple modes"""

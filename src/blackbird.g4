@@ -58,7 +58,7 @@ measure             : MEASURE;
 
 //  function arguments
 
-arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
+arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? COMMA? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
 kwarg               : NAME ASSIGN val;
 

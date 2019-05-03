@@ -196,7 +196,7 @@ class TestBlackbirdProgram:
                 "op": "MeasureHomodyne",
                 "modes": [0],
                 "args": [0.54, -1],
-                "kwargs": {"select": 5.43, "phi": 0.54},
+                "kwargs": OrderedDict([("select", 5.43), ("phi", 0.54)]),
             }
         )
 

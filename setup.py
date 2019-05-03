@@ -41,12 +41,7 @@ info = {
     'description': 'Blackbird is a quantum assembly language for continuous-variable quantum computation by Xanadu Inc.',
     'long_description': open('README.rst').read(),
     'provides': ["blackbird"],
-    'install_requires': requirements,
-    # 'extras_require': extra_requirements,
-    'command_options': {
-        'build_sphinx': {
-            'version': ('setup.py', version),
-            'release': ('setup.py', version)}}
+    'install_requires': requirements
 }
 
 classifiers = [

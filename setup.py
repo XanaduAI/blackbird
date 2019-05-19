@@ -24,7 +24,8 @@ with open("blackbird_python/blackbird/_version.py") as f:
 requirements = [
     "numpy>=1.16",
     "sympy",
-    "antlr4-python3-runtime>=4.7.1"
+    "antlr4-python3-runtime>=4.7.1",
+    "networkx"
 ]
 
 info = {

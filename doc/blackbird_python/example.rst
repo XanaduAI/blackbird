@@ -143,7 +143,6 @@ For example, consider the following state teleportation template:
 
     name StateTeleportation
     version 1.0
-    target gaussian (shots=1000)
 
     # state to be teleported:
     Coherent({alpha}) | 0
@@ -157,7 +156,6 @@ For example, consider the following state teleportation template:
     MeasureP | 1
     Xgate(sqrt(2)*q0) | 2
     Zgate(sqrt(2)*q1) | 2
-    MeasureHeterodyne() | 2
 
 Here, the initial state preparation uses a **template parameter** ``{alpha}``,
 while the squeezed resource states have magnitude given by parameter ``{sq}``.

@@ -288,3 +288,37 @@ as an array:
   they appear in the blackbird program
 
 * each row represents a shot/run
+
+Templates
+---------
+
+A Blackbird template is simply a Blackbird script that contains **template parameters**.
+
+Template parameters use the syntax ``{parameter_name}``, and can be placed within any arithmetic expression.
+
+For example, consider the following state teleportation template:
+
+.. code-block:: python
+
+    name StateTeleportation
+    version 1.0
+
+    # state to be teleported:
+    Coherent({alpha}) | 0
+
+    # teleportation algorithm
+    Squeezed(-{sq}) | 1
+    Squeezed({sq}) | 2
+    BSgate(pi/4, 0) | (1, 2)
+    BSgate(pi/4, 0) | (0, 1)
+    MeasureX | 0
+    MeasureP | 1
+    Xgate(sqrt(2)*q0) | 2
+    Zgate(sqrt(2)*q1) | 2
+
+Here, the initial state preparation uses a template parameter ``{alpha}``,
+while the squeezed resource states have magnitude given by parameter ``{sq}``.
+
+The advantages of Blackbird templates is that a Blackbird script can encapsulate
+a photonic quantum circuit with free parameters --- a Blackbird interpreter can
+dynamically update template parameters without needing to recompile the program.

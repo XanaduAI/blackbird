@@ -19,6 +19,7 @@ from collections import OrderedDict
 import pytest
 
 import numpy as np
+import sympy as sym
 
 from blackbird.program import BlackbirdProgram, numpy_to_blackbird
 
@@ -78,6 +79,56 @@ class TestBlackbirdProgram:
         assert not bb.operations
 
         assert not len(bb)
+
+        assert not bb.is_template()
+        assert not bb.parameters
+
+    def test_use_template(self):
+        """Test templates can be initialized"""
+        bb = BlackbirdProgram(name="prog", version=1.0)
+        x = sym.Symbol('x')
+        hi = sym.Symbol('hi')
+        bb._parameters = [str(x), str(hi)]
+        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
+        bb._operations.append({"op": "Sgate", "modes": [0], "args": [0.543], "kwargs": {}})
+        bb._operations.append({"op": "Sgate", "modes": [0]})
+
+
+        assert bb.parameters == {'x', 'hi'}
+        assert bb.is_template()
+
+        bb2 = bb(x=5, hi=2)
+        assert not bb2.parameters
+        assert not bb2.is_template()
+        assert bb2.operations[0]["args"] == [0.54/5**2]
+        assert bb2.operations[0]["kwargs"] == {'test': 2**4}
+        assert bb.operations[1] == bb2.operations[1]
+
+    def test_invalid_template_call(self):
+        """Test templates raise exception if parameter values not passed"""
+        bb = BlackbirdProgram(name="prog", version=1.0)
+        x = sym.Symbol('x')
+        hi = sym.Symbol('hi')
+        bb._parameters = [x, hi]
+        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
+
+        with pytest.raises(ValueError, match="free parameter not provided"):
+            bb(hi=4)
+
+        with pytest.raises(ValueError, match="free parameter not provided"):
+            bb(x=4)
+
+    def test_not_template(self):
+        """Test initializing a template fails if program is not a template"""
+        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/2**2], "kwargs": {'test': 1.0}})
+
+        with pytest.raises(ValueError, match="Program is not a template"):
+            bb()
+
+
+class TestBlackbirdSerialize:
+    """Test for serialization"""
 
     def test_serialize_empty(self):
         """Test serialization of an empty program"""
@@ -298,6 +349,22 @@ class TestBlackbirdProgram:
             version 1.0
 
             Dgate(key="val") | 0
+            """
+        )
+        assert res == expected
+
+    def test_serialize_free_params(self):
+        """Test serialization of an operation with a string kwarg"""
+        bb = BlackbirdProgram(name="prog", version=1.0)
+        x = sym.Symbol('x')
+        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {}})
+        res = bb.serialize()
+        expected = dedent(
+            """\
+            name prog
+            version 1.0
+
+            Dgate(0.54/{x}**2) | 0
             """
         )
         assert res == expected

@@ -59,17 +59,17 @@ To import this into our Python module:
 The returned object ``bb`` is a :class:`~.BlackbirdProgram`, with various attributes
 and properties that can be queried to return information about the program:
 
-* :attr:`~.name`: name of the Blackbird program
+* :attr:`~.BlackbirdProgram.name`: name of the Blackbird program
 
-* :attr:`~.version`: version of the Blackbird language the program targets
+* :attr:`~.BlackbirdProgram.version`: version of the Blackbird language the program targets
 
-* :attr:`~.modes`: a set of non-negative integers specifying the mode numbers the
+* :attr:`~.BlackbirdProgram.modes`: a set of non-negative integers specifying the mode numbers the
   program manipulates
 
-* :attr:`~.target`: a dictionary containing information regarding the target device
+* :attr:`~.BlackbirdProgram.target`: a dictionary containing information regarding the target device
   (i.e., the target device the Blackbird script is compiled for)
 
-* :attr:`~.operations`: list of operations to apply to the device, in temporal
+* :attr:`~.BlackbirdProgram.operations`: list of operations to apply to the device, in temporal
   order.
 
 
@@ -132,3 +132,64 @@ using :func:`~.dump`:
     with open('new_file.xbb', 'w') as f:
         blackbird.dump(bb, f)
 
+
+Templates
+---------
+
+Templated Blackbird scripts, with templated gate parameters, are saved as ``.xbt`` files.
+For example, consider the following state teleportation template:
+
+.. code-block:: python
+
+    name StateTeleportation
+    version 1.0
+    target gaussian (shots=1000)
+
+    # state to be teleported:
+    Coherent({alpha}) | 0
+
+    # teleportation algorithm
+    Squeezed(-{sq}) | 1
+    Squeezed({sq}) | 2
+    BSgate(pi/4, 0) | (1, 2)
+    BSgate(pi/4, 0) | (0, 1)
+    MeasureX | 0
+    MeasureP | 1
+    Xgate(sqrt(2)*q0) | 2
+    Zgate(sqrt(2)*q1) | 2
+    MeasureHeterodyne() | 2
+
+Here, the initial state preparation uses a **template parameter** ``{alpha}``,
+while the squeezed resource states have magnitude given by parameter ``{sq}``.
+Template parameters are always delimited by ``{`` and ``}``, and can appear
+anywhere within a gate argument expression.
+
+Deserializing this template using Blackbird, we see that it is treated
+as a template:
+
+>>> bb = blackbird.load("teleportation.xbt")
+>>> bb.is_template()
+True
+>>> bb.parameters
+{'alpha', 'sq'}
+
+We can use the loaded Blackbird template to instantiate Blackbird programs
+with specific numerical values for ``alpha`` and ``sq``:
+
+>>> bb_new = bb(alpha=0.54, sq=4)
+>>> print(bb_new.serialize())
+name StateTeleportation
+version 1.0
+target gaussian (shots=1000)
+Coherent(0.54) | 0
+Squeezed(-4) | 1
+Squeezed(4) | 2
+BSgate(0.7853981633974483, 0) | [1, 2]
+BSgate(0.7853981633974483, 0) | [0, 1]
+MeasureP | 1
+MeasureX | 0
+Zgate(1.4142135623731*q1) | 2
+Xgate(1.4142135623731*q0) | 2
+MeasureHeterodyne() | 2
+
+For some utility functions that make use of templates, see :ref:`utils`.

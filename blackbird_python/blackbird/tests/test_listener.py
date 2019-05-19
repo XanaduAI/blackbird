@@ -290,6 +290,29 @@ class TestParsingQuantumPrograms:
         bb = parse_input_mocked_metadata("float array A =\n\t1, 5\nGaussian(means=A) | 0\n")
         assert np.all(bb.operations[0]["kwargs"]["means"] == np.array([[1, 5]]))
 
+    def test_free_parameters(self, parse_input_mocked_metadata):
+        """Test that free parameters are correctly extracted"""
+        bb = parse_input_mocked_metadata(
+            "float alpha = 0.5\nfloat Delta=sqrt(2)\nCoherent(alpha**{p}, Delta*sqrt(pi), 0.2*10) | 0\n"
+        )
+
+        p = sym.Symbol('p')
+        alpha = 0.5
+        Delta = np.sqrt(2)
+        expected = [0.5 ** p, Delta * np.sqrt(np.pi), 0.2 * 10]
+
+        assert bb.operations == [{"modes": [0], "op": "Coherent", "args": expected, "kwargs": {}}]
+
+    def test_regref_transform(self, parse_input_mocked_metadata):
+        """Test that regref transforms are correctly extracted"""
+        bb = parse_input_mocked_metadata(
+            "float alpha = 0.5\nfloat Delta=sqrt(2)\nCoherent(alpha*q0, Delta*sqrt(pi), 0.2*10) | 0\n"
+        )
+
+        p = sym.Symbol('q0')
+        assert isinstance(bb.operations[0]["args"][0], RegRefTransform)
+        assert bb.operations[0]["args"][0].func_str == str(0.5 * p)
+
 
 class TestParsingMetadata:
     """Tests for parsing quantum devices"""

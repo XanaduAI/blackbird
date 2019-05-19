@@ -88,6 +88,7 @@ Blackbird is **free** and **open source**, released under the Apache License, Ve
    blackbird_python/installing
    blackbird_python/example
    blackbird_python/program
+   blackbird_python/utils
    blackbird_python/listener
    blackbird_python/auxiliary
    blackbird_python/error

@@ -238,6 +238,8 @@ def match_template(template, program):
                     if argmatch[key] != val:
                         raise TemplateError("Template parameter {} matches inconsistent values: "
                                             "{} and {}".format(key, val, argmatch[key]))
-                argmatch[key] = val
+
+                if key != "":
+                    argmatch[key] = val
 
     return argmatch

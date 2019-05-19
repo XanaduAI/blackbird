@@ -213,6 +213,7 @@ def match_template(template, program):
     G2nodes = G2.nodes().data()
 
     argmatch = {}
+    key = ""
 
     for n1, n2 in GM.mapping.items():
         for x, y in zip(G1nodes[n1]['args'], G2nodes[n2]['args']):

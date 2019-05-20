@@ -310,16 +310,18 @@ class BlackbirdListener(blackbirdListener):
             # convert any sympy expressions into regref transforms
             for idx, a in enumerate(op_args):
                 if isinstance(a, sym.Expr):
-                    p = [str(i)[0] == 'q' for i in a.free_symbols]
-
-                    if any(p):
+                    if not set(a.free_symbols) <= set(_PARAMS):
+                        # the symbols in the expression are not
+                        # a subset of the template parameters
+                        # Therefore, it includes a regref statement.
                         op_args[idx] = RegRefTransform(a)
 
             for k, v in op_kwargs.items():
                 if isinstance(v, sym.Expr):
-                    p = [str(i)[0] == 'q' for i in v.free_symbols]
-
-                    if any(p):
+                    if not set(v.free_symbols) <= set(_PARAMS):
+                        # the symbols in the expression are not
+                        # a subset of the template parameters
+                        # Therefore, it includes a regref statement.
                         op_kwargs[k] = RegRefTransform(v)
 
             self._program._operations.append(

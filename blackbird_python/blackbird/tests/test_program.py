@@ -67,11 +67,11 @@ class TestBlackbirdProgram:
 
     def test_initialization(self):
         """Test all attributes correctly initialized"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         assert not bb._var
 
         assert bb.name == "prog"
-        assert bb.version == 1.0
+        assert bb.version == 0.0
         assert not bb.modes
 
         assert bb.target["name"] is None
@@ -85,7 +85,7 @@ class TestBlackbirdProgram:
 
     def test_use_template(self):
         """Test templates can be initialized"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         x = sym.Symbol('x')
         hi = sym.Symbol('hi')
         bb._parameters = [str(x), str(hi)]
@@ -106,21 +106,21 @@ class TestBlackbirdProgram:
 
     def test_invalid_template_call(self):
         """Test templates raise exception if parameter values not passed"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         x = sym.Symbol('x')
         hi = sym.Symbol('hi')
         bb._parameters = [x, hi]
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
 
-        with pytest.raises(ValueError, match="free parameter not provided"):
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
             bb(hi=4)
 
-        with pytest.raises(ValueError, match="free parameter not provided"):
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
             bb(x=4)
 
     def test_not_template(self):
         """Test initializing a template fails if program is not a template"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/2**2], "kwargs": {'test': 1.0}})
 
         with pytest.raises(ValueError, match="Program is not a template"):
@@ -132,16 +132,16 @@ class TestBlackbirdSerialize:
 
     def test_serialize_empty(self):
         """Test serialization of an empty program"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         res = bb.serialize()
-        assert res == "name prog\nversion 1.0\n"
+        assert res == "name prog\nversion 0.0\n"
 
     def test_serialize_target(self):
         """Test target serialization"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._target["name"] = "chip0"
         res = bb.serialize()
-        assert res == "name prog\nversion 1.0\ntarget chip0\n"
+        assert res == "name prog\nversion 0.0\ntarget chip0\n"
 
         bb._target["options"] = OrderedDict(
             [("shots", 100), ("hbar", 0.2), ("real", True), ("str", "hi")]
@@ -150,20 +150,20 @@ class TestBlackbirdSerialize:
         assert res == dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
             target chip0 (shots=100, hbar=0.2, real=True, str="hi")
             """
         )
 
     def test_serialize_operation_no_args(self):
         """Test serialization of an operation with no args"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Vac", "modes": [0]})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Vac | 0
             """
@@ -172,13 +172,13 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_args(self):
         """Test serialization of an operation with 1 arg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.43 - 0.543j], "kwargs": {}})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.43-0.543j) | 0
             """
@@ -187,13 +187,13 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_multiple_args(self):
         """Test serialization of an operation with many args"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Sgate", "modes": [0], "args": [0.43, 0.5432], "kwargs": {}})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.43, 0.5432) | 0
             """
@@ -202,7 +202,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_kwargs(self):
         """Test serialization of an operation with a kwarg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append(
             {"op": "MeasureFock", "modes": [0], "args": [], "kwargs": {"select": 2}}
         )
@@ -210,7 +210,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             MeasureFock(select=2) | 0
             """
@@ -219,7 +219,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_multiple_kwargs(self):
         """Test serialization of an operation with many kwargs"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append(
             {
                 "op": "Dgate",
@@ -232,7 +232,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(alpha=0.43-0.543j, phi=0.54) | 0
             """
@@ -241,7 +241,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_args_kwargs(self):
         """Test serialization of an operation with args and kwargs"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append(
             {
                 "op": "MeasureHomodyne",
@@ -255,7 +255,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             MeasureHomodyne(0.54, -1, select=5.43, phi=0.54) | 0
             """
@@ -264,13 +264,13 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_multimode(self):
         """Test serialization of an operation on multiple modes"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Vac", "modes": [0, 1, 2]})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Vac | [0, 1, 2]
             """
@@ -279,7 +279,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_array_arg(self):
         """Test serialization of an operation with an array arg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         U = np.int64(np.identity(2))
 
         bb._operations.append({"op": "Interferometer", "modes": [0], "args": [U], "kwargs": {}})
@@ -288,7 +288,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             int array A0[2, 2] =
                 1, 0
@@ -301,7 +301,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_array_kwarg(self):
         """Test serialization of an operation with an array kwarg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         U = np.int64(np.identity(2))
 
         bb._operations.append(
@@ -312,7 +312,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             int array A0[2, 2] =
                 1, 0
@@ -325,13 +325,13 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_string_arg(self):
         """Test serialization of an operation with a string arg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Dgate", "modes": [0], "args": ["hi"], "kwargs": {}})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate("hi") | 0
             """
@@ -340,13 +340,13 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_string_kwarg(self):
         """Test serialization of an operation with a string kwarg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [], "kwargs": {"key": "val"}})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(key="val") | 0
             """
@@ -355,14 +355,14 @@ class TestBlackbirdSerialize:
 
     def test_serialize_free_params(self):
         """Test serialization of an operation with a string kwarg"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         x = sym.Symbol('x')
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {}})
         res = bb.serialize()
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.54/{x}**2) | 0
             """
@@ -371,7 +371,7 @@ class TestBlackbirdSerialize:
 
     def test_serialize_operation_multiple_arrays(self):
         """Test serialization of an operation with multiple array args"""
-        bb = BlackbirdProgram(name="prog", version=1.0)
+        bb = BlackbirdProgram(name="prog", version=0.0)
         U = np.int64(np.identity(2))
         U2 = np.array([[1, 2j], [-2j, 3]])
 
@@ -387,7 +387,7 @@ class TestBlackbirdSerialize:
         expected = dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             int array A0[2, 2] =
                 1, 0

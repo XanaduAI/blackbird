@@ -33,7 +33,7 @@ class TestDiGraph:
         program = loads(dedent(
             """\
             name prog
-            version 1.1
+            version 0.0
 
             Vac | 0
             """
@@ -48,12 +48,31 @@ class TestDiGraph:
         assert nodes[0]['args'] == []
         assert nodes[0]['kwargs'] == {}
 
+    def test_no_dependence(self):
+        """Test case where operations do not depend on each other.
+        This should result in a graph with no edges."""
+        program = loads(dedent(
+            """\
+            name prog
+            version 0.0
+
+            Sgate(0.43) | 0
+            Dgate(0.543) | 1
+            """
+        ))
+
+        res = to_DiGraph(program)
+        assert len(res) == 2
+
+        nodes = res.nodes().data()
+        assert not list(res.edges())
+
     def test_args(self):
         """Test case where operations have arguments"""
         program = loads(dedent(
             """\
             name prog
-            version 1.1
+            version 0.0
 
             Sgate(0.54) | 1
             BSgate(0.432, phi=0.54) | [1, 2]
@@ -81,7 +100,7 @@ class TestDiGraph:
         program = loads(dedent(
             """\
             name prog
-            version 1.1
+            version 0.0
 
             Dgate(0.54) | 0
             MeasureX | 0
@@ -101,7 +120,7 @@ class TestDiGraph:
         program = loads(dedent(
             """\
             name prog
-            version 1.1
+            version 0.0
 
             Dgate(0.54) | 0
             MeasureX | 0
@@ -125,7 +144,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate({r}, {phi}) | 0
             """
@@ -134,7 +153,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.1
+            version 0.1
 
             Sgate(0.543, pi) | 0
             """
@@ -148,7 +167,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
             target dev1
 
             Sgate({r}, {phi}) | 0
@@ -158,7 +177,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
             target dev2
 
             Sgate(0.543, pi) | 0
@@ -174,7 +193,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 1
             Vac | 2
@@ -185,7 +204,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(0.543, 0.45) | 1
@@ -203,7 +222,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 0
             Sgate({r}, {phi}) | 0
@@ -213,7 +232,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(0.543, 0.45) | 0
@@ -229,7 +248,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 1
             Sgate(0.543, 0.123) | 0
@@ -239,14 +258,14 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(0.543, 0.45) | 1
             """
         ))
 
-        with pytest.raises(TemplateError, match="Argument 1 is not a template!"):
+        with pytest.raises(TemplateError, match="Argument 1 is not a template"):
             match_template(template, program)
 
     def test_not_program(self):
@@ -255,7 +274,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 0
             Sgate({r}, {phi}) | 0
@@ -265,14 +284,14 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate({alpha}, 0.45) | 0
             """
         ))
 
-        with pytest.raises(TemplateError, match="Argument 2 cannot be a template!"):
+        with pytest.raises(TemplateError, match="Argument 2 cannot be a template"):
             match_template(template, program)
 
     def test_too_many_template_parameters(self):
@@ -281,7 +300,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 1
             Sgate({r}+{s}, {phi}) | 0
@@ -291,7 +310,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(0.543, 0.45) | 1
@@ -307,7 +326,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(0.543, 0.45) | 1
             Sgate(2*{r}, {phi}-1) | 0
@@ -317,7 +336,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(0.412, 0.45) | 1
@@ -335,7 +354,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(-{r}, 0.45) | 1
             Vac | 2
@@ -346,7 +365,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(0.543, -1.432*pi) | 0
             Dgate(-0.543, 0.45) | 1
@@ -365,7 +384,7 @@ class TestTemplateMatching:
         template = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Dgate(-{r}, 0.45) | 1
             Vac | 2
@@ -376,7 +395,7 @@ class TestTemplateMatching:
         program = loads(dedent(
             """\
             name prog
-            version 1.0
+            version 0.0
 
             Sgate(1.45, -1.432*pi) | 0
             Dgate(-0.543, 0.45) | 1

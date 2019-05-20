@@ -204,7 +204,7 @@ class BlackbirdProgram:
                     try:
                         vals = {str(p): kwargs[str(p)] for p in par}
                     except KeyError:
-                        raise ValueError("Value for free parameter not provided")
+                        raise ValueError("Invalid value for free parameter provided")
 
                     op['args'][idx] = func(**vals)
 
@@ -216,7 +216,7 @@ class BlackbirdProgram:
                     try:
                         vals = {str(p): kwargs[str(p)] for p in par}
                     except KeyError:
-                        raise ValueError("Value for free parameter not provided")
+                        raise ValueError("Invalid value for free parameter provided")
 
                     op['kwargs'][k] = func(**vals)
 

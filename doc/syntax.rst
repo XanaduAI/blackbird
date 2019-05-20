@@ -294,7 +294,7 @@ Templates
 
 A Blackbird template is simply a Blackbird script that contains **template parameters**.
 
-Template parameters use the syntax ``{parameter_name}``, and can be placed within any arithmetic expression.
+Template parameters use the syntax ``{parameter_name}``, and can be placed within any numeric expression.
 
 For example, consider the following state teleportation template:
 
@@ -319,6 +319,6 @@ For example, consider the following state teleportation template:
 Here, the initial state preparation uses a template parameter ``{alpha}``,
 while the squeezed resource states have magnitude given by parameter ``{sq}``.
 
-The advantages of Blackbird templates is that a Blackbird script can encapsulate
+The advantage of Blackbird templates is that a Blackbird script can encapsulate
 a photonic quantum circuit with free parameters --- a Blackbird interpreter can
 dynamically update template parameters without needing to recompile the program.

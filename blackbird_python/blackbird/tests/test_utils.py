@@ -384,5 +384,5 @@ class TestTemplateMatching:
             """
         ))
 
-        with pytest.raises(TemplateError, match="r matches inconsistent values"):
+        with pytest.raises(TemplateError, match="matches inconsistent values"):
             match_template(template, program)

@@ -185,10 +185,10 @@ def match_template(template, program):
 
     # check template
     if not template.is_template():
-        raise TemplateError("Argument 1 is not a template!")
+        raise TemplateError("Argument 1 is not a template.")
 
     if program.is_template():
-        raise TemplateError("Argument 2 cannot be a template!")
+        raise TemplateError("Argument 2 cannot be a template.")
 
     if template.version != program.version:
         raise TemplateError("Mismatching Blackbird version between template and program")
@@ -207,7 +207,7 @@ def match_template(template, program):
 
     # check if topology matches
     if not GM.is_isomorphic():
-        raise TemplateError("Not the same program!")
+        raise TemplateError("Not the same program.")
 
     G1nodes = G1.nodes().data()
     G2nodes = G2.nodes().data()

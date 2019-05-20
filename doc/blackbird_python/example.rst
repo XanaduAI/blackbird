@@ -136,7 +136,7 @@ using :func:`~.dump`:
 Templates
 ---------
 
-Templated Blackbird scripts, with templated gate parameters, are saved as ``.xbt`` files.
+Templated Blackbird scripts, with templated gate parameters, are saved as ``.xbb`` files.
 For example, consider the following state teleportation template:
 
 .. code-block:: python
@@ -165,7 +165,7 @@ anywhere within a gate argument expression.
 Deserializing this template using Blackbird, we see that it is treated
 as a template:
 
->>> bb = blackbird.load("teleportation.xbt")
+>>> bb = blackbird.load("teleportation.xbb")
 >>> bb.is_template()
 True
 >>> bb.parameters

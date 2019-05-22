@@ -65,7 +65,7 @@ class TestDiGraph:
         assert len(res) == 2
 
         nodes = res.nodes().data()
-        assert not list(res.edges())
+        assert len(res.edges()) == 0
 
     def test_args(self):
         """Test case where operations have arguments"""

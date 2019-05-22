@@ -36,7 +36,10 @@ Summary
 Code details
 ~~~~~~~~~~~~
 """
+import copy
+
 import numpy as np
+import sympy as sym
 
 
 def numpy_to_blackbird(A, var_name):
@@ -95,6 +98,7 @@ class BlackbirdProgram:
         self._version = version
         self._target = {"name": None, "options": dict()}
         self._operations = []
+        self._parameters = []
 
     @property
     def name(self):
@@ -158,6 +162,66 @@ class BlackbirdProgram:
         """
         return self._operations
 
+    @property
+    def parameters(self):
+        """List of free parameters the Blackbird script depends on.
+
+        Returns:
+            List[str]: list of free parameter names
+        """
+        return set([str(i) for i in self._parameters])
+
+    def is_template(self):
+        """Returns ``True`` if there is at least one free parameter.
+
+        Returns:
+            bool: True if a template
+        """
+        return bool(self.parameters)
+
+    def __call__(self, **kwargs):
+        """Create a new Blackbird program, with all free parameters
+        initialized to their passed values.
+
+        Returns:
+            Program:
+        """
+        if not self.parameters:
+            raise ValueError("Program is not a template!")
+
+        prog = copy.copy(self)
+        prog._parameters = [] # pylint: disable=protected-access
+
+        for op in prog._operations: # pylint: disable=protected-access
+            if 'args' not in op:
+                continue
+
+            for idx, a in enumerate(op['args']):
+                if isinstance(a, sym.Expr):
+                    par = list(a.free_symbols)
+                    func = sym.lambdify(par, a)
+
+                    try:
+                        vals = {str(p): kwargs[str(p)] for p in par}
+                    except KeyError:
+                        raise ValueError("Invalid value for free parameter provided")
+
+                    op['args'][idx] = func(**vals)
+
+            for k, v in op['kwargs'].items():
+                if isinstance(v, sym.Expr):
+                    par = list(v.free_symbols)
+                    func = sym.lambdify(par, v)
+
+                    try:
+                        vals = {str(p): kwargs[str(p)] for p in par}
+                    except KeyError:
+                        raise ValueError("Invalid value for free parameter provided")
+
+                    op['kwargs'][k] = func(**vals)
+
+        return prog
+
     def __len__(self):
         """The length of the quantum program (i.e., the number of operations applied).
 
@@ -173,6 +237,7 @@ class BlackbirdProgram:
         Returns:
             str: the blackbird script representing the BlackbirdProgram object
         """
+        # pylint: disable=too-many-statements
         # top level metadata
         var_count = 0
         array_insert = 3
@@ -234,6 +299,14 @@ class BlackbirdProgram:
                     elif isinstance(v, complex):
                         # argument is a complex type
                         args.append("{}{}{}j".format(v.real, "+-"[int(v.imag < 0)], np.abs(v.imag)))
+
+                    elif isinstance(v, sym.Expr):
+                        # argument contains free parameters
+                        res = str(v)
+                        for p in v.free_symbols:
+                            res = res.replace(str(p), "{"+str(p)+"}")
+
+                        args.append(res)
 
                     else:
                         # anything that doesn't need to be dealt with as a special case,

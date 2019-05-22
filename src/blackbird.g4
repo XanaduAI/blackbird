@@ -78,6 +78,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | function LBRAC expression RBRAC           #FunctionLabel
                     | number                                    #NumberLabel
                     | (REGREF | NAME)                           #VariableLabel
+                    | LBRACE NAME RBRACE                        #ParameterLabel
                     ;
 
 number              : (INT|FLOAT|COMPLEX|PI);
@@ -117,7 +118,7 @@ SEQUENCE            : NUMBER (','NUMBER)*;
 PI                  : 'pi';
 
 // Whitespace
-NEWLINE             : ('\r\n' | 'r' | '\n') ;
+NEWLINE             : ('\r\n' | '\r' | '\n') ;
 TAB                 : ('\t'  | '    ') ;
 SPACE               : [ \t]+ -> skip;
 
@@ -152,6 +153,8 @@ LBRAC               : '(' ;
 RBRAC               : ')' ;
 LSQBRAC             : '[' ;
 RSQBRAC             : ']' ;
+LBRACE              : '{' ;
+RBRACE              : '}' ;
 APPLY               : '|' ;
 
 // Type declarations

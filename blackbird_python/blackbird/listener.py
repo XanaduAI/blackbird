@@ -54,7 +54,7 @@ from .blackbirdParser import blackbirdParser
 from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener, BlackbirdSyntaxError
-from .auxiliary import _expression, _get_arguments, _literal, _VAR
+from .auxiliary import _expression, _get_arguments, _literal, _VAR, _PARAMS
 from .program import BlackbirdProgram
 
 
@@ -308,7 +308,21 @@ class BlackbirdListener(blackbirdListener):
             op_args, op_kwargs = _get_arguments(ctx.arguments())
 
             # convert any sympy expressions into regref transforms
-            op_args = [RegRefTransform(i) if isinstance(i, sym.Expr) else i for i in op_args]
+            for idx, a in enumerate(op_args):
+                if isinstance(a, sym.Expr):
+                    if not set(a.free_symbols) <= set(_PARAMS):
+                        # the symbols in the expression are not
+                        # a subset of the template parameters
+                        # Therefore, it includes a regref statement.
+                        op_args[idx] = RegRefTransform(a)
+
+            for k, v in op_kwargs.items():
+                if isinstance(v, sym.Expr):
+                    if not set(v.free_symbols) <= set(_PARAMS):
+                        # the symbols in the expression are not
+                        # a subset of the template parameters
+                        # Therefore, it includes a regref statement.
+                        op_kwargs[k] = RegRefTransform(v)
 
             self._program._operations.append(
                 {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
@@ -324,6 +338,9 @@ class BlackbirdListener(blackbirdListener):
         """
         self._program._var.update(_VAR)
         _VAR.clear()
+
+        self._program._parameters.extend(_PARAMS)
+        _PARAMS.clear()
 
 
 def parse(data, listener=BlackbirdListener):

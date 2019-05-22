@@ -59,6 +59,11 @@ required by :func:`~._expression`.
 """
 
 
+_PARAMS = []
+""" list[Symbol]: list of free parameters in the Blackbird program
+"""
+
+
 def _literal(nonnumeric):
     """Convert a non-numeric blackbird literal to a Python literal.
 
@@ -198,6 +203,11 @@ def _expression(expr):
             )
 
         return _VAR[expr.getText()]
+
+    if isinstance(expr, blackbirdParser.ParameterLabelContext):
+        p = Symbol(expr.NAME().getText())
+        _PARAMS.append(p)
+        return p
 
     if isinstance(expr, blackbirdParser.BracketsLabelContext):
         return _expression(expr.expression())

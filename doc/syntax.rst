@@ -320,6 +320,6 @@ Here, the initial state preparation uses a template parameter ``{alpha}``,
 while the squeezed resource states have magnitude given by parameter ``{sq}``.
 
 The advantage of Blackbird templates is that a Blackbird script can encapsulate
-a photonic quantum circuit with free parameters --- a library that makes use
+a photonic quantum circuit with free parameters. A library that makes use
 of the Blackbird quantum assembly language (such as Strawberry Fields) can
 dynamically update template parameters without needing to recompile the program.

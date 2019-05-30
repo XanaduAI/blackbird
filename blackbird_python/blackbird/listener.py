@@ -42,6 +42,7 @@ Code details
 ~~~~~~~~~~~~
 """
 # pylint: disable=protected-access
+import os
 import warnings
 
 import antlr4
@@ -130,8 +131,10 @@ class BlackbirdListener(blackbirdListener):
     via the :attr:`program` attribute.
     """
 
-    def __init__(self):
+    def __init__(self, cwd):
         self._program = BlackbirdProgram()
+        self._cwd = cwd
+        self._includes = {}
 
     @property
     def program(self):
@@ -176,6 +179,19 @@ class BlackbirdListener(blackbirdListener):
                 )
 
         self._program._target["options"] = kwargs
+
+    def exitInclude(self, ctx:blackbirdParser.IncludeContext):
+        """Run after exiting include metadata.
+
+        Args:
+            ctx: IncludeContext
+        """
+        filename = os.path.join(self._cwd, ctx.STR().getText()[1:-1])
+        cwd = os.path.dirname(filename)
+        data = antlr4.FileStream(filename)
+
+        bb = parse(data, cwd=cwd)
+        self._includes[bb.name] = bb
 
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
@@ -324,11 +340,30 @@ class BlackbirdListener(blackbirdListener):
                         # Therefore, it includes a regref statement.
                         op_kwargs[k] = RegRefTransform(v)
 
-            self._program._operations.append(
-                {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
-            )
+            operation = {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
         else:
-            self._program._operations.append({"op": op, "modes": modes})
+            operation = {"op": op, "modes": modes}
+
+        # check if statement is included from another file
+        if operation["op"] in self._includes:
+            bb = self._includes[operation["op"]]
+
+            if "kwargs" in operation:
+                # operation is a template
+                if not bb.is_template():
+                    raise ValueError()
+
+                bb = bb(**operation["kwargs"])
+                self._program._operations.extend(bb._operations)
+
+            else:
+                # operation is not a template
+                if bb.is_template():
+                    raise ValueError()
+
+                self._program._operations.extend(bb._operations)
+        else:
+            self._program._operations.append(operation)
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
@@ -343,7 +378,7 @@ class BlackbirdListener(blackbirdListener):
         _PARAMS.clear()
 
 
-def parse(data, listener=BlackbirdListener):
+def parse(data, listener=BlackbirdListener, cwd=None):
     """Parse a blackbird data stream.
 
     Args:
@@ -364,7 +399,7 @@ def parse(data, listener=BlackbirdListener):
     parser.addErrorListener(BlackbirdErrorListener())
     tree = parser.start()
 
-    blackbird = listener()
+    blackbird = listener(cwd=cwd)
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 

@@ -126,6 +126,8 @@ Summary
 Code details
 ^^^^^^^^^^^^
 """
+import os
+
 import antlr4
 
 from .listener import BlackbirdListener, RegRefTransform, parse
@@ -143,8 +145,9 @@ def load(filename):
     Returns:
         BlackbirdProgram: parsed representation of the program
     """
+    cwd = os.path.dirname(filename)
     data = antlr4.FileStream(filename)
-    return parse(data)
+    return parse(data, cwd=cwd)
 
 
 def loads(string):

@@ -131,10 +131,14 @@ class BlackbirdListener(blackbirdListener):
     via the :attr:`program` attribute.
     """
 
-    def __init__(self, cwd):
+    def __init__(self, cwd=None):
         self._program = BlackbirdProgram()
-        self._cwd = cwd
         self._includes = {}
+        self._cwd = cwd
+
+        if cwd is None:
+            # assume the current directory
+            self._cwd = os.getcwd()
 
     @property
     def program(self):
@@ -180,7 +184,7 @@ class BlackbirdListener(blackbirdListener):
 
         self._program._target["options"] = kwargs
 
-    def exitInclude(self, ctx:blackbirdParser.IncludeContext):
+    def exitInclude(self, ctx: blackbirdParser.IncludeContext):
         """Run after exiting include metadata.
 
         Args:
@@ -348,20 +352,51 @@ class BlackbirdListener(blackbirdListener):
         if operation["op"] in self._includes:
             bb = self._includes[operation["op"]]
 
+            # make sure modes match
+            if len(operation["modes"]) != len(bb.modes):
+                raise ValueError(
+                    "Included operation {} acts on {} modes, "
+                    "but {} modes provided".format(
+                        operation["op"], len(bb.modes), len(operation["modes"])
+                    )
+                )
+
             if "kwargs" in operation:
                 # operation is a template
                 if not bb.is_template():
-                    raise ValueError()
+                    raise ValueError(
+                        "Included operation {} does not accept arguments".format(
+                            operation["op"]
+                        )
+                    )
 
+                if bb.parameters != set(operation["kwargs"]):
+                    raise ValueError(
+                        "Included operation {} must accept only keyword arguments {}".format(
+                            operation["op"], bb.parameters
+                        )
+                    )
+
+                # instantiate template
                 bb = bb(**operation["kwargs"])
-                self._program._operations.extend(bb._operations)
 
             else:
                 # operation is not a template
                 if bb.is_template():
-                    raise ValueError()
+                    raise ValueError(
+                        "Included operation {} missing keyword arguments {}".format(
+                            operation["op"], bb.parameters
+                        )
+                    )
 
-                self._program._operations.extend(bb._operations)
+            # mode mapping dictionary
+            mode_map = dict(zip(bb.modes, operation["modes"]))
+
+            for i in bb._operations:
+                # for each operation in
+                i["modes"] = [mode_map[j] for j in i["modes"]]
+
+            self._program._operations.extend(bb._operations)
         else:
             self._program._operations.append(operation)
 

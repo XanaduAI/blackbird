@@ -185,17 +185,42 @@ class BlackbirdListener(blackbirdListener):
         self._program._target["options"] = kwargs
 
     def exitInclude(self, ctx: blackbirdParser.IncludeContext):
-        """Run after exiting include metadata.
+        """Run after exiting include statement.
 
         Args:
             ctx: IncludeContext
         """
         filename = os.path.join(self._cwd, ctx.STR().getText()[1:-1])
+
+        # check if filename has already been included
+        for _, f in self._includes.items():
+            if filename == f[0]:
+                return
+
         cwd = os.path.dirname(filename)
         data = antlr4.FileStream(filename)
 
-        bb = parse(data, cwd=cwd)
-        self._includes[bb.name] = bb
+        # parse the included file
+        lexer = blackbirdLexer(data)
+        stream = antlr4.CommonTokenStream(lexer)
+
+        parser = blackbirdParser(stream)
+        parser.removeErrorListeners()
+        parser.addErrorListener(BlackbirdErrorListener())
+        tree = parser.start()
+
+        listener = BlackbirdListener(cwd=cwd)
+        walker = antlr4.ParseTreeWalker()
+        walker.walk(listener, tree)
+
+        # add parsed blackbird program to the include
+        # dictionary
+        bb = listener.program
+        self._includes[bb.name] = [filename, bb]
+
+        # make sure to also add all nested includes
+        # to the top level include dictionary
+        self._includes.update(listener._includes)
 
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
@@ -350,7 +375,7 @@ class BlackbirdListener(blackbirdListener):
 
         # check if statement is included from another file
         if operation["op"] in self._includes:
-            bb = self._includes[operation["op"]]
+            bb = self._includes[operation["op"]][1]
 
             # make sure modes match
             if len(operation["modes"]) != len(bb.modes):

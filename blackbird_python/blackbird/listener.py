@@ -390,9 +390,7 @@ class BlackbirdListener(blackbirdListener):
                 # operation is a template
                 if not bb.is_template():
                     raise ValueError(
-                        "Included operation {} does not accept arguments".format(
-                            operation["op"]
-                        )
+                        "Included operation {} does not accept arguments".format(operation["op"])
                     )
 
                 if bb.parameters != set(operation["kwargs"]):

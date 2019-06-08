@@ -342,7 +342,7 @@ A Blackbird script may have multiple includes, and they must all be placed
 after the metadata block, and before the quantum program/variables are defined.
 
 The ``include`` statement allows the external Blackbird program to be used as
-a qquantum subroutine within the existing script. This quantum operation is called
+a subroutine within the existing script. This quantum subroutine is called
 via the ``name`` of the included Blackbird script. For example, consider
 a state teleportation template, ``state_teleportation.xbb``:
 

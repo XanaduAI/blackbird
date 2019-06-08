@@ -194,7 +194,7 @@ class BlackbirdListener(blackbirdListener):
 
         # check if filename has already been included
         for _, f in self._includes.items():
-            if filename == f[0]:
+            if f[0] == filename:
                 return
 
         cwd = os.path.dirname(filename)

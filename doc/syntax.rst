@@ -378,7 +378,7 @@ template:
 
 .. code-block:: python
 
-    name coherent_teleport_test
+    name ExampleInclude
     version 1.0
     target gaussian (shots=10)
 

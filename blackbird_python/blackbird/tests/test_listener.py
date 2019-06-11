@@ -448,7 +448,7 @@ class TestParsingInclude:
             """
         ).format(filename1)
 
-        filename2 = tmpdir.join("chip16.xbb")
+        filename2 = tmpdir.join("chip15.xbb")
 
         with open(filename2, "w") as f:
             f.write(template2)
@@ -500,7 +500,7 @@ class TestParsingInclude:
             """
         ).format(filename1)
 
-        filename2 = tmpdir.join("chip16.xbb")
+        filename2 = tmpdir.join("chip15.xbb")
 
         with open(filename2, "w") as f:
             f.write(template2)
@@ -560,8 +560,8 @@ class TestParsingInclude:
 
     @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_too_many_arguments(self, parse_input, tmpdir):
-        """Test exception raised if custom subroutine does
-        not accept arguments, but arguments are passed:"""
+        """Test exception raised if wrong number of arguments are
+        passed to a custom subroutine"""
         program = textwrap.dedent(
             """
             name CustomOperation
@@ -591,7 +591,7 @@ class TestParsingInclude:
 
     @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_no_arguments(self, parse_input, tmpdir):
-        """Test exception raised if custom subroutine aceepts
+        """Test exception raised if custom subroutine accepts
         arguments, but none are passed:"""
         program = textwrap.dedent(
             """
@@ -622,8 +622,7 @@ class TestParsingInclude:
 
     @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_invalid_arguments(self, parse_input, tmpdir):
-        """Test exception raised if custom subroutine aceepts
-        arguments, but none are passed:"""
+        """Test exception raised if wrong keyword arguments are passed to a subroutine"""
         program = textwrap.dedent(
             """
             name CustomOperation

@@ -413,10 +413,14 @@ class BlackbirdListener(blackbirdListener):
                     )
 
             # mode mapping dictionary
+            # maps the modes of the included program
+            # to the modes it is applied to in the including program
             mode_map = dict(zip(bb.modes, operation["modes"]))
 
             for i in bb._operations:
-                # for each operation in
+                # for each operation in the included program,
+                # update the applied mode to match the including
+                # program
                 i["modes"] = [mode_map[j] for j in i["modes"]]
 
             self._program._operations.extend(bb._operations)

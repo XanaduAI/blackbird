@@ -42,6 +42,7 @@ Code details
 ~~~~~~~~~~~~
 """
 # pylint: disable=protected-access
+import os
 import warnings
 
 import antlr4
@@ -130,8 +131,14 @@ class BlackbirdListener(blackbirdListener):
     via the :attr:`program` attribute.
     """
 
-    def __init__(self):
+    def __init__(self, cwd=None):
         self._program = BlackbirdProgram()
+        self._includes = {}
+        self._cwd = cwd
+
+        if cwd is None:
+            # assume the current directory
+            self._cwd = os.getcwd()
 
     @property
     def program(self):
@@ -176,6 +183,44 @@ class BlackbirdListener(blackbirdListener):
                 )
 
         self._program._target["options"] = kwargs
+
+    def exitInclude(self, ctx: blackbirdParser.IncludeContext):
+        """Run after exiting include statement.
+
+        Args:
+            ctx: IncludeContext
+        """
+        filename = os.path.join(self._cwd, ctx.STR().getText()[1:-1])
+
+        # check if filename has already been included
+        for _, f in self._includes.items():
+            if f[0] == filename:
+                return
+
+        cwd = os.path.dirname(filename)
+        data = antlr4.FileStream(filename)
+
+        # parse the included file
+        lexer = blackbirdLexer(data)
+        stream = antlr4.CommonTokenStream(lexer)
+
+        parser = blackbirdParser(stream)
+        parser.removeErrorListeners()
+        parser.addErrorListener(BlackbirdErrorListener())
+        tree = parser.start()
+
+        listener = BlackbirdListener(cwd=cwd)
+        walker = antlr4.ParseTreeWalker()
+        walker.walk(listener, tree)
+
+        # add parsed blackbird program to the include
+        # dictionary
+        bb = listener.program
+        self._includes[bb.name] = [filename, bb]
+
+        # make sure to also add all nested includes
+        # to the top level include dictionary
+        self._includes.update(listener._includes)
 
     def exitExpressionvar(self, ctx: blackbirdParser.ExpressionvarContext):
         """Run after exiting an expression variable.
@@ -324,11 +369,63 @@ class BlackbirdListener(blackbirdListener):
                         # Therefore, it includes a regref statement.
                         op_kwargs[k] = RegRefTransform(v)
 
-            self._program._operations.append(
-                {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
-            )
+            operation = {"op": op, "args": op_args, "kwargs": op_kwargs, "modes": modes}
         else:
-            self._program._operations.append({"op": op, "modes": modes})
+            operation = {"op": op, "modes": modes}
+
+        # check if statement is included from another file
+        if operation["op"] in self._includes:
+            bb = self._includes[operation["op"]][1]
+
+            # make sure modes match
+            if len(operation["modes"]) != len(bb.modes):
+                raise ValueError(
+                    "Included operation {} acts on {} modes, "
+                    "but {} modes provided".format(
+                        operation["op"], len(bb.modes), len(operation["modes"])
+                    )
+                )
+
+            if "kwargs" in operation:
+                # operation is a template
+                if not bb.is_template():
+                    raise ValueError(
+                        "Included operation {} does not accept arguments".format(operation["op"])
+                    )
+
+                if bb.parameters != set(operation["kwargs"]):
+                    raise ValueError(
+                        "Included operation {} must accept only keyword arguments {}".format(
+                            operation["op"], bb.parameters
+                        )
+                    )
+
+                # instantiate template
+                bb = bb(**operation["kwargs"])
+
+            else:
+                # operation is not a template
+                if bb.is_template():
+                    raise ValueError(
+                        "Included operation {} missing keyword arguments {}".format(
+                            operation["op"], bb.parameters
+                        )
+                    )
+
+            # mode mapping dictionary
+            # maps the modes of the included program
+            # to the modes it is applied to in the including program
+            mode_map = dict(zip(bb.modes, operation["modes"]))
+
+            for i in bb._operations:
+                # for each operation in the included program,
+                # update the applied mode to match the including
+                # program
+                i["modes"] = [mode_map[j] for j in i["modes"]]
+
+            self._program._operations.extend(bb._operations)
+        else:
+            self._program._operations.append(operation)
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
@@ -343,7 +440,7 @@ class BlackbirdListener(blackbirdListener):
         _PARAMS.clear()
 
 
-def parse(data, listener=BlackbirdListener):
+def parse(data, listener=BlackbirdListener, cwd=None):
     """Parse a blackbird data stream.
 
     Args:
@@ -364,7 +461,7 @@ def parse(data, listener=BlackbirdListener):
     parser.addErrorListener(BlackbirdErrorListener())
     tree = parser.start()
 
-    blackbird = listener()
+    blackbird = listener(cwd=cwd)
     walker = antlr4.ParseTreeWalker()
     walker.walk(blackbird, tree)
 

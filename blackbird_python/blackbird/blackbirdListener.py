@@ -80,6 +80,15 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#include.
+    def enterInclude(self, ctx:blackbirdParser.IncludeContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#include.
+    def exitInclude(self, ctx:blackbirdParser.IncludeContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#program.
     def enterProgram(self, ctx:blackbirdParser.ProgramContext):
         pass
@@ -242,21 +251,12 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#FunctionLabel.
-    def enterFunctionLabel(self, ctx:blackbirdParser.FunctionLabelContext):
+    # Enter a parse tree produced by blackbirdParser#ParameterLabel.
+    def enterParameterLabel(self, ctx:blackbirdParser.ParameterLabelContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#FunctionLabel.
-    def exitFunctionLabel(self, ctx:blackbirdParser.FunctionLabelContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#MulLabel.
-    def enterMulLabel(self, ctx:blackbirdParser.MulLabelContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#MulLabel.
-    def exitMulLabel(self, ctx:blackbirdParser.MulLabelContext):
+    # Exit a parse tree produced by blackbirdParser#ParameterLabel.
+    def exitParameterLabel(self, ctx:blackbirdParser.ParameterLabelContext):
         pass
 
 
@@ -269,21 +269,21 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#SignLabel.
+    def enterSignLabel(self, ctx:blackbirdParser.SignLabelContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#SignLabel.
+    def exitSignLabel(self, ctx:blackbirdParser.SignLabelContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#PowerLabel.
     def enterPowerLabel(self, ctx:blackbirdParser.PowerLabelContext):
         pass
 
     # Exit a parse tree produced by blackbirdParser#PowerLabel.
     def exitPowerLabel(self, ctx:blackbirdParser.PowerLabelContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#ParameterLabel.
-    def enterParameterLabel(self, ctx:blackbirdParser.ParameterLabelContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#ParameterLabel.
-    def exitParameterLabel(self, ctx:blackbirdParser.ParameterLabelContext):
         pass
 
 
@@ -296,15 +296,6 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#AddLabel.
-    def enterAddLabel(self, ctx:blackbirdParser.AddLabelContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#AddLabel.
-    def exitAddLabel(self, ctx:blackbirdParser.AddLabelContext):
-        pass
-
-
     # Enter a parse tree produced by blackbirdParser#VariableLabel.
     def enterVariableLabel(self, ctx:blackbirdParser.VariableLabelContext):
         pass
@@ -314,12 +305,30 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by blackbirdParser#SignLabel.
-    def enterSignLabel(self, ctx:blackbirdParser.SignLabelContext):
+    # Enter a parse tree produced by blackbirdParser#MulLabel.
+    def enterMulLabel(self, ctx:blackbirdParser.MulLabelContext):
         pass
 
-    # Exit a parse tree produced by blackbirdParser#SignLabel.
-    def exitSignLabel(self, ctx:blackbirdParser.SignLabelContext):
+    # Exit a parse tree produced by blackbirdParser#MulLabel.
+    def exitMulLabel(self, ctx:blackbirdParser.MulLabelContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#FunctionLabel.
+    def enterFunctionLabel(self, ctx:blackbirdParser.FunctionLabelContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#FunctionLabel.
+    def exitFunctionLabel(self, ctx:blackbirdParser.FunctionLabelContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#AddLabel.
+    def enterAddLabel(self, ctx:blackbirdParser.AddLabelContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#AddLabel.
+    def exitAddLabel(self, ctx:blackbirdParser.AddLabelContext):
         pass
 
 

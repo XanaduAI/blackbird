@@ -15,6 +15,7 @@
 """Tests for the Blackbird parser/listener"""
 # pylint: disable=too-many-ancestors,no-self-use,redefined-outer-name,no-value-for-parameter
 import sys
+import textwrap
 
 import pytest
 
@@ -44,7 +45,7 @@ MeasureFock() | 0
 def parse_input():
     """Create a parser for the test"""
 
-    def _parse_input(text):
+    def _parse_input(text, cwd=None):
         """The parser fixture accepts a blackbird string to parse"""
         lexer = blackbirdLexer(antlr4.InputStream(text))
         stream = antlr4.CommonTokenStream(lexer)
@@ -52,7 +53,7 @@ def parse_input():
 
         tree = parser.start()
 
-        bb = BlackbirdListener()
+        bb = BlackbirdListener(cwd=cwd)
         walker = antlr4.ParseTreeWalker()
         walker.walk(bb, tree)
         return bb.program
@@ -64,7 +65,7 @@ def parse_input():
 def parse_input_mocked_metadata(monkeypatch):
     """Create a parser for the test that mocks out the metadata"""
 
-    def _parse_input(text):
+    def _parse_input(text, cwd=None):
         """The parser fixture accepts a blackbird string to parse"""
         text = "name mockname\nversion 1.0\n" + text
         lexer = blackbirdLexer(antlr4.InputStream(text))
@@ -73,7 +74,7 @@ def parse_input_mocked_metadata(monkeypatch):
 
         tree = parser.start()
 
-        bb = BlackbirdListener()
+        bb = BlackbirdListener(cwd=cwd)
         walker = antlr4.ParseTreeWalker()
         walker.walk(bb, tree)
 
@@ -296,7 +297,7 @@ class TestParsingQuantumPrograms:
             "float alpha = 0.5\nfloat Delta=sqrt(2)\nCoherent(alpha**{p}, Delta*sqrt(pi), 0.2*10) | 0\n"
         )
 
-        p = sym.Symbol('p')
+        p = sym.Symbol("p")
         alpha = 0.5
         Delta = np.sqrt(2)
         expected = [0.5 ** p, Delta * np.sqrt(np.pi), 0.2 * 10]
@@ -309,7 +310,7 @@ class TestParsingQuantumPrograms:
             "float alpha = 0.5\nfloat Delta=sqrt(2)\nCoherent(alpha*q0, Delta*sqrt(pi), 0.2*10) | 0\n"
         )
 
-        p = sym.Symbol('q0')
+        p = sym.Symbol("q0")
         assert isinstance(bb.operations[0]["args"][0], RegRefTransform)
         assert bb.operations[0]["args"][0].func_str == str(0.5 * p)
 
@@ -344,6 +345,312 @@ class TestParsingMetadata:
         """Test that an device with positional arguments raises a warning"""
         with pytest.warns(SyntaxWarning, match="only accept keyword options"):
             parse_input("name testname\nversion 1.0\ntarget example (6)")
+
+
+class TestParsingInclude:
+    """Tests for the `include` statement"""
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_include_program(self, parse_input, tmpdir):
+        """Test including a non-templated program"""
+        program = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            float alpha = 0.3423
+            Coherent(alpha, sqrt(pi)) | 0
+            MeasureFock() | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(program)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation | 1
+            """
+        ).format(filename)
+
+        bb = parse_input(test_include, cwd=tmpdir)
+
+        expected = [
+            {"op": "Coherent", "args": [0.3423, np.sqrt(np.pi)], "kwargs": {}, "modes": [1]},
+            {"op": "MeasureFock", "args": [], "kwargs": {}, "modes": [1]},
+        ]
+
+        assert bb.operations == expected
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_include_template(self, parse_input, tmpdir):
+        """Test including a templated program"""
+        template = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            BSgate({theta}, pi/2) | [0, 1]
+            Rgate({phi}) | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(template)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation(theta=0.54, phi=0.1) | [2, 1]
+            """
+        ).format(filename)
+
+        bb = parse_input(test_include, cwd=tmpdir)
+
+        expected = [
+            {"op": "BSgate", "args": [0.54, np.pi / 2], "kwargs": {}, "modes": [2, 1]},
+            {"op": "Rgate", "args": [0.1], "kwargs": {}, "modes": [2]},
+        ]
+
+        assert bb.operations == expected
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_nested_include(self, parse_input, tmpdir):
+        """Test nested includes"""
+        template1 = textwrap.dedent(
+            """
+            name MachZehnder
+            version 0.0
+            BSgate({theta}, pi/2) | [0, 1]
+            Rgate({phi}) | 0
+            """
+        )
+
+        filename1 = tmpdir.join("mach_zehnder.xbb")
+
+        with open(filename1, "w") as f:
+            f.write(template1)
+
+        template2 = textwrap.dedent(
+            """
+            name Chip15
+            version 0.0
+            include "{}"
+            S2gate({{sq}}) | [0, 1]
+            MachZehnder(theta={{theta}}, phi={{phi}}) | [1, 2]
+            """
+        ).format(filename1)
+
+        filename2 = tmpdir.join("chip15.xbb")
+
+        with open(filename2, "w") as f:
+            f.write(template2)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            Chip15(sq=0.5, theta=0.54, phi=0.1) | [0, 2, 1]
+            """
+        ).format(filename2)
+
+        bb = parse_input(test_include, cwd=tmpdir)
+
+        expected = [
+            {"op": "S2gate", "args": [0.5], "kwargs": {}, "modes": [0, 2]},
+            {"op": "BSgate", "args": [0.54, np.pi / 2], "kwargs": {}, "modes": [2, 1]},
+            {"op": "Rgate", "args": [0.1], "kwargs": {}, "modes": [2]},
+        ]
+
+        assert bb.operations == expected
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_multiple_nested_include(self, parse_input, tmpdir):
+        """Same as the above, but tests the case where the same file
+        might be imported multiple times in different places."""
+        template1 = textwrap.dedent(
+            """
+            name MachZehnder
+            version 0.0
+            BSgate({theta}, pi/2) | [0, 1]
+            Rgate({phi}) | 0
+            """
+        )
+
+        filename1 = tmpdir.join("mach_zehnder.xbb")
+
+        with open(filename1, "w") as f:
+            f.write(template1)
+
+        template2 = textwrap.dedent(
+            """
+            name Chip15
+            version 0.0
+            include "{}"
+            S2gate({{sq}}) | [0, 1]
+            MachZehnder(theta={{theta}}, phi={{phi}}) | [1, 2]
+            """
+        ).format(filename1)
+
+        filename2 = tmpdir.join("chip15.xbb")
+
+        with open(filename2, "w") as f:
+            f.write(template2)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            include "{}"
+            Chip15(sq=0.5, theta=0.54, phi=0.1) | [0, 2, 1]
+            """
+        ).format(filename2, filename1)
+
+        bb = parse_input(test_include, cwd=tmpdir)
+
+        expected = [
+            {"op": "S2gate", "args": [0.5], "kwargs": {}, "modes": [0, 2]},
+            {"op": "BSgate", "args": [0.54, np.pi / 2], "kwargs": {}, "modes": [2, 1]},
+            {"op": "Rgate", "args": [0.1], "kwargs": {}, "modes": [2]},
+        ]
+
+        assert bb.operations == expected
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_mismatched_modes(self, parse_input, tmpdir):
+        """Test exception raised if modes do not match between
+        applied subroutine and the defined template"""
+        program = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            float alpha = 0.3423
+            Coherent(alpha, sqrt(pi)) | 0
+            MeasureFock() | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(program)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation | [0, 1]
+            """
+        ).format(filename)
+
+        with pytest.raises(
+            ValueError, match="CustomOperation acts on 1 modes, but 2 modes provided"
+        ):
+            bb = parse_input(test_include, cwd=tmpdir)
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_too_many_arguments(self, parse_input, tmpdir):
+        """Test exception raised if wrong number of arguments are
+        passed to a custom subroutine"""
+        program = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            float alpha = 0.3423
+            Coherent(alpha, sqrt(pi)) | 0
+            MeasureFock() | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(program)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation() | 0
+            """
+        ).format(filename)
+
+        with pytest.raises(ValueError, match="CustomOperation does not accept arguments"):
+            bb = parse_input(test_include, cwd=tmpdir)
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_no_arguments(self, parse_input, tmpdir):
+        """Test exception raised if custom subroutine accepts
+        arguments, but none are passed:"""
+        program = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            float alpha = 0.3423
+            Coherent({alpha}, sqrt(pi)) | 0
+            MeasureFock() | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(program)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation | 0
+            """
+        ).format(filename)
+
+        with pytest.raises(ValueError, match="CustomOperation missing keyword arguments"):
+            bb = parse_input(test_include, cwd=tmpdir)
+
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
+    def test_invalid_arguments(self, parse_input, tmpdir):
+        """Test exception raised if wrong keyword arguments are passed to a subroutine"""
+        program = textwrap.dedent(
+            """
+            name CustomOperation
+            version 0.0
+            float alpha = 0.3423
+            Coherent({alpha}, sqrt(pi)) | 0
+            MeasureFock() | 0
+            """
+        )
+
+        filename = tmpdir.join("test.xbb")
+
+        with open(filename, "w") as f:
+            f.write(program)
+
+        test_include = textwrap.dedent(
+            """
+            name test_include
+            version 0.0
+            include "{}"
+            CustomOperation(sq=0.5) | 0
+            """
+        ).format(filename)
+
+        with pytest.raises(
+            ValueError, match="CustomOperation must accept only keyword arguments {'alpha'}"
+        ):
+            bb = parse_input(test_include, cwd=tmpdir)
 
 
 class TestRegRefTransform:

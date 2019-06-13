@@ -8,7 +8,7 @@ start               : NEWLINE* metadatablock NEWLINE* program NEWLINE* EOF;
 
 
 // Metadata
-metadatablock       : declarename NEWLINE+ version NEWLINE+ target?;
+metadatablock       : declarename NEWLINE+ version NEWLINE+ target? (NEWLINE | include_list+=include)*;
 
 declarename         : PROGNAME programname;
 
@@ -21,6 +21,8 @@ versionnumber       : FLOAT;
 target              : TARGET device arguments?;
 
 device              : (NAME | DEVICE);
+
+include             : INCLUDE STR;
 
 
 
@@ -126,6 +128,7 @@ SPACE               : [ \t]+ -> skip;
 PROGNAME            : 'name';
 VERSION             : 'version';
 TARGET              : 'target';
+INCLUDE             : 'include';
 
 // Functions
 SQRT                : 'sqrt' ;

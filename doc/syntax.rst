@@ -323,3 +323,75 @@ The advantage of Blackbird templates is that a Blackbird script can encapsulate
 a photonic quantum circuit with free parameters. A library that makes use
 of the Blackbird quantum assembly language (such as Strawberry Fields) can
 dynamically update template parameters without needing to recompile the program.
+
+
+Including subroutines
+---------------------
+
+There may be the case where you have a Blackbird program or template representing
+a circuit primitive that you may want to re-use across multiple Blackbird programs.
+
+This is possible using the ``include`` statement. This has the following syntax:
+
+.. code-block:: python
+
+    include "path/to/filename.xbb"
+
+where the file path is relative to the location of the current Blackbird script.
+A Blackbird script may have multiple includes, and they must all be placed
+after the metadata block, and before the quantum program/variables are defined.
+
+The ``include`` statement allows the external Blackbird program to be used as
+a subroutine within the existing script. This quantum subroutine is called
+via the ``name`` of the included Blackbird script. For example, consider
+a state teleportation template, ``state_teleportation.xbb``:
+
+.. code-block:: python
+
+    name StateTeleportation
+    version 1.0
+
+    # maximally entangled states
+    Squeezed(-{sq}) | 1
+    Squeezed({sq}) | 2
+    BSgate(pi/4, 0) | (1, 2)
+
+    # Alice performs the joint measurement
+    # in the maximally entangled basis
+    BSgate(pi/4, 0) | (0, 1)
+    MeasureX | 0
+    MeasureP | 1
+
+    # Bob conditionally displaces his mode
+    # based on Alice's measurement result
+    Xgate(sqrt(2)*q0) | 2
+    Zgate(sqrt(2)*q1) | 2
+
+This template accepts the parameter ``sq`` (the squeezing magnitude of the
+resource states), and acts on three modes, teleporting the state in mode 0
+to mode 2.
+
+Now, consider another file, ``example_include.xbb``, which includes the
+above ``StateTeleportation`` operation imported from the ``state_teleportation.xbb``
+template:
+
+
+.. code-block:: python
+
+    name ExampleInclude
+    version 1.0
+    target gaussian (shots=10)
+
+    include "state_teleportation.xbb"
+
+    float alpha = 0.3423
+
+    Coherent(a=alpha) | 0
+    Coherent(a=alpha) | 1
+    StateTeleportation(sq=1) | [0, 2, 3]
+    MeasureHeterodyne() | 3
+
+We can now call the ``StateTeleportation`` subroutine, with ``sq=1``,
+and apply it to modes 0, 2, and 3.
+
+.. note:: Make sure to avoid **circular includes** when using the ``include`` statement.

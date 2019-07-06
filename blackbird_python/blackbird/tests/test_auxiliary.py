@@ -338,7 +338,7 @@ class TestExpression:
 
         with monkeypatch.context() as m:
             m.setattr(blackbird.auxiliary, "_VAR", {"var1": 5})
-            with pytest.raises(SystemExit, match="name 'var2' is not defined"):
+            with pytest.raises(BlackbirdSyntaxError, match="name 'var2' is not defined"):
                 _expression(expr)
 
     @pytest.mark.parametrize('n1', test_complex)
@@ -661,7 +661,7 @@ class TestArguments:
         arg1.start = start()
         args.getChildren = lambda: [arg1]
 
-        with pytest.raises(SystemExit, match="name 'U' is not defined"):
+        with pytest.raises(BlackbirdSyntaxError, match="name 'U' is not defined"):
             _get_arguments(args)
 
     def test_keyword_expression(self, parser, ctx, num):

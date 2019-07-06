@@ -27,6 +27,7 @@ import antlr4
 from blackbird.blackbirdLexer import blackbirdLexer
 from blackbird.blackbirdParser import blackbirdParser
 from blackbird.listener import BlackbirdListener, RegRefTransform, parse
+from blackbird.error import BlackbirdSyntaxError
 
 
 test_file = """
@@ -88,30 +89,30 @@ class TestParsingVariables:
 
     def test_invalid_regref(self, parse_input_mocked_metadata):
         """Test that a variable using the reserved name for regrefs returns an exception"""
-        with pytest.raises(SystemExit, match="reserved for register references"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved for register references"):
             parse_input_mocked_metadata("float q0 = 5")
 
-        with pytest.raises(SystemExit, match="reserved for register references"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved for register references"):
             parse_input_mocked_metadata("float array q4 =\n\t-0.1, 0.2")
 
     def test_invalid_variable_name(self, parse_input_mocked_metadata):
         """Test that a variable using the reserved name for a blackbird keyword returns an exception"""
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float name = 5")
 
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float target = 5")
 
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float version = 5")
 
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float array name =\n\t-0.1, 0.2")
 
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float array target =\n\t-0.1, 0.2")
 
-        with pytest.raises(SystemExit, match="reserved Blackbird keyword"):
+        with pytest.raises(BlackbirdSyntaxError, match="reserved Blackbird keyword"):
             parse_input_mocked_metadata("float array version =\n\t-0.1, 0.2")
 
     def test_integer_variable(self, parse_input_mocked_metadata):
@@ -184,7 +185,7 @@ class TestParsingVariables:
 
     def test_invalid_array_type(self, parse_input_mocked_metadata):
         """Test exception is raised if the array variable type is incorrect"""
-        with pytest.raises(SystemExit, match=r"not of declared type float"):
+        with pytest.raises(BlackbirdSyntaxError, match=r"not of declared type float"):
             parse_input_mocked_metadata(
                 "float array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j"
             )
@@ -192,7 +193,7 @@ class TestParsingVariables:
     def test_invalid_array_shape(self, parse_input_mocked_metadata):
         """Test exception is raised if the array variable shape is incorrect"""
         with pytest.raises(
-            SystemExit, match=r"has declared shape \(1, 2\) but actual shape \(2, 2\)"
+            BlackbirdSyntaxError, match=r"has declared shape \(1, 2\) but actual shape \(2, 2\)"
         ):
             parse_input_mocked_metadata(
                 "complex array A[1, 2] =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j"

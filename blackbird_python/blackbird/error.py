@@ -68,7 +68,6 @@ class NoTraceBack(Exception):
             _ = sys.exc_info()[-1].tb_lineno
         except AttributeError:
             pass
-        sys.exit(self)
 
 
 class BlackbirdSyntaxError(NoTraceBack):

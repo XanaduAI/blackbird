@@ -231,7 +231,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCCOS = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arccos(expected)
+        assert np.allclose(_func(func, expression), np.arccos(expected))
 
     def test_function_arctan(self, parser, ctx, num):
         """Test that a Blackbird arctan function is properly called"""
@@ -275,7 +275,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCSINH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arcsinh(expected)
+        assert np.allclose(_func(func, expression), np.arcsinh(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_arccosh(self, parser, ctx, n, expected, num):
@@ -283,7 +283,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCCOSH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arccosh(expected)
+        assert np.allclose(_func(func, expression), np.arccosh(expected))
 
     def test_function_arctanh(self, parser, ctx, num):
         """Test that a Blackbird arctanh function is properly called"""
@@ -301,7 +301,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.SQRT = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.sqrt(expected)
+        assert np.allclose(_func(func, expression), np.sqrt(expected))
 
     def test_function_invalid(self, parser, ctx):
         """Test that an invalid Blackbird function raises the correct exception"""
@@ -507,7 +507,7 @@ class TestExpressionArray:
             expression = lambda self: (num(n1[0]), var("U"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U": U})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
 
             expr = DummyAddLabel(parser, ctx)
             expr.PLUS = lambda: True
@@ -521,7 +521,7 @@ class TestExpressionArray:
             expression = lambda self: (var("U1"), var("U2"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U1": U*5, "U2": np.cos(U)})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U1": (U*5).tolist(), "U2": np.cos(U).tolist()})
 
             expr = DummyAddLabel(parser, ctx)
             expr.PLUS = lambda: True
@@ -536,11 +536,22 @@ class TestExpressionArray:
             expression = lambda self: (num(n1[0]), var("U"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U": U})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
 
             expr = DummyAddLabel(parser, ctx)
             expr.MINUS = lambda: True
             assert np.all(_expression(expr) == n1[1] - U)
+
+        class DummyAddLabel(blackbirdParser.AddLabelContext):
+            """Dummy add label"""
+            expression = lambda self: (var("U"), num(n1[0]))
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
+
+            expr = DummyAddLabel(parser, ctx)
+            expr.MINUS = lambda: True
+            assert np.all(_expression(expr) == U - n1[1])
 
     def test_minus_array(self, parser, ctx, var, monkeypatch):
         """Test subtraction of two arrays"""
@@ -550,7 +561,7 @@ class TestExpressionArray:
             expression = lambda self: (var("U1"), var("U2"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U1": U*5, "U2": np.cos(U)})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U1": (U*5).tolist(), "U2": np.cos(U).tolist()})
 
             expr = DummyAddLabel(parser, ctx)
             expr.MINUS = lambda: True
@@ -565,7 +576,7 @@ class TestExpressionArray:
             expression = lambda self: (num(n1[0]), var("U"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U": U})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
 
             expr = DummyMulLabel(parser, ctx)
             expr.TIMES = lambda: True
@@ -579,7 +590,7 @@ class TestExpressionArray:
             expression = lambda self: (var("U1"), var("U2"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U1": U*5, "U2": np.cos(U)})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U1": (U*5).tolist(), "U2": np.cos(U).tolist()})
 
             expr = DummyMulLabel(parser, ctx)
             expr.TIMES = lambda: True
@@ -594,11 +605,22 @@ class TestExpressionArray:
             expression = lambda self: (num(n1[0]), var("U"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U": U})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
 
             expr = DummyMulLabel(parser, ctx)
             expr.DIVIDE = lambda: True
             assert np.all(_expression(expr) == n1[1]/U)
+
+        class DummyMulLabel(blackbirdParser.MulLabelContext):
+            """Dummy mul label"""
+            expression = lambda self: (var("U"), num(n1[0]))
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
+
+            expr = DummyMulLabel(parser, ctx)
+            expr.DIVIDE = lambda: True
+            assert np.all(_expression(expr) == U/n1[1])
 
     def test_divide_array_element(self, parser, ctx, var, monkeypatch):
         """Test division of two arrays"""
@@ -608,11 +630,48 @@ class TestExpressionArray:
             expression = lambda self: (var("U1"), var("U2"))
 
         with monkeypatch.context() as m:
-            m.setattr(blackbird.auxiliary, "_VAR", {"U1": U*5, "U2": np.cos(U)})
+            m.setattr(blackbird.auxiliary, "_VAR", {"U1": (U*5).tolist(), "U2": np.cos(U).tolist()})
 
             expr = DummyMulLabel(parser, ctx)
             expr.DIVIDE = lambda: True
             assert np.allclose(_expression(expr), U*5/np.cos(U))
+
+    @pytest.mark.parametrize('n1', test_complex)
+    def test_pow_scalar_array(self, parser, ctx, n1, num, var, monkeypatch):
+        """Test power of a number and an array"""
+
+        class DummyPowLabel(blackbirdParser.PowerLabelContext):
+            """Dummy power label"""
+            expression = lambda self: (num(n1[0]), var("U"))
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
+
+            expr = DummyPowLabel(parser, ctx)
+            assert np.allclose(_expression(expr), n1[1]**U)
+
+        class DummyPowLabel(blackbirdParser.PowerLabelContext):
+            """Dummy power label"""
+            expression = lambda self: (var("U"), num(n1[0]))
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"U": U.tolist()})
+
+            expr = DummyPowLabel(parser, ctx)
+            assert np.allclose(_expression(expr), U**n1[1])
+
+    def test_pow_array_element(self, parser, ctx, var, monkeypatch):
+        """Test power of two arrays"""
+
+        class DummyPowLabel(blackbirdParser.PowerLabelContext):
+            """Dummy power label"""
+            expression = lambda self: (var("U1"), var("U2"))
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"U1": (U*5).tolist(), "U2": np.cos(U).tolist()})
+
+            expr = DummyPowLabel(parser, ctx)
+            assert np.allclose(_expression(expr), (U*5)**np.cos(U))
 
 
 class TestArguments:

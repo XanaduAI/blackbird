@@ -40,7 +40,6 @@ Code details
 """
 from collections import namedtuple
 
-import numpy as np
 import sympy as sym
 from sympy.solvers import solve
 
@@ -217,7 +216,7 @@ def match_template(template, program):
 
     for n1, n2 in GM.mapping.items():
         for x, y in zip(G1nodes[n1]['args'], G2nodes[n2]['args']):
-            if np.all(x != y):
+            if x != y:
                 if isinstance(x, sym.Symbol):
                     key = str(x)
                     val = y

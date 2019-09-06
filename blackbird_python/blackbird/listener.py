@@ -33,8 +33,6 @@ Summary
 
 .. autosummary::
     PYTHON_TYPES
-    NUMPY_TYPES
-    RegRefTransform
     BlackbirdListener
     parse
 
@@ -47,7 +45,6 @@ import warnings
 
 import antlr4
 
-import numpy as np
 import sympy as sym
 
 from .blackbirdLexer import blackbirdLexer
@@ -56,11 +53,11 @@ from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener, BlackbirdSyntaxError
 from .auxiliary import _expression, _get_arguments, _literal, _VAR, _PARAMS
-from .program import BlackbirdProgram
+from .program import BlackbirdProgram, RegRefTransform
 
 
 PYTHON_TYPES = {
-    "array": np.ndarray,
+    "array": list,
     "float": float,
     "complex": complex,
     "int": int,
@@ -69,55 +66,6 @@ PYTHON_TYPES = {
 }
 """dict[str->type]: Mapping from the allowed Blackbird types
 to the equivalent Python/NumPy types."""
-
-
-NUMPY_TYPES = {
-    "float": np.float64,
-    "complex": np.complex128,
-    "int": np.int64,
-    "str": np.str,
-    "bool": np.bool,
-}
-"""dict[str->type]: Mapping from the allowed Blackbird array types
-to the equivalent NumPy data types."""
-
-
-class RegRefTransform:
-    """Class to represent a classical register transform.
-
-    Args:
-        expr (sympy.Expr): a SymPy expression representing the RegRef transform
-    """
-
-    def __init__(self, expr):
-        """After initialization, the RegRefTransform has three attributes
-        which may be inspected to translate the Blackbird program to a
-        simulator or quantum hardware:
-
-        * :attr:`func`
-        * :attr:`regrefs`
-        * :attr:`func_str`
-        """
-        regref_symbols = list(expr.free_symbols)
-        # get the Python function represented by the regref transform
-        self.func = sym.lambdify(regref_symbols, expr)
-        """function: Scalar function that takes one or more values corresponding
-        to measurement results, and outputs a single numeric value."""
-
-        # get the regrefs involved
-        self.regrefs = [int(str(i)[1:]) for i in regref_symbols]
-        """list[int]: List of integers corresponding to the modes that are measured
-        and act as inputs to :attr:`func`. Note that the order of this list corresponds
-        to the order that the measured mode results should be passed to the function."""
-
-        self.func_str = str(expr)
-        """str: String representation of the RegRefTransform function."""
-
-    def __str__(self):
-        """Print formatting"""
-        return self.func_str
-
-    __repr__ = __str__
 
 
 class BlackbirdListener(blackbirdListener):
@@ -255,17 +203,15 @@ class BlackbirdListener(blackbirdListener):
             value = _literal(ctx.nonnumeric())
 
         try:
-            # assume all variables are scalar
-            final_value = PYTHON_TYPES[vartype](value)
-        except:
-            try:
-                # maybe one of the variables was a NumPy array?
-                final_value = NUMPY_TYPES[vartype](value)
-            except:
-                # nope
-                raise TypeError(
-                    "Var {} = {} is not of declared type {}".format(name, value, vartype)
-                ) from None
+            if isinstance(value, list):
+                # variable is an array
+                final_value = [[PYTHON_TYPES[vartype](el) for el in row] for row in value]
+            else:
+                final_value = PYTHON_TYPES[vartype](value)
+        except TypeError:
+            raise TypeError(
+                "Var {} = {} is not of declared type {}".format(name, value, vartype)
+            ) from None
 
         _VAR[name] = final_value
 
@@ -313,7 +259,7 @@ class BlackbirdListener(blackbirdListener):
                         value[-1].append(_expression(j))
 
         try:
-            final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
+            final_value = [[PYTHON_TYPES[vartype](el) for el in row] for row in value]
         except:
             line = ctx.start.line
             col = ctx.start.column
@@ -324,7 +270,7 @@ class BlackbirdListener(blackbirdListener):
             )
 
         if shape is not None:
-            actual_shape = final_value.shape
+            actual_shape = (len(final_value), len(final_value[0]))
             if actual_shape != shape:
                 line = ctx.start.line
                 col = ctx.start.column

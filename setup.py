@@ -23,7 +23,7 @@ with open("blackbird_python/blackbird/_version.py") as f:
 
 requirements = [
     "sympy",
-    "antlr4-python3-runtime>=4.7.1",
+    "antlr4-python3-runtime>=4.7.2",
     "networkx"
 ]
 

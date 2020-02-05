@@ -40,9 +40,7 @@ Summary
 Code details
 ~~~~~~~~~~~~
 """
-import cmath
-import math
-
+import numpy as np
 from sympy import Symbol
 
 from .blackbirdParser import blackbirdParser
@@ -108,7 +106,7 @@ def _number(number):
         return complex(number.getText())
 
     if number.PI():
-        return math.pi
+        return np.pi
 
     raise ValueError("Unknown number " + number.getText())
 
@@ -123,70 +121,55 @@ def _func(function, arg):
         int or float or complex
     """
     # exponential functions
-    expr = _expression(arg)
-    math_lib = math
-
-    if isinstance(expr, list):
-        if any(isinstance(i, complex) for row in expr for i in row):
-            math_lib = cmath
-
-        map_fn = lambda fn, val: [list(map(fn, row)) for row in val]
-    else:
-        if isinstance(expr, complex):
-            math_lib = cmath
-
-        map_fn = lambda fn, val: fn(val)
-
     if function.EXP():
-        return map_fn(math_lib.exp, expr)
+        return np.exp(_expression(arg))
 
     if function.LOG():
-        return map_fn(math_lib.log, expr)
+        return np.log(_expression(arg))
 
     # trig functions
     if function.SIN():
-        return map_fn(math_lib.sin, expr)
+        return np.sin(_expression(arg))
 
     if function.COS():
-        print(expr)
-        return map_fn(math_lib.cos, expr)
+        return np.cos(_expression(arg))
 
     if function.TAN():
-        return map_fn(math_lib.tan, expr)
+        return np.tan(_expression(arg))
 
     # trig inverses
     if function.ARCSIN():
-        return map_fn(math_lib.asin, expr)
+        return np.arcsin(_expression(arg))
 
     if function.ARCCOS():
-        return map_fn(math_lib.acos, expr)
+        return np.arccos(_expression(arg))
 
     if function.ARCTAN():
-        return map_fn(math_lib.atan, expr)
+        return np.arctan(_expression(arg))
 
     # hyperbolic trig
     if function.SINH():
-        return map_fn(math_lib.sinh, expr)
+        return np.sinh(_expression(arg))
 
     if function.COSH():
-        return map_fn(math_lib.cosh, expr)
+        return np.cosh(_expression(arg))
 
     if function.TANH():
-        return map_fn(math_lib.tanh, expr)
+        return np.tanh(_expression(arg))
 
     # hyperbolic trig inverses
     if function.ARCSINH():
-        return map_fn(math_lib.asinh, expr)
+        return np.arcsinh(_expression(arg))
 
     if function.ARCCOSH():
-        return map_fn(math_lib.acosh, expr)
+        return np.arccosh(_expression(arg))
 
     if function.ARCTANH():
-        return map_fn(math_lib.atanh, expr)
+        return np.arctanh(_expression(arg))
 
     # other
     if function.SQRT():
-        return map_fn(math_lib.sqrt, expr)
+        return np.sqrt(_expression(arg))
 
     raise NameError("Unknown function " + function.getText())
 
@@ -202,7 +185,6 @@ def _expression(expr):
     Returns:
         int or float or complex or str or bool
     """
-    # pylint: disable=too-many-statements
     if isinstance(expr, blackbirdParser.NumberLabelContext):
         return _number(expr.number())
 
@@ -239,50 +221,15 @@ def _expression(expr):
 
     if isinstance(expr, blackbirdParser.AddLabelContext):
         a, b = expr.expression()
-        a = _expression(a)
-        b = _expression(b)
-
         if expr.PLUS():
-            if isinstance(a, list) and isinstance(b, list):
-                return [[i+j for i, j in zip(row_a, row_b)] for row_a, row_b in zip(a, b)]
-
-            if isinstance(a, list) and not isinstance(b, list):
-                return [[b+j for j in row_a] for row_a in a]
-
-            if not isinstance(a, list) and isinstance(b, list):
-                return [[a+j for j in row_b] for row_b in b]
-
-            return a + b
-
+            return np.sum([_expression(a), _expression(b)], axis=0)
         if expr.MINUS():
-            if isinstance(a, list) and isinstance(b, list):
-                return [[i-j for i, j in zip(row_a, row_b)] for row_a, row_b in zip(a, b)]
-
-            if isinstance(a, list) and not isinstance(b, list):
-                return [[j-b for j in row_a] for row_a in a]
-
-            if not isinstance(a, list) and isinstance(b, list):
-                return [[a-j for j in row_b] for row_b in b]
-
-            return a - b
+            return np.sum([_expression(a), -_expression(b)], axis=0)
 
     if isinstance(expr, blackbirdParser.MulLabelContext):
         a, b = expr.expression()
-        expr_a = _expression(a)
-        expr_b = _expression(b)
-
         if expr.TIMES():
-            if isinstance(expr_a, list) and isinstance(expr_b, list):
-                return [[i*j for i, j in zip(row_a, row_b)] for row_a, row_b in zip(expr_a, expr_b)]
-
-            if isinstance(expr_a, list) and not isinstance(expr_b, list):
-                return [[expr_b*j for j in row_a] for row_a in expr_a]
-
-            if not isinstance(expr_a, list) and isinstance(expr_b, list):
-                return [[expr_a*j for j in row_b] for row_b in expr_b]
-
-            return expr_a * expr_b
-
+            return np.prod([_expression(a), _expression(b)], axis=0)
         if expr.DIVIDE():
             a = _expression(a)
             b = _expression(b)
@@ -290,32 +237,11 @@ def _expression(expr):
             if isinstance(b, int):
                 b = float(b)
 
-            if isinstance(expr_a, list) and isinstance(expr_b, list):
-                return [[i*pow(j, -1) for i, j in zip(row_a, row_b)] for row_a, row_b in zip(expr_a, expr_b)]
-
-            if isinstance(expr_a, list) and not isinstance(expr_b, list):
-                return [[j*pow(b, -1) for j in row_a] for row_a in expr_a]
-
-            if not isinstance(expr_a, list) and isinstance(expr_b, list):
-                return [[a*pow(j, -1) for j in row_b] for row_b in expr_b]
-
-            return a * pow(b, -1)
+            return np.prod([a, np.power(b, -1)], axis=0)
 
     if isinstance(expr, blackbirdParser.PowerLabelContext):
         a, b = expr.expression()
-        a = _expression(a)
-        b = _expression(b)
-
-        if isinstance(a, list) and isinstance(b, list):
-            return [[pow(i, j) for i, j in zip(row_a, row_b)] for row_a, row_b in zip(a, b)]
-
-        if isinstance(a, list) and not isinstance(b, list):
-            return [[pow(j, b) for j in row_a] for row_a in a]
-
-        if not isinstance(a, list) and isinstance(b, list):
-            return [[pow(a, j) for j in row_b] for row_b in b]
-
-        return pow(a, b)
+        return np.power(_expression(a), _expression(b))
 
     if isinstance(expr, blackbirdParser.FunctionLabelContext):
         return _func(expr.function(), expr.expression())

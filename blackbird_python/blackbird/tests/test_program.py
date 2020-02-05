@@ -21,7 +21,7 @@ import pytest
 import numpy as np
 import sympy as sym
 
-from blackbird.program import BlackbirdProgram, list_to_blackbird
+from blackbird.program import BlackbirdProgram, numpy_to_blackbird
 
 
 class TestNumPyToBlackbird:
@@ -29,22 +29,22 @@ class TestNumPyToBlackbird:
 
     def test_real_array(self):
         """Test real array is correctly formatted"""
-        A = [[0.453, 1, 0.213], [-0.543, 1.342, 1e-4]]
-        res = "\n".join(list_to_blackbird(A, "A"))
+        A = np.array([[0.453, 1, 0.213], [-0.543, 1.342, 1e-4]])
+        res = "\n".join(numpy_to_blackbird(A, "A"))
         expected = "float array A[2, 3] =\n    0.453, 1.0, 0.213\n    -0.543, 1.342, 0.0001\n"
         assert res == expected
 
     def test_int_array(self):
         """Test integer array is correctly formatted"""
-        A = [[1, -0, -15]]
-        res = "\n".join(list_to_blackbird(A, "A"))
+        A = np.array([[1, -0, -15]])
+        res = "\n".join(numpy_to_blackbird(A, "A"))
         expected = "int array A[1, 3] =\n    1, 0, -15\n"
         assert res == expected
 
     def test_complex_array(self):
         """Test complex array is correctly formatted"""
-        A = [[0.453 - 0.543j, 1, 0.213 + 8j], [-0.543j, 1.342 + 0.5j, 1e-4 - 2e2j]]
-        res = "\n".join(list_to_blackbird(A, "A"))
+        A = np.array([[0.453 - 0.543j, 1, 0.213 + 8j], [-0.543j, 1.342 + 0.5j, 1e-4 - 2e2j]])
+        res = "\n".join(numpy_to_blackbird(A, "A"))
         expected = dedent(
             """\
             complex array A[2, 3] =
@@ -56,10 +56,10 @@ class TestNumPyToBlackbird:
 
     def test_unknown_array(self):
         """Test non-numeric array raises an exception"""
-        A = [True, False]
+        A = np.array([True, False])
 
         with pytest.raises(ValueError, match="unsupported type"):
-            list_to_blackbird(A, "A")
+            numpy_to_blackbird(A, "A")
 
 
 class TestBlackbirdProgram:
@@ -185,14 +185,6 @@ class TestBlackbirdSerialize:
         )
         assert res == expected
 
-    def test_serialize_invalid_operation_args(self):
-        """Test serialization of an operation with invalid arg raises error"""
-        bb = BlackbirdProgram(name="prog", version=0.0)
-        bb._operations.append({"op": "Dgate", "modes": [0], "args": [np.array([0.5])], "kwargs": {}})
-
-        with pytest.raises(ValueError, match="Unknown argument type"):
-            res = bb.serialize()
-
     def test_serialize_operation_multiple_args(self):
         """Test serialization of an operation with many args"""
         bb = BlackbirdProgram(name="prog", version=0.0)
@@ -224,14 +216,6 @@ class TestBlackbirdSerialize:
             """
         )
         assert res == expected
-
-    def test_serialize_invalid_operation_kwargs(self):
-        """Test serialization of an operation with invalid arg raises error"""
-        bb = BlackbirdProgram(name="prog", version=0.0)
-        bb._operations.append({"op": "Dgate", "modes": [0], "args": [], "kwargs": {"U": np.array([0.5])}})
-
-        with pytest.raises(ValueError, match="Unknown argument type"):
-            res = bb.serialize()
 
     def test_serialize_operation_multiple_kwargs(self):
         """Test serialization of an operation with many kwargs"""
@@ -296,7 +280,7 @@ class TestBlackbirdSerialize:
     def test_serialize_operation_array_arg(self):
         """Test serialization of an operation with an array arg"""
         bb = BlackbirdProgram(name="prog", version=0.0)
-        U = np.int64(np.identity(2)).tolist()
+        U = np.int64(np.identity(2))
 
         bb._operations.append({"op": "Interferometer", "modes": [0], "args": [U], "kwargs": {}})
 
@@ -318,7 +302,7 @@ class TestBlackbirdSerialize:
     def test_serialize_operation_array_kwarg(self):
         """Test serialization of an operation with an array kwarg"""
         bb = BlackbirdProgram(name="prog", version=0.0)
-        U = np.int64(np.identity(2)).tolist()
+        U = np.int64(np.identity(2))
 
         bb._operations.append(
             {"op": "Interferometer", "modes": [0], "args": [], "kwargs": {"U": U}}
@@ -388,8 +372,8 @@ class TestBlackbirdSerialize:
     def test_serialize_operation_multiple_arrays(self):
         """Test serialization of an operation with multiple array args"""
         bb = BlackbirdProgram(name="prog", version=0.0)
-        U = np.int64(np.identity(2)).tolist()
-        U2 = np.array([[1, 2j], [-2j, 3]]).tolist()
+        U = np.int64(np.identity(2))
+        U2 = np.array([[1, 2j], [-2j, 3]])
 
         bb._operations.extend(
             [

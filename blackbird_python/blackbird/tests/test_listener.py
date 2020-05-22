@@ -256,6 +256,13 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "Coherent", "args": [], "kwargs": {"alpha": -0.3 + 2j}}
         ]
 
+    def test_operation_kwarglist(self, parse_input_mocked_metadata):
+        """Test that an operation with keyword arguments is correctly parsed"""
+        bb = parse_input_mocked_metadata("MeasureFock(dark_counts=[1, 3]) | [0, 1]\n")
+        assert bb.operations == [
+            {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {"dark_counts": [1, 3]}}
+        ]
+
     def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureHomodyne(phi=0.23, b=1) | 0\n")

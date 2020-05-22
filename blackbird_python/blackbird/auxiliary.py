@@ -285,9 +285,19 @@ def _get_arguments(arguments):
 
         elif isinstance(arg, blackbirdParser.KwargContext):
             name = arg.NAME().getText()
-            if arg.val().expression():
-                kwargs[name] = _expression(arg.val().expression())
-            elif arg.val().nonnumeric():
-                kwargs[name] = _literal(arg.val().nonnumeric())
+            if arg.val():
+                if arg.val().expression():
+                    kwargs[name] = _expression(arg.val().expression())
+                elif arg.val().nonnumeric():
+                    kwargs[name] = _literal(arg.val().nonnumeric())
+            elif arg.vallist():
+                kwargslist = []
+                for v in arg.vallist().getChildren():
+                    if isinstance(v, blackbirdParser.ValContext):
+                        if v.expression():
+                            kwargslist.append(_expression(v.expression()))
+                        elif v.nonnumeric():
+                            kwargslist.append(_literal(v.nonnumeric()))
+                kwargs[name] = kwargslist
 
     return args, kwargs

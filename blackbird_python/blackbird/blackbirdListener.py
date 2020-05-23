@@ -1,4 +1,4 @@
-# Generated from blackbird.g4 by ANTLR 4.7.1
+# Generated from src/blackbird.g4 by ANTLR 4.8
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .blackbirdParser import blackbirdParser
@@ -242,6 +242,15 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#vallist.
+    def enterVallist(self, ctx:blackbirdParser.VallistContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#vallist.
+    def exitVallist(self, ctx:blackbirdParser.VallistContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#modes.
     def enterModes(self, ctx:blackbirdParser.ModesContext):
         pass
@@ -350,3 +359,5 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+
+del blackbirdParser

@@ -256,10 +256,17 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "Coherent", "args": [], "kwargs": {"alpha": -0.3 + 2j}}
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], [], 0])
+    @pytest.mark.parametrize("dc", [[1, 3], [1], ["3", True], [], 0, "1"])
     def test_operation_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
+
+        # change element-type to int for comparison
+        if isinstance(dc, list):
+            dc = [int(i) for i in dc]
+        else:
+            dc = int(dc)
+
         assert bb.operations == [
             {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {"dark_counts": dc}}
         ]

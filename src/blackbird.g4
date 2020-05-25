@@ -62,9 +62,11 @@ measure             : MEASURE;
 
 arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? COMMA? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
-kwarg               : NAME ASSIGN val;
+kwarg               : NAME ASSIGN (val | vallist);
 
 val                 : (nonnumeric | expression);
+
+vallist             : LSQBRAC (val (COMMA val)*)? RSQBRAC;
 
 modes               : INT (COMMA INT)*;
 

@@ -256,6 +256,21 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "Coherent", "args": [], "kwargs": {"alpha": -0.3 + 2j}}
         ]
 
+    @pytest.mark.parametrize("dc", [[1, 3], [1], ["3", True], [], 0, "1"])
+    def test_operation_kwarglist(self, parse_input_mocked_metadata, dc):
+        """Test that an operation with keyword arguments is correctly parsed"""
+        bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
+
+        # change element-type to int for comparison
+        if isinstance(dc, list):
+            dc = [int(i) for i in dc]
+        else:
+            dc = int(dc)
+
+        assert bb.operations == [
+            {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {"dark_counts": dc}}
+        ]
+
     def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
         """Test that an operation with multiple keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureHomodyne(phi=0.23, b=1) | 0\n")
@@ -272,6 +287,21 @@ class TestParsingQuantumPrograms:
                 "op": "MeasureHomodyne",
                 "args": [0.23, 0.54],
                 "kwargs": {"select": 0.41, "hi": "yes"},
+            }
+        ]
+
+    @pytest.mark.parametrize("dc", [[1, 3], [1], [], 0])
+    def test_operation_args_kwarg_kwarglist(self, parse_input_mocked_metadata, dc):
+        """Test that an operation with multiple args/kwargs, with lists, is correctly parsed"""
+        bb = parse_input_mocked_metadata(
+            'MeasureHomodyne(0.23, 0.54, select={}, hi="yes") | 0\n'.format(dc)
+            )
+        assert bb.operations == [
+            {
+                "modes": [0],
+                "op": "MeasureHomodyne",
+                "args": [0.23, 0.54],
+                "kwargs": {"select": dc, "hi": "yes"},
             }
         ]
 

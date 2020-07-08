@@ -455,15 +455,22 @@ class BlackbirdListener(blackbirdListener):
         if ctx.INT():
             _FORVAR = range(int(ctx.INT().getText()))
         elif ctx.vallist():
-            _FORVAR = ctx.vallist().getText().split(',')
+            _FORVAR = [
+                _expression(c.expression()) for c in ctx.vallist().getChildren()
+                if isinstance(c, blackbirdParser.ValContext)
+            ]
 
         for var in _FORVAR:
             if ctx.NAME():
                 try:
-                    var = PYTHON_TYPES[ctx.vartype().getText()](var)
+                    new_var = PYTHON_TYPES[ctx.vartype().getText()](var)
+                    if new_var != var:
+                        raise ValueError
                 except ValueError:
                     raise ValueError(f"invalid value {var}; must be {ctx.vartype().getText()}")
-                _VAR[ctx.NAME().getText()] = var
+
+                _VAR[ctx.NAME().getText()] = new_var
+                print(var)
             for statement in ctx.statement_list:
                 self.exitStatement(statement)
         _FORVAR = []

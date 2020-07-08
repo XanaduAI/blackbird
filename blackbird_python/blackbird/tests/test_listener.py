@@ -47,10 +47,17 @@ MeasureFock() | 0
 # version 1.0
 # target fock (num_subsystems=1, cutoff_dim=7, shots=10)
 
+# par array phases =
+#     {phase_0}
+#     {phase_1}
+#     {phase_2}
+#     {phase_3}
+#     {phase_4}
+
 # float alpha = 0.3423
 # Coherent(alpha, sqrt(pi)) | 0
-# for [2, 7, 3] ->  float m
-#     MeasureFock() | m
+# for 0, 3, 1 ->  int m
+#     MZgate(phases[m], phases[m+1]) | [m, m+1]
 # """
 
 

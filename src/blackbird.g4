@@ -39,7 +39,7 @@ invalid             : (REGREF | reserved);
 
 reserved            : (PROGNAME | VERSION | TARGET);
 
-vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL);
+vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL|TYPE_PAR);
 
 nonnumeric          : (STR|BOOL);
 
@@ -55,7 +55,7 @@ operation           : NAME;
 
 measure             : MEASURE;
 
-forloop             : FOR (INT | LSQBRAC vallist RSQBRAC) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
+forloop             : FOR (INT | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
 
 
 //  function arguments
@@ -80,7 +80,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | function LBRAC expression RBRAC           #FunctionLabel
                     | number                                    #NumberLabel
                     | (REGREF | NAME)                           #VariableLabel
-                    | NAME LSQBRAC arrayrow RSQBRAC             #ArrayIdxLabel
+                    | NAME LSQBRAC expression RSQBRAC           #ArrayIdxLabel
                     | LBRACE NAME RBRACE                        #ParameterLabel
                     ;
 
@@ -170,6 +170,7 @@ TYPE_COMPLEX        : 'complex';
 TYPE_INT            : 'int';
 TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
+TYPE_PAR            : 'par';
 
 // Variable names
 REGREF              : 'q' DIGIT;

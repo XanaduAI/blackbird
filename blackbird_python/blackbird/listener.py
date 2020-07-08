@@ -66,6 +66,7 @@ PYTHON_TYPES = {
     "int": int,
     "str": str,
     "bool": bool,
+    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird types
 to the equivalent Python/NumPy types."""
@@ -77,6 +78,7 @@ NUMPY_TYPES = {
     "int": np.int64,
     "str": np.str,
     "bool": np.bool,
+    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""
@@ -470,9 +472,10 @@ class BlackbirdListener(blackbirdListener):
                     raise ValueError(f"invalid value {var}; must be {ctx.vartype().getText()}")
 
                 _VAR[ctx.NAME().getText()] = new_var
-                print(var)
+
             for statement in ctx.statement_list:
                 self.exitStatement(statement)
+
         _FORVAR = []
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):

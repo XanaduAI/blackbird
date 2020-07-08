@@ -206,6 +206,10 @@ def _expression(expr):
 
         return _VAR[expr.getText()]
 
+    if isinstance(expr, blackbirdParser.ArrayIdxLabelContext):
+        inner_expr = _expression(expr.expression())
+        return _VAR[expr.NAME().getText()].flatten()[inner_expr]
+
     if isinstance(expr, blackbirdParser.ParameterLabelContext):
         p = Symbol(expr.NAME().getText())
         _PARAMS.append(p)

@@ -41,6 +41,18 @@ Coherent(alpha, sqrt(pi)) | 0
 MeasureFock() | 0
 """
 
+# test_for = """
+# # a test blackbird script
+# name test_name
+# version 1.0
+# target fock (num_subsystems=1, cutoff_dim=7, shots=10)
+
+# float alpha = 0.3423
+# Coherent(alpha, sqrt(pi)) | 0
+# for [2, 7, 3] ->  float m
+#     MeasureFock() | m
+# """
+
 
 @pytest.fixture
 def parse_input():
@@ -256,7 +268,7 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "Coherent", "args": [], "kwargs": {"alpha": -0.3 + 2j}}
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], ["3", True], [], 0, "1"])
+    @pytest.mark.parametrize("dc", [[1, 3], 0, [1]])
     def test_operation_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
@@ -269,6 +281,21 @@ class TestParsingQuantumPrograms:
 
         assert bb.operations == [
             {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {"dark_counts": dc}}
+        ]
+
+    @pytest.mark.parametrize("dc", [[]])
+    def test_operation_empty_kwarglist(self, parse_input_mocked_metadata, dc):
+        """Test that an operation with empty keyword arguments is correctly parsed"""
+        bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
+
+        # change element-type to int for comparison
+        if isinstance(dc, list):
+            dc = [int(i) for i in dc]
+        else:
+            dc = int(dc)
+
+        assert bb.operations == [
+            {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {}}
         ]
 
     def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
@@ -290,7 +317,7 @@ class TestParsingQuantumPrograms:
             }
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], [], 0])
+    @pytest.mark.parametrize("dc", [[1, 3], [1], 0])
     def test_operation_args_kwarg_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with multiple args/kwargs, with lists, is correctly parsed"""
         bb = parse_input_mocked_metadata(

@@ -55,7 +55,7 @@ from .blackbirdParser import blackbirdParser
 from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener, BlackbirdSyntaxError
-from .auxiliary import _expression, _get_arguments, _literal, _VAR, _PARAMS
+from .auxiliary import _expression, _get_arguments, _literal, _VAR, _FORVAR, _PARAMS
 from .program import BlackbirdProgram
 
 
@@ -135,6 +135,7 @@ class BlackbirdListener(blackbirdListener):
         self._program = BlackbirdProgram()
         self._includes = {}
         self._cwd = cwd
+        self._infor = False
 
         if cwd is None:
             # assume the current directory
@@ -341,12 +342,30 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: statement context
         """
+        if isinstance(ctx.parentCtx, blackbirdParser.ForloopContext):
+            if self._infor:
+                return
+
         if ctx.operation():
             op = ctx.operation().getText()
         elif ctx.measure():
             op = ctx.measure().getText()
 
-        modes = [int(i) for i in ctx.modes().getText().split(",")]
+        # get modes; if variables, replace with corresponding values
+        modes = ctx.arrayrow().getText().split(",")
+        for i, m in enumerate(modes):
+            try:
+                modes[i] = int(m)
+            except ValueError:
+                m = m.strip()
+                if m in _VAR.keys():
+                    if isinstance(_VAR[m], int):
+                        modes[i] = _VAR[m]
+                    else:
+                        raise ValueError(f"Mode must be of type int, not {type(_VAR[m])}")
+                else:
+                    raise ValueError(f"Variable {m} not declared")
+
         self._program._modes |= set(modes)
 
         if ctx.arguments():
@@ -426,6 +445,28 @@ class BlackbirdListener(blackbirdListener):
             self._program._operations.extend(bb._operations)
         else:
             self._program._operations.append(operation)
+
+    def enterForloop(self, ctx: blackbirdParser.ForloopContext):
+        self._infor = True
+
+    def exitForloop(self, ctx: blackbirdParser.ForloopContext):
+        self._infor = False
+
+        if ctx.INT():
+            _FORVAR = range(int(ctx.INT().getText()))
+        elif ctx.vallist():
+            _FORVAR = ctx.vallist().getText().split(',')
+
+        for var in _FORVAR:
+            if ctx.NAME():
+                try:
+                    var = PYTHON_TYPES[ctx.vartype().getText()](var)
+                except ValueError:
+                    raise ValueError(f"invalid value {var}; must be {ctx.vartype().getText()}")
+                _VAR[ctx.NAME().getText()] = var
+            for statement in ctx.statement_list:
+                self.exitStatement(statement)
+        _FORVAR = []
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.

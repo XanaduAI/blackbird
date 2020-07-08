@@ -215,6 +215,15 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#forloop.
+    def enterForloop(self, ctx:blackbirdParser.ForloopContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#forloop.
+    def exitForloop(self, ctx:blackbirdParser.ForloopContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#arguments.
     def enterArguments(self, ctx:blackbirdParser.ArgumentsContext):
         pass
@@ -248,15 +257,6 @@ class blackbirdListener(ParseTreeListener):
 
     # Exit a parse tree produced by blackbirdParser#vallist.
     def exitVallist(self, ctx:blackbirdParser.VallistContext):
-        pass
-
-
-    # Enter a parse tree produced by blackbirdParser#modes.
-    def enterModes(self, ctx:blackbirdParser.ModesContext):
-        pass
-
-    # Exit a parse tree produced by blackbirdParser#modes.
-    def exitModes(self, ctx:blackbirdParser.ModesContext):
         pass
 
 
@@ -311,6 +311,15 @@ class blackbirdListener(ParseTreeListener):
 
     # Exit a parse tree produced by blackbirdParser#VariableLabel.
     def exitVariableLabel(self, ctx:blackbirdParser.VariableLabelContext):
+        pass
+
+
+    # Enter a parse tree produced by blackbirdParser#ArrayIdxLabel.
+    def enterArrayIdxLabel(self, ctx:blackbirdParser.ArrayIdxLabelContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#ArrayIdxLabel.
+    def exitArrayIdxLabel(self, ctx:blackbirdParser.ArrayIdxLabelContext):
         pass
 
 

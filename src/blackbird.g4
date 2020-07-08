@@ -25,10 +25,9 @@ device              : (NAME | DEVICE);
 include             : INCLUDE STR;
 
 
-
 // Variable declaration
 
-program             : (NEWLINE | var_list+=expressionvar | array_list+=arrayvar | statement_list+=statement)*;
+program             : (NEWLINE | for_list += forloop | var_list+=expressionvar | array_list+=arrayvar | statement_list+=statement)*;
 
 expressionvar       : vartype name ASSIGN (expression | nonnumeric);
 
@@ -50,25 +49,24 @@ arrayval            : (TAB row_list+=arrayrow NEWLINE)*;
 
 arrayrow            : expression (COMMA expression)*;
 
-statement           : (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE*;
+statement           : (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? arrayrow (RBRAC|RSQBRAC)? NEWLINE*;
 
 operation           : NAME;
 
 measure             : MEASURE;
 
+forloop             : FOR (INT | LSQBRAC vallist RSQBRAC) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
 
 
 //  function arguments
 
 arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? COMMA? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
-kwarg               : NAME ASSIGN (val | vallist);
+kwarg               : NAME ASSIGN (val | LSQBRAC vallist? RSQBRAC);
 
 val                 : (nonnumeric | expression);
 
-vallist             : LSQBRAC (val (COMMA val)*)? RSQBRAC;
-
-modes               : INT (COMMA INT)*;
+vallist             : val (COMMA val)*;
 
 
 
@@ -82,6 +80,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | function LBRAC expression RBRAC           #FunctionLabel
                     | number                                    #NumberLabel
                     | (REGREF | NAME)                           #VariableLabel
+                    | NAME LSQBRAC arrayrow RSQBRAC             #ArrayIdxLabel
                     | LBRACE NAME RBRACE                        #ParameterLabel
                     ;
 
@@ -106,6 +105,8 @@ TIMES               : '*';
 DIVIDE              : '/';
 PWR                 : '**';
 ASSIGN              : '=';
+SETTO               : '->';
+FOR                 : 'for';
 
 // Literals
 fragment DIGIT      : [0-9]+;

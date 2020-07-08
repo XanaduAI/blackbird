@@ -135,7 +135,7 @@ class BlackbirdListener(blackbirdListener):
         self._program = BlackbirdProgram()
         self._includes = {}
         self._cwd = cwd
-        self._infor = False
+        self._in_for = False
 
         if cwd is None:
             # assume the current directory
@@ -343,7 +343,7 @@ class BlackbirdListener(blackbirdListener):
             ctx: statement context
         """
         if isinstance(ctx.parentCtx, blackbirdParser.ForloopContext):
-            if self._infor:
+            if self._in_for:
                 return
 
         if ctx.operation():
@@ -447,10 +447,10 @@ class BlackbirdListener(blackbirdListener):
             self._program._operations.append(operation)
 
     def enterForloop(self, ctx: blackbirdParser.ForloopContext):
-        self._infor = True
+        self._in_for = True
 
     def exitForloop(self, ctx: blackbirdParser.ForloopContext):
-        self._infor = False
+        self._in_for = False
 
         if ctx.INT():
             _FORVAR = range(int(ctx.INT().getText()))

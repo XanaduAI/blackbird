@@ -58,6 +58,9 @@ MeasureFock() | 0
 # Coherent(alpha, sqrt(pi)) | 0
 # for 0, 3, 1 ->  int m
 #     MZgate(phases[m], phases[m+1]) | [m, m+1]
+#
+# for 2:20:2 ->  int m
+#     MeasureFock() | m
 # """
 
 

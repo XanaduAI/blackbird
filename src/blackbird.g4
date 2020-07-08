@@ -55,7 +55,7 @@ operation           : NAME;
 
 measure             : MEASURE;
 
-forloop             : FOR (INT | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
+forloop             : FOR (INT | rangeval | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
 
 
 //  function arguments
@@ -67,6 +67,8 @@ kwarg               : NAME ASSIGN (val | LSQBRAC vallist? RSQBRAC);
 val                 : (nonnumeric | expression);
 
 vallist             : val (COMMA val)*;
+
+rangeval            : INT COLON INT (COLON INT)?;
 
 
 

@@ -456,6 +456,11 @@ class BlackbirdListener(blackbirdListener):
 
         if ctx.INT():
             _FORVAR = range(int(ctx.INT().getText()))
+        elif ctx.rangeval():
+            _FORVAR = range(*[
+                int(c.getText()) for c in ctx.rangeval().getChildren()
+                if c.getText() != ":"
+            ])
         elif ctx.vallist():
             _FORVAR = [
                 _expression(c.expression()) for c in ctx.vallist().getChildren()

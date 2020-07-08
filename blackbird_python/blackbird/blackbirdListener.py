@@ -260,6 +260,15 @@ class blackbirdListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by blackbirdParser#rangeval.
+    def enterRangeval(self, ctx:blackbirdParser.RangevalContext):
+        pass
+
+    # Exit a parse tree produced by blackbirdParser#rangeval.
+    def exitRangeval(self, ctx:blackbirdParser.RangevalContext):
+        pass
+
+
     # Enter a parse tree produced by blackbirdParser#ParameterLabel.
     def enterParameterLabel(self, ctx:blackbirdParser.ParameterLabelContext):
         pass

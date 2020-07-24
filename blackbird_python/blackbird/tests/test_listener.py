@@ -277,10 +277,7 @@ class TestParsingQuantumPrograms:
         bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
 
         # change element-type to int for comparison
-        if isinstance(dc, list):
-            dc = [int(i) for i in dc]
-        else:
-            dc = int(dc)
+        dc = [int(i) for i in dc]
 
         assert bb.operations == [
             {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {}}
@@ -305,7 +302,7 @@ class TestParsingQuantumPrograms:
             }
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], 0])
+    @pytest.mark.parametrize("dc", [[1, 3], [1], 0, [True, 0]])
     def test_operation_args_kwarg_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with multiple args/kwargs, with lists, is correctly parsed"""
         bb = parse_input_mocked_metadata(

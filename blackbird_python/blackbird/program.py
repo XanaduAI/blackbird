@@ -91,6 +91,7 @@ class BlackbirdProgram:
 
     def __init__(self, name="blackbird_program", version="1.0"):
         self._var = {}
+        self._forvar = {}
         self._modes = set()
 
         # the following attributes fully describe a Blackbird program

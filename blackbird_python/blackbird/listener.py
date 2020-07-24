@@ -55,7 +55,7 @@ from .blackbirdParser import blackbirdParser
 from .blackbirdListener import blackbirdListener
 
 from .error import BlackbirdErrorListener, BlackbirdSyntaxError
-from .auxiliary import _expression, _get_arguments, _literal, _VAR, _FORVAR, _PARAMS
+from .auxiliary import _expression, _get_arguments, _literal, _VAR, _PARAMS
 from .program import BlackbirdProgram
 
 
@@ -354,10 +354,11 @@ class BlackbirdListener(blackbirdListener):
             op = ctx.measure().getText()
 
         # get modes; if variables, replace with corresponding values
-        modes = ctx.arrayrow().getText().split(",")
+        modes = [m for m in ctx.arrayrow().getChildren() if m.getText() != ","]
+
         for i, m in enumerate(modes):
             try:
-                modes[i] = int(m)
+                modes[i] = _expression(m)
             except ValueError:
                 m = m.strip()
                 if m in _VAR.keys():
@@ -455,17 +456,17 @@ class BlackbirdListener(blackbirdListener):
         self._in_for = False
 
         if ctx.rangeval():
-            _FORVAR = range(*[
+            for_var = range(*[
                 int(c.getText()) for c in ctx.rangeval().getChildren()
                 if c.getText() != ":"
             ])
         elif ctx.vallist():
-            _FORVAR = [
+            for_var = [
                 _expression(c.expression()) for c in ctx.vallist().getChildren()
                 if isinstance(c, blackbirdParser.ValContext)
             ]
 
-        for var in _FORVAR:
+        for var in for_var:
             if ctx.NAME():
                 try:
                     new_var = PYTHON_TYPES[ctx.vartype().getText()](var)
@@ -479,7 +480,9 @@ class BlackbirdListener(blackbirdListener):
             for statement in ctx.statement_list:
                 self.exitStatement(statement)
 
-        _FORVAR = []
+        self._program._forvar[ctx.NAME().getText()] = np.array(for_var)
+        if ctx.NAME():
+            del _VAR[ctx.NAME().getText()]
 
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.

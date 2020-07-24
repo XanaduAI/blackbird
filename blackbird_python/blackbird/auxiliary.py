@@ -58,9 +58,6 @@ required by :func:`~._expression`.
 
 """
 
-_FORVAR = []
-
-
 _PARAMS = []
 """ list[Symbol]: list of free parameters in the Blackbird program
 """

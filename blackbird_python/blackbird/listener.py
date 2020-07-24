@@ -358,8 +358,6 @@ class BlackbirdListener(blackbirdListener):
 
         for i, m in enumerate(modes):
             m = _expression(m)
-            if isinstance(m, str):
-                m = _VAR.get(m.strip(), None)
 
             if isinstance(m, (int, np.integer)):
                 modes[i] = m

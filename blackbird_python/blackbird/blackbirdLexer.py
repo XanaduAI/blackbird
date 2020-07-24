@@ -20,7 +20,7 @@ def serializedATN():
         buf.write("\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:")
         buf.write("\4;\t;\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\3\2\3")
         buf.write("\2\3\3\3\3\3\4\3\4\3\5\3\5\3\6\3\6\3\6\3\7\3\7\3\b\3\b")
-        buf.write("\3\b\3\t\3\t\3\t\3\t\3\n\6\n\u009b\n\n\r\n\16\n\u009c")
+        buf.write("\3\b\3\b\3\t\3\t\3\t\3\n\6\n\u009b\n\n\r\n\16\n\u009c")
         buf.write("\3\13\3\13\3\13\5\13\u00a2\n\13\3\13\3\13\5\13\u00a6\n")
         buf.write("\13\3\13\5\13\u00a9\n\13\3\f\3\f\5\f\u00ad\n\f\3\r\3\r")
         buf.write("\3\r\3\16\3\16\3\17\3\17\3\20\5\20\u00b7\n\20\3\20\3\20")
@@ -68,7 +68,7 @@ def serializedATN():
         buf.write("\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2")
         buf.write("\u0081\3\2\2\2\2\u0083\3\2\2\2\3\u0085\3\2\2\2\5\u0087")
         buf.write("\3\2\2\2\7\u0089\3\2\2\2\t\u008b\3\2\2\2\13\u008d\3\2")
-        buf.write("\2\2\r\u0090\3\2\2\2\17\u0092\3\2\2\2\21\u0095\3\2\2\2")
+        buf.write("\2\2\r\u0090\3\2\2\2\17\u0092\3\2\2\2\21\u0096\3\2\2\2")
         buf.write("\23\u009a\3\2\2\2\25\u009e\3\2\2\2\27\u00ac\3\2\2\2\31")
         buf.write("\u00ae\3\2\2\2\33\u00b1\3\2\2\2\35\u00b3\3\2\2\2\37\u00b6")
         buf.write("\3\2\2\2!\u00bf\3\2\2\2#\u00d1\3\2\2\2%\u00d3\3\2\2\2")
@@ -89,13 +89,13 @@ def serializedATN():
         buf.write("\2\u0087\u0088\7/\2\2\u0088\6\3\2\2\2\u0089\u008a\7,\2")
         buf.write("\2\u008a\b\3\2\2\2\u008b\u008c\7\61\2\2\u008c\n\3\2\2")
         buf.write("\2\u008d\u008e\7,\2\2\u008e\u008f\7,\2\2\u008f\f\3\2\2")
-        buf.write("\2\u0090\u0091\7?\2\2\u0091\16\3\2\2\2\u0092\u0093\7/")
-        buf.write("\2\2\u0093\u0094\7@\2\2\u0094\20\3\2\2\2\u0095\u0096\7")
-        buf.write("h\2\2\u0096\u0097\7q\2\2\u0097\u0098\7t\2\2\u0098\22\3")
-        buf.write("\2\2\2\u0099\u009b\t\2\2\2\u009a\u0099\3\2\2\2\u009b\u009c")
-        buf.write("\3\2\2\2\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d")
-        buf.write("\24\3\2\2\2\u009e\u00a1\5\23\n\2\u009f\u00a0\7\60\2\2")
-        buf.write("\u00a0\u00a2\5\23\n\2\u00a1\u009f\3\2\2\2\u00a1\u00a2")
+        buf.write("\2\u0090\u0091\7?\2\2\u0091\16\3\2\2\2\u0092\u0093\7h")
+        buf.write("\2\2\u0093\u0094\7q\2\2\u0094\u0095\7t\2\2\u0095\20\3")
+        buf.write("\2\2\2\u0096\u0097\7k\2\2\u0097\u0098\7p\2\2\u0098\22")
+        buf.write("\3\2\2\2\u0099\u009b\t\2\2\2\u009a\u0099\3\2\2\2\u009b")
+        buf.write("\u009c\3\2\2\2\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2")
+        buf.write("\u009d\24\3\2\2\2\u009e\u00a1\5\23\n\2\u009f\u00a0\7\60")
+        buf.write("\2\2\u00a0\u00a2\5\23\n\2\u00a1\u009f\3\2\2\2\u00a1\u00a2")
         buf.write("\3\2\2\2\u00a2\u00a8\3\2\2\2\u00a3\u00a5\t\3\2\2\u00a4")
         buf.write("\u00a6\t\4\2\2\u00a5\u00a4\3\2\2\2\u00a5\u00a6\3\2\2\2")
         buf.write("\u00a6\u00a7\3\2\2\2\u00a7\u00a9\5\23\n\2\u00a8\u00a3")
@@ -218,8 +218,8 @@ class blackbirdLexer(Lexer):
     DIVIDE = 4
     PWR = 5
     ASSIGN = 6
-    SETTO = 7
-    FOR = 8
+    FOR = 7
+    IN = 8
     INT = 9
     FLOAT = 10
     COMPLEX = 11
@@ -279,7 +279,7 @@ class blackbirdLexer(Lexer):
     modeNames = [ "DEFAULT_MODE" ]
 
     literalNames = [ "<INVALID>",
-            "'+'", "'-'", "'*'", "'/'", "'**'", "'='", "'->'", "'for'", 
+            "'+'", "'-'", "'*'", "'/'", "'**'", "'='", "'for'", "'in'", 
             "'pi'", "'name'", "'version'", "'target'", "'include'", "'sqrt'", 
             "'sin'", "'cos'", "'tan'", "'arcsin'", "'arccos'", "'arctan'", 
             "'sinh'", "'cosh'", "'tanh'", "'arcsinh'", "'arccosh'", "'arctanh'", 
@@ -288,8 +288,8 @@ class blackbirdLexer(Lexer):
             "'int'", "'str'", "'bool'", "'par'" ]
 
     symbolicNames = [ "<INVALID>",
-            "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", "ASSIGN", "SETTO", 
-            "FOR", "INT", "FLOAT", "COMPLEX", "STR", "BOOL", "SEQUENCE", 
+            "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", "ASSIGN", "FOR", 
+            "IN", "INT", "FLOAT", "COMPLEX", "STR", "BOOL", "SEQUENCE", 
             "PI", "NEWLINE", "TAB", "SPACE", "PROGNAME", "VERSION", "TARGET", 
             "INCLUDE", "SQRT", "SIN", "COS", "TAN", "ARCSIN", "ARCCOS", 
             "ARCTAN", "SINH", "COSH", "TANH", "ARCSINH", "ARCCOSH", "ARCTANH", 
@@ -299,8 +299,8 @@ class blackbirdLexer(Lexer):
             "TYPE_BOOL", "TYPE_PAR", "REGREF", "MEASURE", "NAME", "DEVICE", 
             "COMMENT", "ANY" ]
 
-    ruleNames = [ "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", "ASSIGN", "SETTO", 
-                  "FOR", "DIGIT", "REAL", "NUMBER", "IMAG", "INT", "FLOAT", 
+    ruleNames = [ "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", "ASSIGN", "FOR", 
+                  "IN", "DIGIT", "REAL", "NUMBER", "IMAG", "INT", "FLOAT", 
                   "COMPLEX", "STR", "BOOL", "SEQUENCE", "PI", "NEWLINE", 
                   "TAB", "SPACE", "PROGNAME", "VERSION", "TARGET", "INCLUDE", 
                   "SQRT", "SIN", "COS", "TAN", "ARCSIN", "ARCCOS", "ARCTAN", 

@@ -335,9 +335,9 @@ class TestParsingQuantumPrograms:
     def test_operation_mode_expressions(self, parse_input_mocked_metadata):
         """Test that expressions inside modes are properly evaluated"""
         bb = parse_input_mocked_metadata(
-            "int m = 4\nMZgate(0, 1) | [m/2, -1+m]"
+            "int m = 4\nMZgate(0, 1) | [m*2, -1+m]"
         )
-        assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [2, 3]}]
+        assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [8, 3]}]
 
     def test_parameter_idx(self, parse_input_mocked_metadata):
         """Test that parameter array indexing works inside arguments"""
@@ -393,6 +393,12 @@ class TestParsingQuantumPrograms:
         p = sym.Symbol("q0")
         assert isinstance(bb.operations[0]["args"][0], RegRefTransform)
         assert bb.operations[0]["args"][0].func_str == str(0.5 * p)
+
+    @pytest.mark.parametrize("m", [[3.5], ["4.2"], [1+2j], [True]])
+    def test_non_integer_mode(self, m, parse_input_mocked_metadata):
+        """Test that an error is used when setting non integer modes"""
+        with pytest.raises(ValueError, match="Mode must be of type int, not"):
+            bb = parse_input_mocked_metadata("MeasureFock() | {}".format(m))
 
 
 class TestParsingMetadata:
@@ -813,7 +819,7 @@ class TestParseFunction:
         assert bb.operations == expected
 
 
-class TestParsingForLoops():
+class TestParsingForLoops:
     """Tests for parsing for-loops correctly"""
 
     def test_for_loop(self, parse_input_mocked_metadata):

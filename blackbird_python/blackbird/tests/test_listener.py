@@ -849,3 +849,10 @@ class TestParsingForLoops:
             {'op': 'MZgate', 'args': [5.0, 2.5], 'kwargs': {}, 'modes': [0, 1]},
             {'op': 'MZgate', 'args': [8.0, 4.0], 'kwargs': {}, 'modes': [0, 1]}
         ]
+
+    def test_wrong_type_error(self, parse_input_mocked_metadata):
+        """Test that error is raised when using mixed types in for-loop list"""
+        with pytest.raises(ValueError, match="invalid value"):
+            bb = parse_input_mocked_metadata(
+                "for int m in [1, 4.2, 9]\n\tMZgate(0, 1) | [0, 1]"
+            )

@@ -454,9 +454,7 @@ class BlackbirdListener(blackbirdListener):
     def exitForloop(self, ctx: blackbirdParser.ForloopContext):
         self._in_for = False
 
-        if ctx.INT():
-            _FORVAR = range(int(ctx.INT().getText()))
-        elif ctx.rangeval():
+        if ctx.rangeval():
             _FORVAR = range(*[
                 int(c.getText()) for c in ctx.rangeval().getChildren()
                 if c.getText() != ":"

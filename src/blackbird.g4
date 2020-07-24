@@ -55,7 +55,7 @@ operation           : NAME;
 
 measure             : MEASURE;
 
-forloop             : FOR (INT | rangeval | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (SETTO vartype NAME)? (NEWLINE TAB statement_list += statement)+;
+forloop             : FOR vartype NAME IN (rangeval | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (NEWLINE TAB statement_list += statement)+;
 
 
 //  function arguments
@@ -107,8 +107,8 @@ TIMES               : '*';
 DIVIDE              : '/';
 PWR                 : '**';
 ASSIGN              : '=';
-SETTO               : '->';
 FOR                 : 'for';
+IN                  : 'in';
 
 // Literals
 fragment DIGIT      : [0-9]+;

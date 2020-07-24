@@ -364,9 +364,9 @@ class BlackbirdListener(blackbirdListener):
                     if isinstance(_VAR[m], int):
                         modes[i] = _VAR[m]
                     else:
-                        raise ValueError(f"Mode must be of type int, not {type(_VAR[m])}")
+                        raise ValueError("Mode must be of type int, not {}".format(type(_VAR[m])))
                 else:
-                    raise ValueError(f"Variable {m} not declared")
+                    raise ValueError("Variable {} not declared".format(m))
 
         self._program._modes |= set(modes)
 
@@ -472,7 +472,7 @@ class BlackbirdListener(blackbirdListener):
                     if new_var != var:
                         raise ValueError
                 except ValueError:
-                    raise ValueError(f"invalid value {var}; must be {ctx.vartype().getText()}")
+                    raise ValueError("invalid value {}; must be {ctx.vartype().getText()}".format(var))
 
                 _VAR[ctx.NAME().getText()] = new_var
 

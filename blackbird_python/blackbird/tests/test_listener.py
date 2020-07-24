@@ -41,28 +41,6 @@ Coherent(alpha, sqrt(pi)) | 0
 MeasureFock() | 0
 """
 
-# test_for = """
-# # a test blackbird script
-# name test_name
-# version 1.0
-# target fock (num_subsystems=1, cutoff_dim=7, shots=10)
-
-# par array phases =
-#     {phase_0}
-#     {phase_1}
-#     {phase_2}
-#     {phase_3}
-#     {phase_4}
-
-# float alpha = 0.3423
-# Coherent(alpha, sqrt(pi)) | 0
-# for 0, 3, 1 ->  int m
-#     MZgate(phases[m], phases[m+1]) | [m, m+1]
-#
-# for 2:20:2 ->  int m
-#     MeasureFock() | m
-# """
-
 
 @pytest.fixture
 def parse_input():
@@ -353,6 +331,40 @@ class TestParsingQuantumPrograms:
         expected = [alpha ** 2, Delta * np.sqrt(np.pi), 0.2 * 10]
 
         assert bb.operations == [{"modes": [0], "op": "Coherent", "args": expected, "kwargs": {}}]
+
+    def test_operation_mode_expressions(self, parse_input_mocked_metadata):
+        """Test that expressions inside modes are properly evaluated"""
+        bb = parse_input_mocked_metadata(
+            "int m = 4\nMZgate(0, 1) | [m/2, -1+m]"
+        )
+        assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [2, 3]}]
+
+    def test_parameter_idx(self, parse_input_mocked_metadata):
+        """Test that parameter array indexing works inside arguments"""
+        bb = parse_input_mocked_metadata(
+            "par array phases =\n\t{phase_0}\n\t{phase_1}\n\nMZgate(phases[0], phases[1]) | [0, 1]"
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [sym.Symbol("phase_0"), sym.Symbol("phase_1")], 'kwargs': {}, 'modes': [0, 1]}
+        ]
+
+    def test_var_idx_in_modes(self, parse_input_mocked_metadata):
+        """Test that array indexing works inside modes"""
+        bb = parse_input_mocked_metadata(
+            "int array vars =\n\t1, 2\n\nMZgate(0, 1) | [vars[0], vars[1]]"
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [1, 2]}
+        ]
+
+    def test_var_idx_in_args(self, parse_input_mocked_metadata):
+        """Test that array indexing works inside arguments"""
+        bb = parse_input_mocked_metadata(
+            "float array vars =\n\t0.5, 1\n\nMZgate(vars[0], vars[1]) | [0, 1]"
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [0.5, 1.0], 'kwargs': {}, 'modes': [0, 1]}
+        ]
 
     def test_operation_arg_array(self, parse_input_mocked_metadata):
         """Test that arrays inside arguments are properly evaluated"""
@@ -799,3 +811,35 @@ class TestParseFunction:
         ]
 
         assert bb.operations == expected
+
+
+class TestParsingForLoops():
+    """Tests for parsing for-loops correctly"""
+
+    def test_for_loop(self, parse_input_mocked_metadata):
+        """Test that a for-loop over a list is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            "for int m in [1, 2, 3]\n\tMeasureFock() | m"
+        )
+        assert np.all(
+            bb._forvar["m"] == np.array([1, 2, 3])
+        )
+        assert bb.operations == [
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [1]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [2]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [3]}
+        ]
+
+    def test_for_range(self, parse_input_mocked_metadata):
+        """Test that a for-loop over a range is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            "for float m in 2:10:3\n\tMZgate(m, m/2) | [0, 1]"
+        )
+        assert np.all(
+            bb._forvar["m"] == np.array([2, 5, 8])
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [2.0, 1.0], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [5.0, 2.5], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [8.0, 4.0], 'kwargs': {}, 'modes': [0, 1]}
+        ]

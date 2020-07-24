@@ -357,17 +357,14 @@ class BlackbirdListener(blackbirdListener):
         modes = [m for m in ctx.arrayrow().getChildren() if m.getText() != ","]
 
         for i, m in enumerate(modes):
-            try:
-                modes[i] = _expression(m)
-            except ValueError:
-                m = m.strip()
-                if m in _VAR.keys():
-                    if isinstance(_VAR[m], int):
-                        modes[i] = _VAR[m]
-                    else:
-                        raise ValueError("Mode must be of type int, not {}".format(type(_VAR[m])))
-                else:
-                    raise ValueError("Variable {} not declared".format(m))
+            m = _expression(m)
+            if isinstance(m, str):
+                m = _VAR.get(m.strip(), None)
+
+            if isinstance(m, (int, np.integer)):
+                modes[i] = m
+            else:
+                raise ValueError("Mode must be of type int, not {}".format(type(m)))
 
         self._program._modes |= set(modes)
 

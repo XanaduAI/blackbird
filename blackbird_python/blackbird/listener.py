@@ -470,7 +470,7 @@ class BlackbirdListener(blackbirdListener):
                     if new_var != var:
                         raise ValueError
                 except ValueError:
-                    raise ValueError("invalid value {}; must be {ctx.vartype().getText()}".format(var))
+                    raise ValueError("invalid value {}; must be {}".format(var, ctx.vartype().getText()))
 
                 _VAR[ctx.NAME().getText()] = new_var
 
@@ -492,6 +492,18 @@ class BlackbirdListener(blackbirdListener):
 
         self._program._parameters.extend(_PARAMS)
         _PARAMS.clear()
+
+    def enterProgram(self, ctx: blackbirdParser.ProgramContext):
+        """Run after entering the program block.
+
+        Args:
+            ctx: program context
+        """
+        _VAR.clear()
+        self._program._var.update(_VAR)
+
+        _PARAMS.clear()
+        self._program._parameters.extend(_PARAMS)
 
 
 def parse(data, listener=BlackbirdListener, cwd=None):

@@ -317,7 +317,7 @@ class BlackbirdListener(blackbirdListener):
 
         try:
             final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
-        except:
+        except TypeError:
             line = ctx.start.line
             col = ctx.start.column
             raise BlackbirdSyntaxError(

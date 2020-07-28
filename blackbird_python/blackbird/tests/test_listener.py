@@ -819,32 +819,38 @@ class TestParseFunction:
 class TestParsingForLoops:
     """Tests for parsing for-loops correctly"""
 
-    def test_for_loop(self, parse_input_mocked_metadata):
+    @pytest.mark.parametrize("modes", [[1, 2, 3], [1+2**2, -1+4, 4/2]])
+    def test_for_loop(self, modes, parse_input_mocked_metadata):
         """Test that a for-loop over a list is parsed correctly"""
         bb = parse_input_mocked_metadata(
-            "for int m in [1, 2, 3]\n\tMeasureFock() | m"
+            "for int m in {}\n\tMeasureFock() | m".format(modes)
         )
         assert np.all(
-            bb._forvar["m"] == np.array([1, 2, 3])
+            bb._forvar["m"] == np.array(modes)
         )
         assert bb.operations == [
-            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [1]},
-            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [2]},
-            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [3]}
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[0]]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[1]]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[2]]}
         ]
 
-    def test_for_range(self, parse_input_mocked_metadata):
+    @pytest.mark.parametrize("rnge", ["2:10:3", "3:6"])
+    def test_for_range(self, rnge, parse_input_mocked_metadata):
         """Test that a for-loop over a range is parsed correctly"""
         bb = parse_input_mocked_metadata(
-            "for float m in 2:10:3\n\tMZgate(m, m/2) | [0, 1]"
+            "for float m in {}\n\tMZgate(m, m/2) | [0, 1]".format(rnge)
         )
-        assert np.all(
-            bb._forvar["m"] == np.array([2, 5, 8])
+        # create a list out of the `rnge` string
+        rnge_list = np.array(
+            range(*np.array(rnge.split(":"), dtype=int)),
+            dtype=float
         )
+
+        assert np.all(bb._forvar["m"] == rnge_list)
         assert bb.operations == [
-            {'op': 'MZgate', 'args': [2.0, 1.0], 'kwargs': {}, 'modes': [0, 1]},
-            {'op': 'MZgate', 'args': [5.0, 2.5], 'kwargs': {}, 'modes': [0, 1]},
-            {'op': 'MZgate', 'args': [8.0, 4.0], 'kwargs': {}, 'modes': [0, 1]}
+            {'op': 'MZgate', 'args': [rnge_list[0], rnge_list[0]/2], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [rnge_list[1], rnge_list[1]/2], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [rnge_list[2], rnge_list[2]/2], 'kwargs': {}, 'modes': [0, 1]}
         ]
 
     def test_wrong_type_error(self, parse_input_mocked_metadata):

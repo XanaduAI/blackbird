@@ -256,7 +256,7 @@ class TestParsingQuantumPrograms:
             {"modes": [0], "op": "Coherent", "args": [], "kwargs": {"alpha": -0.3 + 2j}}
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], ["3", True], [], 0, "1"])
+    @pytest.mark.parametrize("dc", [[1, 3], 0, [1]])
     def test_operation_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with keyword arguments is correctly parsed"""
         bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
@@ -269,6 +269,18 @@ class TestParsingQuantumPrograms:
 
         assert bb.operations == [
             {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {"dark_counts": dc}}
+        ]
+
+    @pytest.mark.parametrize("dc", [[]])
+    def test_operation_empty_kwarglist(self, parse_input_mocked_metadata, dc):
+        """Test that an operation with empty keyword arguments is correctly parsed"""
+        bb = parse_input_mocked_metadata("MeasureFock(dark_counts={}) | [0, 1]\n".format(dc))
+
+        # change element-type to int for comparison
+        dc = [int(i) for i in dc]
+
+        assert bb.operations == [
+            {"modes": [0, 1], "op": "MeasureFock", "args": [], "kwargs": {}}
         ]
 
     def test_operation_multiple_kwarg(self, parse_input_mocked_metadata):
@@ -290,7 +302,7 @@ class TestParsingQuantumPrograms:
             }
         ]
 
-    @pytest.mark.parametrize("dc", [[1, 3], [1], [], 0])
+    @pytest.mark.parametrize("dc", [[1, 3], [1], 0, [True, 0]])
     def test_operation_args_kwarg_kwarglist(self, parse_input_mocked_metadata, dc):
         """Test that an operation with multiple args/kwargs, with lists, is correctly parsed"""
         bb = parse_input_mocked_metadata(
@@ -316,6 +328,42 @@ class TestParsingQuantumPrograms:
         expected = [alpha ** 2, Delta * np.sqrt(np.pi), 0.2 * 10]
 
         assert bb.operations == [{"modes": [0], "op": "Coherent", "args": expected, "kwargs": {}}]
+
+    def test_operation_mode_expressions(self, parse_input_mocked_metadata):
+        """Test that expressions inside modes are properly evaluated"""
+        bb = parse_input_mocked_metadata(
+            "int m = 4\nMZgate(0, 1) | [m*2, -1+m]"
+        )
+        assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [8, 3]}]
+
+    @pytest.mark.parametrize("arr", ["\t{phase_0}\n\t{phase_1}\n", "\t{phase_0}, {phase_1}\n"])
+    def test_parameter_idx(self, arr, parse_input_mocked_metadata):
+        """Test that parameter array indexing works inside arguments"""
+        bb = parse_input_mocked_metadata(
+            "par array phases =\n{}\nMZgate(phases[0], phases[1]) | [0, 1]".format(arr)
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [sym.Symbol("phase_0"), sym.Symbol("phase_1")], 'kwargs': {}, 'modes': [0, 1]}
+        ]
+
+    @pytest.mark.parametrize("arr", ["\t1\n\t2\n\t3\n", "\t1, 2, 3\n", "\t1, 2\n\t3, 4\n"])
+    def test_var_idx_in_modes(self, arr, parse_input_mocked_metadata):
+        """Test that array indexing works inside modes"""
+        bb = parse_input_mocked_metadata(
+            "int array vars =\n{}\nMZgate(0, 1) | [vars[0], vars[1], vars[2]]".format(arr)
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [1, 2, 3]}
+        ]
+
+    def test_var_idx_in_args(self, parse_input_mocked_metadata):
+        """Test that array indexing works inside arguments"""
+        bb = parse_input_mocked_metadata(
+            "float array vars =\n\t0.5, 1\n\nMZgate(vars[0], vars[1]) | [0, 1]"
+        )
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [0.5, 1.0], 'kwargs': {}, 'modes': [0, 1]}
+        ]
 
     def test_operation_arg_array(self, parse_input_mocked_metadata):
         """Test that arrays inside arguments are properly evaluated"""
@@ -344,6 +392,12 @@ class TestParsingQuantumPrograms:
         p = sym.Symbol("q0")
         assert isinstance(bb.operations[0]["args"][0], RegRefTransform)
         assert bb.operations[0]["args"][0].func_str == str(0.5 * p)
+
+    @pytest.mark.parametrize("m", [[3.5], ["4.2"], [1+2j], [True]])
+    def test_non_integer_mode(self, m, parse_input_mocked_metadata):
+        """Test that an error is used when setting non integer modes"""
+        with pytest.raises(ValueError, match="Mode must be of type int, not"):
+            bb = parse_input_mocked_metadata("MeasureFock() | {}".format(m))
 
 
 class TestParsingMetadata:
@@ -762,3 +816,48 @@ class TestParseFunction:
         ]
 
         assert bb.operations == expected
+
+
+class TestParsingForLoops:
+    """Tests for parsing for-loops correctly"""
+
+    @pytest.mark.parametrize("modes", [[1, 2, 3], [1+2**2, -1+4, 4/2]])
+    def test_for_loop(self, modes, parse_input_mocked_metadata):
+        """Test that a for-loop over a list is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            "for int m in {}\n\tMeasureFock() | m".format(modes)
+        )
+        assert np.all(
+            bb._forvar["m"] == np.array(modes)
+        )
+        assert bb.operations == [
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[0]]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[1]]},
+            {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[2]]}
+        ]
+
+    @pytest.mark.parametrize("rnge", ["2:10:3", "3:6"])
+    def test_for_range(self, rnge, parse_input_mocked_metadata):
+        """Test that a for-loop over a range is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            "for float m in {}\n\tMZgate(m, m/2) | [0, 1]".format(rnge)
+        )
+        # create a list out of the `rnge` string
+        rnge_list = np.array(
+            range(*np.array(rnge.split(":"), dtype=int)),
+            dtype=float
+        )
+
+        assert np.all(bb._forvar["m"] == rnge_list)
+        assert bb.operations == [
+            {'op': 'MZgate', 'args': [rnge_list[0], rnge_list[0]/2], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [rnge_list[1], rnge_list[1]/2], 'kwargs': {}, 'modes': [0, 1]},
+            {'op': 'MZgate', 'args': [rnge_list[2], rnge_list[2]/2], 'kwargs': {}, 'modes': [0, 1]}
+        ]
+
+    def test_wrong_type_error(self, parse_input_mocked_metadata):
+        """Test that error is raised when using mixed types in for-loop list"""
+        with pytest.raises(ValueError, match="invalid value"):
+            bb = parse_input_mocked_metadata(
+                "for int m in [1, 4.2, 9]\n\tMZgate(0, 1) | [0, 1]"
+            )

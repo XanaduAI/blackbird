@@ -66,6 +66,7 @@ PYTHON_TYPES = {
     "int": int,
     "str": str,
     "bool": bool,
+    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird types
 to the equivalent Python/NumPy types."""
@@ -77,6 +78,7 @@ NUMPY_TYPES = {
     "int": np.int64,
     "str": np.str,
     "bool": np.bool,
+    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""
@@ -135,6 +137,7 @@ class BlackbirdListener(blackbirdListener):
         self._program = BlackbirdProgram()
         self._includes = {}
         self._cwd = cwd
+        self._in_for = False
 
         if cwd is None:
             # assume the current directory
@@ -314,7 +317,7 @@ class BlackbirdListener(blackbirdListener):
 
         try:
             final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
-        except:
+        except TypeError:
             line = ctx.start.line
             col = ctx.start.column
             raise BlackbirdSyntaxError(
@@ -341,12 +344,26 @@ class BlackbirdListener(blackbirdListener):
         Args:
             ctx: statement context
         """
+        if isinstance(ctx.parentCtx, blackbirdParser.ForloopContext):
+            if self._in_for:
+                return
+
         if ctx.operation():
             op = ctx.operation().getText()
         elif ctx.measure():
             op = ctx.measure().getText()
 
-        modes = [int(i) for i in ctx.modes().getText().split(",")]
+        # get modes; if variables, replace with corresponding values
+        modes = [m for m in ctx.arrayrow().getChildren() if m.getText() != ","]
+
+        for i, m in enumerate(modes):
+            m = _expression(m)
+
+            if isinstance(m, (int, np.integer)):
+                modes[i] = m
+            else:
+                raise ValueError("Mode must be of type int, not {}".format(type(m)))
+
         self._program._modes |= set(modes)
 
         if ctx.arguments():
@@ -427,6 +444,41 @@ class BlackbirdListener(blackbirdListener):
         else:
             self._program._operations.append(operation)
 
+    def enterForloop(self, ctx: blackbirdParser.ForloopContext):
+        self._in_for = True
+
+    def exitForloop(self, ctx: blackbirdParser.ForloopContext):
+        self._in_for = False
+
+        if ctx.rangeval():
+            for_var = range(*[
+                int(c.getText()) for c in ctx.rangeval().getChildren()
+                if c.getText() != ":"
+            ])
+        elif ctx.vallist():
+            for_var = [
+                _expression(c.expression()) for c in ctx.vallist().getChildren()
+                if isinstance(c, blackbirdParser.ValContext)
+            ]
+
+        for var in for_var:
+            if ctx.NAME():
+                try:
+                    new_var = PYTHON_TYPES[ctx.vartype().getText()](var)
+                    if new_var != var:
+                        raise ValueError
+                except ValueError:
+                    raise ValueError("invalid value {}; must be {}".format(var, ctx.vartype().getText()))
+
+                _VAR[ctx.NAME().getText()] = new_var
+
+            for statement in ctx.statement_list:
+                self.exitStatement(statement)
+
+        self._program._forvar[ctx.NAME().getText()] = np.array(for_var)
+        if ctx.NAME():
+            del _VAR[ctx.NAME().getText()]
+
     def exitProgram(self, ctx: blackbirdParser.ProgramContext):
         """Run after exiting the program block.
 
@@ -438,6 +490,18 @@ class BlackbirdListener(blackbirdListener):
 
         self._program._parameters.extend(_PARAMS)
         _PARAMS.clear()
+
+    def enterProgram(self, ctx: blackbirdParser.ProgramContext):
+        """Run after entering the program block.
+
+        Args:
+            ctx: program context
+        """
+        _VAR.clear()
+        self._program._var.update(_VAR)
+
+        _PARAMS.clear()
+        self._program._parameters.extend(_PARAMS)
 
 
 def parse(data, listener=BlackbirdListener, cwd=None):

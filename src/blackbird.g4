@@ -25,10 +25,9 @@ device              : (NAME | DEVICE);
 include             : INCLUDE STR;
 
 
-
 // Variable declaration
 
-program             : (NEWLINE | var_list+=expressionvar | array_list+=arrayvar | statement_list+=statement)*;
+program             : (NEWLINE | for_list += forloop | var_list+=expressionvar | array_list+=arrayvar | statement_list+=statement)*;
 
 expressionvar       : vartype name ASSIGN (expression | nonnumeric);
 
@@ -40,7 +39,7 @@ invalid             : (REGREF | reserved);
 
 reserved            : (PROGNAME | VERSION | TARGET);
 
-vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL);
+vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL|TYPE_PAR);
 
 nonnumeric          : (STR|BOOL);
 
@@ -50,25 +49,26 @@ arrayval            : (TAB row_list+=arrayrow NEWLINE)*;
 
 arrayrow            : expression (COMMA expression)*;
 
-statement           : (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? modes (RBRAC|RSQBRAC)? NEWLINE*;
+statement           : (operation | measure) arguments? APPLY (LBRAC|LSQBRAC)? arrayrow (RBRAC|RSQBRAC)? NEWLINE*;
 
 operation           : NAME;
 
 measure             : MEASURE;
 
+forloop             : FOR vartype NAME IN (rangeval | (LBRAC|LSQBRAC)? vallist (RBRAC|RSQBRAC)?) (NEWLINE TAB statement_list += statement)+;
 
 
 //  function arguments
 
 arguments           : (LBRAC (val_list+=val (COMMA val_list+=val)*)? COMMA? (kwarg_list+=kwarg (COMMA kwarg_list+=kwarg)*)? RBRAC);
 
-kwarg               : NAME ASSIGN (val | vallist);
+kwarg               : NAME ASSIGN (val | LSQBRAC vallist? RSQBRAC);
 
 val                 : (nonnumeric | expression);
 
-vallist             : LSQBRAC (val (COMMA val)*)? RSQBRAC;
+vallist             : val (COMMA val)*;
 
-modes               : INT (COMMA INT)*;
+rangeval            : INT COLON INT (COLON INT)?;
 
 
 
@@ -82,6 +82,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | function LBRAC expression RBRAC           #FunctionLabel
                     | number                                    #NumberLabel
                     | (REGREF | NAME)                           #VariableLabel
+                    | NAME LSQBRAC expression RSQBRAC           #ArrayIdxLabel
                     | LBRACE NAME RBRACE                        #ParameterLabel
                     ;
 
@@ -106,6 +107,8 @@ TIMES               : '*';
 DIVIDE              : '/';
 PWR                 : '**';
 ASSIGN              : '=';
+FOR                 : 'for';
+IN                  : 'in';
 
 // Literals
 fragment DIGIT      : [0-9]+;
@@ -169,6 +172,7 @@ TYPE_COMPLEX        : 'complex';
 TYPE_INT            : 'int';
 TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
+TYPE_PAR            : 'par';
 
 // Variable names
 REGREF              : 'q' DIGIT;

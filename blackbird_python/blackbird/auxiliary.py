@@ -58,7 +58,6 @@ required by :func:`~._expression`.
 
 """
 
-
 _PARAMS = []
 """ list[Symbol]: list of free parameters in the Blackbird program
 """
@@ -203,6 +202,10 @@ def _expression(expr):
             )
 
         return _VAR[expr.getText()]
+
+    if isinstance(expr, blackbirdParser.ArrayIdxLabelContext):
+        inner_expr = _expression(expr.expression())
+        return _VAR[expr.NAME().getText()].flatten()[inner_expr]
 
     if isinstance(expr, blackbirdParser.ParameterLabelContext):
         p = Symbol(expr.NAME().getText())

@@ -47,28 +47,28 @@ the following:
 
 * Case sensitivity.
 
-.. 
+..
 
 * ``#`` for line comments.
 
-.. 
+..
 
 * Newlines indicate the end of a statement.
 
-.. 
+..
 
 * Operators and literals are similar to their Python equivalents.
 
-.. 
+..
 
 * The ``|`` operator is used to apply intrinsic quantum operations to quantum registers.
 
-.. 
+..
 
 * After measurement, quantum modes are automatically and implicitly converted into
   classical registers.
 
-.. 
+..
 
 * The resulting output is implicitly determined by the presence of measurement statements.
 
@@ -82,10 +82,6 @@ a wide array of quantum hardware:
 
 * Statically typed - you must declare the variable type, and variables
   and arguments of conflicting types are **not** automatically cast to the correct type.
-
-.. 
-
-* Array variables may be declared, but Blackbird does not support array manipulation.
 
 
 Metadata
@@ -140,6 +136,7 @@ with the following types supported:
 * ``complex``: ``0+5j``, ``8.1-1j``, ``0.54+0.21j``
 * ``bool``: ``True``, ``False``
 * ``str``: any ASCII string surrounded by double quotation marks, ``"hello world"``
+* ``par``: a variable name surrounded by braces, {parameter_name}
 
 .. note::
 
@@ -148,6 +145,8 @@ with the following types supported:
 
     * When using a complex, you must provide both real and imaginary parts.
       I.e., ``8`` and ``2j`` are not valid complex literals, but ``8+0j`` is.
+
+    * See `Templates`_ for more information on ``par``.
 
 Examples:
 
@@ -167,12 +166,13 @@ Examples:
 
     bool flag = True
     str name = "program1"
+    par name = {parameter_name}
 
 .. warning::
 
-    All variable names are allowed, *except* those consisting of a single 'q' followed
-    by an integer, for example ``q0``, ``q1``, ``q2``, etc. These are reserved for
-    quantum register references.
+    All variable names starting with a letter are allowed, *except* those consisting of a single 'q'
+    followed by an integer, for example ``q0``, ``q1``, ``q2``, etc. These are reserved for quantum
+    register references.
 
 Operators
 ~~~~~~~~~
@@ -185,7 +185,7 @@ Blackbird allows expressions using the following operators:
 * ``/``: division
 * ``**``: right-associative exponentiation.
 
-.. 
+..
     * Blackbird will attempt to dynamically cast variables where it makes sense.
       For example, consider the following:
       .. code-block:: python
@@ -237,12 +237,13 @@ columns separated by commas.
         +0.42259383+0.56368926j, -0.42219920+0.04735544j, -0.18902308-0.01590913j
         -0.02396850+0.64301446j,  0.09918161+0.36797446j,  0.26993055+0.30341975j
 
+Arrays support retrieving values through linear indexing. For example, ``U[4]`` would correspond to
+the fourth value in the above array if flattened, thus returning ``+0.42259383+0.56368926j``.
 
 .. note::
 
-    For additional array validation, you can specify the *shape* of the array using square
-    brackets directly after the variable name (i.e., ``U[3, 3]``)
-    but this is optional.
+    For additional array validation, you can specify the *shape* of the array using square brackets
+    directly after the variable name (i.e., ``U[3, 3]``) but this is optional.
 
 Quantum program
 ---------------
@@ -266,10 +267,10 @@ For example:
     Interferometer(U) | [0, 1, 2, 3]
 
     # Finish with measurements
-    MeasureFock() | 0
+    MeasureFock(dark_counts=[0.1, 0.2]) | [0, 1]
 
-Currently, the device always accepts keyword arguments, and operations always accept
-positional arguments.
+Currently, the device always accepts keyword arguments, and operations accept positional arguments
+and keyword arguments.
 
 To pass measured mode values to successive gate arguments, you may use the reserved
 variables ``qX``, where ``X`` is an integer representing mode ``X``, as parameters:
@@ -288,6 +289,30 @@ as an array:
   they appear in the blackbird program
 
 * each row represents a shot/run
+
+For-loops
+~~~~~~~~~
+
+Similar to Python, for-loops can be declared using the ``for ... in ...`` syntax, followed by lines
+of indented statements. Notice that there is no ``:`` at the end of the for-statement. The for-loop
+variable type must be declared followed by either a list of values, of the specified type, or a
+range using the syntax ``from:to:step``.
+
+For example:
+
+.. code-block:: python
+
+    for int i in [0, 2, 1, 0, 2, 1]
+        MZgate(phases[i], phases[i+1]) | [i, i+1]
+
+where ``phases`` could be an array declare above, or:
+
+.. code-block:: python
+
+    for int m in 2:10:2
+        MeasureX | m
+
+measuring over modes 2, 4, 6 and 8.
 
 Templates
 ---------

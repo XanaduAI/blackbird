@@ -8,7 +8,7 @@ dependencies can be installed via ``pip``:
 
 .. code-block:: console
 
-	$ pip install quantum-blackbird
+    $ pip install quantum-blackbird
 
 
 Alternatively, you can install the latest development version directly
@@ -16,7 +16,7 @@ from GitHub as follows. The Python Blackbird listener requires NumPy and the Pyt
 
 .. code-block:: console
 
-    $ pip install numpy antlr4-python3-runtime>=4.7.1
+    $ pip install numpy antlr4-python3-runtime>=4.8
 
 Once this is installed, simply clone the Blackbird git repository, use pip to install:
 

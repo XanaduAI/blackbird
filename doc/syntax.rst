@@ -83,6 +83,9 @@ a wide array of quantum hardware:
 * Statically typed - you must declare the variable type, and variables
   and arguments of conflicting types are **not** automatically cast to the correct type.
 
+* Array variables may be declared, and individual elements accessed through indexing, but Blackbird
+  does not support array manipulation.
+
 
 Metadata
 --------

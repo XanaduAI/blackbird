@@ -305,7 +305,7 @@ For example:
     for int i in [0, 2, 1, 0, 2, 1]
         MZgate(phases[i], phases[i+1]) | [i, i+1]
 
-where ``phases`` could be an array declare above, or:
+where ``phases`` could be an array declared above, or:
 
 .. code-block:: python
 

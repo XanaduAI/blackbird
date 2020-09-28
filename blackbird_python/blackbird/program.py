@@ -146,7 +146,7 @@ class BlackbirdProgram:
         return self._target
 
     @property
-    def type(self):
+    def programtype(self):
         """Information regarding the type of program that is to be run on the device.
 
         Important keys include:

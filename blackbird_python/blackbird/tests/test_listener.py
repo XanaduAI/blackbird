@@ -435,12 +435,12 @@ class TestParsingMetadata:
     def test_type_name(self, parse_input):
         """Test that device name is extracted"""
         bb = parse_input("name testname\nversion 1.0\ntype TDM")
-        assert bb.type["name"] == "TDM"
+        assert bb.programtype["name"] == "TDM"
 
     def test_type_kwarg(self, parse_input):
         """Test that an device with keyword arguments is correctly parsed"""
         bb = parse_input("name testname\nversion 1.0\ntarget example (6)\ntype example (copies=1000)")
-        assert bb.type["options"] == {"copies": 1000}
+        assert bb.programtype["options"] == {"copies": 1000}
 
     def test_type_arg(self, parse_input):
         """Test that an device with positional arguments raises a warning"""

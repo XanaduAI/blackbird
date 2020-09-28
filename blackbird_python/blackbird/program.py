@@ -98,6 +98,7 @@ class BlackbirdProgram:
         self._name = name
         self._version = version
         self._target = {"name": None, "options": dict()}
+        self._type = {"name": None, "options": dict()}
         self._operations = []
         self._parameters = []
 
@@ -143,6 +144,12 @@ class BlackbirdProgram:
             dict[str->[str, dict]]: target information
         """
         return self._target
+
+    @property
+    def type(self):
+        """
+        """
+        return self._type
 
     @property
     def operations(self):

@@ -35,7 +35,6 @@ test_file = """
 name test_name
 version 1.0
 target fock (num_subsystems=1, cutoff_dim=7, shots=10)
-type TDM (copies=1000)
 
 float alpha = 0.3423
 Coherent(alpha, sqrt(pi)) | 0

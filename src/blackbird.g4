@@ -8,7 +8,7 @@ start               : NEWLINE* metadatablock NEWLINE* program NEWLINE* EOF;
 
 
 // Metadata
-metadatablock       : declarename NEWLINE+ version NEWLINE+ target? (NEWLINE | include_list+=include)*;
+metadatablock       : declarename NEWLINE+ version (NEWLINE+ target)? (NEWLINE+ declaretype)? (NEWLINE | include_list+=include)*;
 
 declarename         : PROGNAME programname;
 
@@ -21,6 +21,10 @@ versionnumber       : FLOAT;
 target              : TARGET device arguments?;
 
 device              : (NAME | DEVICE);
+
+declaretype         : PROGTYPE programtype arguments?;
+
+programtype         : NAME;
 
 include             : INCLUDE STR;
 
@@ -37,7 +41,7 @@ name                : (invalid | NAME);
 
 invalid             : (REGREF | reserved);
 
-reserved            : (PROGNAME | VERSION | TARGET);
+reserved            : (PROGNAME | VERSION | TARGET | PROGTYPE);
 
 vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL|TYPE_PAR);
 
@@ -133,6 +137,7 @@ SPACE               : [ \t]+ -> skip;
 PROGNAME            : 'name';
 VERSION             : 'version';
 TARGET              : 'target';
+PROGTYPE            : 'type';
 INCLUDE             : 'include';
 
 // Functions

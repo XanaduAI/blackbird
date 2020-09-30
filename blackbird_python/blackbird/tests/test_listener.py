@@ -336,15 +336,6 @@ class TestParsingQuantumPrograms:
         )
         assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [8, 3]}]
 
-    @pytest.mark.parametrize("arr", ["\t{phase_0}\n\t{phase_1}\n", "\t{phase_0}, {phase_1}\n"])
-    def test_parameter_idx(self, arr, parse_input_mocked_metadata):
-        """Test that parameter array indexing works inside arguments"""
-        bb = parse_input_mocked_metadata(
-            "par array phases =\n{}\nMZgate(phases[0], phases[1]) | [0, 1]".format(arr)
-        )
-        assert bb.operations == [
-            {'op': 'MZgate', 'args': [sym.Symbol("phase_0"), sym.Symbol("phase_1")], 'kwargs': {}, 'modes': [0, 1]}
-        ]
 
     @pytest.mark.parametrize("arr", ["\t1\n\t2\n\t3\n", "\t1, 2, 3\n", "\t1, 2\n\t3, 4\n"])
     def test_var_idx_in_modes(self, arr, parse_input_mocked_metadata):

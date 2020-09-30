@@ -1,17 +1,13 @@
-# Generated from src/blackbird.g4 by ANTLR 4.8
+# Generated from src/blackbird.g4 by ANTLR 4.7.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
+from typing.io import TextIO
 import sys
-if sys.version_info[1] > 5:
-	from typing import TextIO
-else:
-	from typing.io import TextIO
-
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3?")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3>")
         buf.write("\u0157\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
@@ -47,9 +43,9 @@ def serializedATN():
         buf.write("\3\37\3\37\3\37\3\37\5\37\u0143\n\37\3\37\3\37\3\37\3")
         buf.write("\37\3\37\3\37\3\37\3\37\3\37\7\37\u014e\n\37\f\37\16\37")
         buf.write("\u0151\13\37\3 \3 \3!\3!\3!\2\3<\"\2\4\6\b\n\f\16\20\22")
-        buf.write("\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@\2\r\3\2<")
-        buf.write("=\3\2\25\27\3\2\639\3\2\16\17\4\2,,..\4\2--//\3\2\3\4")
-        buf.write("\4\2::<<\3\2\5\6\4\2\13\r\21\21\3\2\31\'\2\u0167\2E\3")
+        buf.write("\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@\2\r\3\2;")
+        buf.write("<\3\2\25\27\3\2\638\3\2\16\17\4\2,,..\4\2--//\3\2\3\4")
+        buf.write("\4\299;;\3\2\5\6\4\2\13\r\21\21\3\2\31\'\2\u0167\2E\3")
         buf.write("\2\2\2\4X\3\2\2\2\6n\3\2\2\2\bq\3\2\2\2\ns\3\2\2\2\fv")
         buf.write("\3\2\2\2\16x\3\2\2\2\20}\3\2\2\2\22\177\3\2\2\2\24\u0089")
         buf.write("\3\2\2\2\26\u008c\3\2\2\2\30\u0093\3\2\2\2\32\u00a2\3")
@@ -69,7 +65,7 @@ def serializedATN():
         buf.write("ce\3\2\2\2df\5\16\b\2ed\3\2\2\2ef\3\2\2\2fk\3\2\2\2gj")
         buf.write("\7\22\2\2hj\5\22\n\2ig\3\2\2\2ih\3\2\2\2jm\3\2\2\2ki\3")
         buf.write("\2\2\2kl\3\2\2\2l\5\3\2\2\2mk\3\2\2\2no\7\25\2\2op\5\b")
-        buf.write("\5\2p\7\3\2\2\2qr\7<\2\2r\t\3\2\2\2st\7\26\2\2tu\5\f\7")
+        buf.write("\5\2p\7\3\2\2\2qr\7;\2\2r\t\3\2\2\2st\7\26\2\2tu\5\f\7")
         buf.write("\2u\13\3\2\2\2vw\7\f\2\2w\r\3\2\2\2xy\7\27\2\2y{\5\20")
         buf.write("\t\2z|\5\62\32\2{z\3\2\2\2{|\3\2\2\2|\17\3\2\2\2}~\t\2")
         buf.write("\2\2~\21\3\2\2\2\177\u0080\7\30\2\2\u0080\u0081\7\16\2")
@@ -87,8 +83,8 @@ def serializedATN():
         buf.write("\u009b\3\2\2\2\u009a\u0096\3\2\2\2\u009a\u009b\3\2\2\2")
         buf.write("\u009b\u009c\3\2\2\2\u009c\u009d\7\b\2\2\u009d\u009e\7")
         buf.write("\22\2\2\u009e\u009f\5&\24\2\u009f\31\3\2\2\2\u00a0\u00a3")
-        buf.write("\5\34\17\2\u00a1\u00a3\7<\2\2\u00a2\u00a0\3\2\2\2\u00a2")
-        buf.write("\u00a1\3\2\2\2\u00a3\33\3\2\2\2\u00a4\u00a7\7:\2\2\u00a5")
+        buf.write("\5\34\17\2\u00a1\u00a3\7;\2\2\u00a2\u00a0\3\2\2\2\u00a2")
+        buf.write("\u00a1\3\2\2\2\u00a3\33\3\2\2\2\u00a4\u00a7\79\2\2\u00a5")
         buf.write("\u00a7\5\36\20\2\u00a6\u00a4\3\2\2\2\u00a6\u00a5\3\2\2")
         buf.write("\2\u00a7\35\3\2\2\2\u00a8\u00a9\t\3\2\2\u00a9\37\3\2\2")
         buf.write("\2\u00aa\u00ab\t\4\2\2\u00ab!\3\2\2\2\u00ac\u00ad\t\5")
@@ -112,9 +108,9 @@ def serializedATN():
         buf.write("\2\2\2\u00d5\u00d9\3\2\2\2\u00d6\u00d8\7\22\2\2\u00d7")
         buf.write("\u00d6\3\2\2\2\u00d8\u00db\3\2\2\2\u00d9\u00d7\3\2\2\2")
         buf.write("\u00d9\u00da\3\2\2\2\u00da+\3\2\2\2\u00db\u00d9\3\2\2")
-        buf.write("\2\u00dc\u00dd\7<\2\2\u00dd-\3\2\2\2\u00de\u00df\7;\2")
+        buf.write("\2\u00dc\u00dd\7;\2\2\u00dd-\3\2\2\2\u00de\u00df\7:\2")
         buf.write("\2\u00df/\3\2\2\2\u00e0\u00e1\7\t\2\2\u00e1\u00e2\5 \21")
-        buf.write("\2\u00e2\u00e3\7<\2\2\u00e3\u00ec\7\n\2\2\u00e4\u00ed")
+        buf.write("\2\u00e2\u00e3\7;\2\2\u00e3\u00ec\7\n\2\2\u00e4\u00ed")
         buf.write("\5:\36\2\u00e5\u00e7\t\6\2\2\u00e6\u00e5\3\2\2\2\u00e6")
         buf.write("\u00e7\3\2\2\2\u00e7\u00e8\3\2\2\2\u00e8\u00ea\58\35\2")
         buf.write("\u00e9\u00eb\t\7\2\2\u00ea\u00e9\3\2\2\2\u00ea\u00eb\3")
@@ -134,7 +130,7 @@ def serializedATN():
         buf.write("\u0109\3\2\2\2\u0109\u010c\3\2\2\2\u010a\u0108\3\2\2\2")
         buf.write("\u010b\u0103\3\2\2\2\u010b\u010c\3\2\2\2\u010c\u010d\3")
         buf.write("\2\2\2\u010d\u010e\7-\2\2\u010e\63\3\2\2\2\u010f\u0110")
-        buf.write("\7<\2\2\u0110\u0117\7\b\2\2\u0111\u0118\5\66\34\2\u0112")
+        buf.write("\7;\2\2\u0110\u0117\7\b\2\2\u0111\u0118\5\66\34\2\u0112")
         buf.write("\u0114\7.\2\2\u0113\u0115\58\35\2\u0114\u0113\3\2\2\2")
         buf.write("\u0114\u0115\3\2\2\2\u0115\u0116\3\2\2\2\u0116\u0118\7")
         buf.write("/\2\2\u0117\u0111\3\2\2\2\u0117\u0112\3\2\2\2\u0118\65")
@@ -151,9 +147,9 @@ def serializedATN():
         buf.write("\u0132\t\b\2\2\u0132\u0143\5<\37\13\u0133\u0134\5@!\2")
         buf.write("\u0134\u0135\7,\2\2\u0135\u0136\5<\37\2\u0136\u0137\7")
         buf.write("-\2\2\u0137\u0143\3\2\2\2\u0138\u0143\5> \2\u0139\u0143")
-        buf.write("\t\t\2\2\u013a\u013b\7<\2\2\u013b\u013c\7.\2\2\u013c\u013d")
+        buf.write("\t\t\2\2\u013a\u013b\7;\2\2\u013b\u013c\7.\2\2\u013c\u013d")
         buf.write("\5<\37\2\u013d\u013e\7/\2\2\u013e\u0143\3\2\2\2\u013f")
-        buf.write("\u0140\7\60\2\2\u0140\u0141\7<\2\2\u0141\u0143\7\61\2")
+        buf.write("\u0140\7\60\2\2\u0140\u0141\7;\2\2\u0141\u0143\7\61\2")
         buf.write("\2\u0142\u012c\3\2\2\2\u0142\u0131\3\2\2\2\u0142\u0133")
         buf.write("\3\2\2\2\u0142\u0138\3\2\2\2\u0142\u0139\3\2\2\2\u0142")
         buf.write("\u013a\3\2\2\2\u0142\u013f\3\2\2\2\u0143\u014f\3\2\2\2")
@@ -190,7 +186,7 @@ class blackbirdParser ( Parser ):
                      "'arcsinh'", "'arccosh'", "'arctanh'", "'exp'", "'log'", 
                      "'.'", "','", "':'", "'\"'", "'('", "')'", "'['", "']'", 
                      "'{'", "'}'", "'|'", "'array'", "'float'", "'complex'", 
-                     "'int'", "'str'", "'bool'", "'par'" ]
+                     "'int'", "'str'", "'bool'" ]
 
     symbolicNames = [ "<INVALID>", "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", 
                       "ASSIGN", "FOR", "IN", "INT", "FLOAT", "COMPLEX", 
@@ -201,8 +197,8 @@ class blackbirdParser ( Parser ):
                       "EXP", "LOG", "PERIOD", "COMMA", "COLON", "QUOTE", 
                       "LBRAC", "RBRAC", "LSQBRAC", "RSQBRAC", "LBRACE", 
                       "RBRACE", "APPLY", "TYPE_ARRAY", "TYPE_FLOAT", "TYPE_COMPLEX", 
-                      "TYPE_INT", "TYPE_STR", "TYPE_BOOL", "TYPE_PAR", "REGREF", 
-                      "MEASURE", "NAME", "DEVICE", "COMMENT", "ANY" ]
+                      "TYPE_INT", "TYPE_STR", "TYPE_BOOL", "REGREF", "MEASURE", 
+                      "NAME", "DEVICE", "COMMENT", "ANY" ]
 
     RULE_start = 0
     RULE_metadatablock = 1
@@ -300,20 +296,18 @@ class blackbirdParser ( Parser ):
     TYPE_INT=52
     TYPE_STR=53
     TYPE_BOOL=54
-    TYPE_PAR=55
-    REGREF=56
-    MEASURE=57
-    NAME=58
-    DEVICE=59
-    COMMENT=60
-    ANY=61
+    REGREF=55
+    MEASURE=56
+    NAME=57
+    DEVICE=58
+    COMMENT=59
+    ANY=60
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.8")
+        self.checkVersion("4.7.2")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
-
 
 
 
@@ -405,7 +399,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class MetadatablockContext(ParserRuleContext):
 
@@ -531,7 +524,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class DeclarenameContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -577,7 +569,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ProgramnameContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -616,7 +607,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class VersionContext(ParserRuleContext):
 
@@ -663,7 +653,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class VersionnumberContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -702,7 +691,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class TargetContext(ParserRuleContext):
 
@@ -762,7 +750,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class DeviceContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -811,7 +798,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class IncludeContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -855,7 +841,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ProgramContext(ParserRuleContext):
 
@@ -975,7 +960,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ExpressionvarContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1048,7 +1032,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ArrayvarContext(ParserRuleContext):
 
@@ -1140,7 +1123,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class NameContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1195,7 +1177,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class InvalidContext(ParserRuleContext):
 
@@ -1252,7 +1233,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ReservedContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1304,7 +1284,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class VartypeContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1329,9 +1308,6 @@ class blackbirdParser ( Parser ):
         def TYPE_BOOL(self):
             return self.getToken(blackbirdParser.TYPE_BOOL, 0)
 
-        def TYPE_PAR(self):
-            return self.getToken(blackbirdParser.TYPE_PAR, 0)
-
         def getRuleIndex(self):
             return blackbirdParser.RULE_vartype
 
@@ -1355,7 +1331,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 168
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.TYPE_ARRAY) | (1 << blackbirdParser.TYPE_FLOAT) | (1 << blackbirdParser.TYPE_COMPLEX) | (1 << blackbirdParser.TYPE_INT) | (1 << blackbirdParser.TYPE_STR) | (1 << blackbirdParser.TYPE_BOOL) | (1 << blackbirdParser.TYPE_PAR))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.TYPE_ARRAY) | (1 << blackbirdParser.TYPE_FLOAT) | (1 << blackbirdParser.TYPE_COMPLEX) | (1 << blackbirdParser.TYPE_INT) | (1 << blackbirdParser.TYPE_STR) | (1 << blackbirdParser.TYPE_BOOL))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1367,7 +1343,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class NonnumericContext(ParserRuleContext):
 
@@ -1416,7 +1391,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ShapeContext(ParserRuleContext):
 
@@ -1478,7 +1452,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ArrayvalContext(ParserRuleContext):
 
@@ -1551,7 +1524,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ArrayrowContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1613,7 +1585,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class StatementContext(ParserRuleContext):
 
@@ -1750,7 +1721,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class OperationContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1790,7 +1760,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class MeasureContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1829,7 +1798,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ForloopContext(ParserRuleContext):
 
@@ -1987,7 +1955,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ArgumentsContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2110,7 +2077,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class KwargContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2194,7 +2160,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ValContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2250,7 +2215,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class VallistContext(ParserRuleContext):
 
@@ -2314,7 +2278,6 @@ class blackbirdParser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class RangevalContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2377,7 +2340,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class ExpressionContext(ParserRuleContext):
 
@@ -2806,7 +2768,6 @@ class blackbirdParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
-
     class NumberContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2860,7 +2821,6 @@ class blackbirdParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
 
     class FunctionContext(ParserRuleContext):
 

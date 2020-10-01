@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3@")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3?")
         buf.write("\u016a\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
@@ -44,8 +44,8 @@ def serializedATN():
         buf.write("!\3!\3!\3!\3!\5!\u0156\n!\3!\3!\3!\3!\3!\3!\3!\3!\3!\7")
         buf.write("!\u0161\n!\f!\16!\u0164\13!\3\"\3\"\3#\3#\3#\2\3@$\2\4")
         buf.write("\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64")
-        buf.write("\668:<>@BD\2\r\3\2=>\3\2\25\30\3\2\64:\3\2\16\17\4\2-")
-        buf.write("-//\4\2..\60\60\3\2\3\4\4\2;;==\3\2\5\6\4\2\13\r\21\21")
+        buf.write("\668:<>@BD\2\r\3\2<=\3\2\25\30\3\2\649\3\2\16\17\4\2-")
+        buf.write("-//\4\2..\60\60\3\2\3\4\4\2::<<\3\2\5\6\4\2\13\r\21\21")
         buf.write("\3\2\32(\2\u017b\2I\3\2\2\2\4\\\3\2\2\2\6z\3\2\2\2\b}")
         buf.write("\3\2\2\2\n\177\3\2\2\2\f\u0082\3\2\2\2\16\u0084\3\2\2")
         buf.write("\2\20\u0089\3\2\2\2\22\u008b\3\2\2\2\24\u0090\3\2\2\2")
@@ -68,14 +68,14 @@ def serializedATN():
         buf.write("\2no\3\2\2\2op\3\2\2\2pr\5\22\n\2ql\3\2\2\2qr\3\2\2\2")
         buf.write("rw\3\2\2\2sv\7\22\2\2tv\5\26\f\2us\3\2\2\2ut\3\2\2\2v")
         buf.write("y\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\5\3\2\2\2yw\3\2\2\2z{\7")
-        buf.write("\25\2\2{|\5\b\5\2|\7\3\2\2\2}~\7=\2\2~\t\3\2\2\2\177\u0080")
+        buf.write("\25\2\2{|\5\b\5\2|\7\3\2\2\2}~\7<\2\2~\t\3\2\2\2\177\u0080")
         buf.write("\7\26\2\2\u0080\u0081\5\f\7\2\u0081\13\3\2\2\2\u0082\u0083")
         buf.write("\7\f\2\2\u0083\r\3\2\2\2\u0084\u0085\7\27\2\2\u0085\u0087")
         buf.write("\5\20\t\2\u0086\u0088\5\66\34\2\u0087\u0086\3\2\2\2\u0087")
         buf.write("\u0088\3\2\2\2\u0088\17\3\2\2\2\u0089\u008a\t\2\2\2\u008a")
         buf.write("\21\3\2\2\2\u008b\u008c\7\30\2\2\u008c\u008e\5\24\13\2")
         buf.write("\u008d\u008f\5\66\34\2\u008e\u008d\3\2\2\2\u008e\u008f")
-        buf.write("\3\2\2\2\u008f\23\3\2\2\2\u0090\u0091\7=\2\2\u0091\25")
+        buf.write("\3\2\2\2\u008f\23\3\2\2\2\u0090\u0091\7<\2\2\u0091\25")
         buf.write("\3\2\2\2\u0092\u0093\7\31\2\2\u0093\u0094\7\16\2\2\u0094")
         buf.write("\27\3\2\2\2\u0095\u009b\7\22\2\2\u0096\u009b\5\64\33\2")
         buf.write("\u0097\u009b\5\32\16\2\u0098\u009b\5\34\17\2\u0099\u009b")
@@ -91,8 +91,8 @@ def serializedATN():
         buf.write("\3\2\2\2\u00ad\u00a9\3\2\2\2\u00ad\u00ae\3\2\2\2\u00ae")
         buf.write("\u00af\3\2\2\2\u00af\u00b0\7\b\2\2\u00b0\u00b1\7\22\2")
         buf.write("\2\u00b1\u00b2\5*\26\2\u00b2\35\3\2\2\2\u00b3\u00b6\5")
-        buf.write(" \21\2\u00b4\u00b6\7=\2\2\u00b5\u00b3\3\2\2\2\u00b5\u00b4")
-        buf.write("\3\2\2\2\u00b6\37\3\2\2\2\u00b7\u00ba\7;\2\2\u00b8\u00ba")
+        buf.write(" \21\2\u00b4\u00b6\7<\2\2\u00b5\u00b3\3\2\2\2\u00b5\u00b4")
+        buf.write("\3\2\2\2\u00b6\37\3\2\2\2\u00b7\u00ba\7:\2\2\u00b8\u00ba")
         buf.write("\5\"\22\2\u00b9\u00b7\3\2\2\2\u00b9\u00b8\3\2\2\2\u00ba")
         buf.write("!\3\2\2\2\u00bb\u00bc\t\3\2\2\u00bc#\3\2\2\2\u00bd\u00be")
         buf.write("\t\4\2\2\u00be%\3\2\2\2\u00bf\u00c0\t\5\2\2\u00c0\'\3")
@@ -115,10 +115,10 @@ def serializedATN():
         buf.write("\u00e7\u00e6\3\2\2\2\u00e7\u00e8\3\2\2\2\u00e8\u00ec\3")
         buf.write("\2\2\2\u00e9\u00eb\7\22\2\2\u00ea\u00e9\3\2\2\2\u00eb")
         buf.write("\u00ee\3\2\2\2\u00ec\u00ea\3\2\2\2\u00ec\u00ed\3\2\2\2")
-        buf.write("\u00ed/\3\2\2\2\u00ee\u00ec\3\2\2\2\u00ef\u00f0\7=\2\2")
-        buf.write("\u00f0\61\3\2\2\2\u00f1\u00f2\7<\2\2\u00f2\63\3\2\2\2")
+        buf.write("\u00ed/\3\2\2\2\u00ee\u00ec\3\2\2\2\u00ef\u00f0\7<\2\2")
+        buf.write("\u00f0\61\3\2\2\2\u00f1\u00f2\7;\2\2\u00f2\63\3\2\2\2")
         buf.write("\u00f3\u00f4\7\t\2\2\u00f4\u00f5\5$\23\2\u00f5\u00f6\7")
-        buf.write("=\2\2\u00f6\u00ff\7\n\2\2\u00f7\u0100\5> \2\u00f8\u00fa")
+        buf.write("<\2\2\u00f6\u00ff\7\n\2\2\u00f7\u0100\5> \2\u00f8\u00fa")
         buf.write("\t\6\2\2\u00f9\u00f8\3\2\2\2\u00f9\u00fa\3\2\2\2\u00fa")
         buf.write("\u00fb\3\2\2\2\u00fb\u00fd\5<\37\2\u00fc\u00fe\t\7\2\2")
         buf.write("\u00fd\u00fc\3\2\2\2\u00fd\u00fe\3\2\2\2\u00fe\u0100\3")
@@ -137,7 +137,7 @@ def serializedATN():
         buf.write("\2\2\2\u011b\u0119\3\2\2\2\u011b\u011c\3\2\2\2\u011c\u011f")
         buf.write("\3\2\2\2\u011d\u011b\3\2\2\2\u011e\u0116\3\2\2\2\u011e")
         buf.write("\u011f\3\2\2\2\u011f\u0120\3\2\2\2\u0120\u0121\7.\2\2")
-        buf.write("\u0121\67\3\2\2\2\u0122\u0123\7=\2\2\u0123\u012a\7\b\2")
+        buf.write("\u0121\67\3\2\2\2\u0122\u0123\7<\2\2\u0123\u012a\7\b\2")
         buf.write("\2\u0124\u012b\5:\36\2\u0125\u0127\7/\2\2\u0126\u0128")
         buf.write("\5<\37\2\u0127\u0126\3\2\2\2\u0127\u0128\3\2\2\2\u0128")
         buf.write("\u0129\3\2\2\2\u0129\u012b\7\60\2\2\u012a\u0124\3\2\2")
@@ -154,9 +154,9 @@ def serializedATN():
         buf.write("\u0156\3\2\2\2\u0144\u0145\t\b\2\2\u0145\u0156\5@!\13")
         buf.write("\u0146\u0147\5D#\2\u0147\u0148\7-\2\2\u0148\u0149\5@!")
         buf.write("\2\u0149\u014a\7.\2\2\u014a\u0156\3\2\2\2\u014b\u0156")
-        buf.write("\5B\"\2\u014c\u0156\t\t\2\2\u014d\u014e\7=\2\2\u014e\u014f")
+        buf.write("\5B\"\2\u014c\u0156\t\t\2\2\u014d\u014e\7<\2\2\u014e\u014f")
         buf.write("\7/\2\2\u014f\u0150\5@!\2\u0150\u0151\7\60\2\2\u0151\u0156")
-        buf.write("\3\2\2\2\u0152\u0153\7\61\2\2\u0153\u0154\7=\2\2\u0154")
+        buf.write("\3\2\2\2\u0152\u0153\7\61\2\2\u0153\u0154\7<\2\2\u0154")
         buf.write("\u0156\7\62\2\2\u0155\u013f\3\2\2\2\u0155\u0144\3\2\2")
         buf.write("\2\u0155\u0146\3\2\2\2\u0155\u014b\3\2\2\2\u0155\u014c")
         buf.write("\3\2\2\2\u0155\u014d\3\2\2\2\u0155\u0152\3\2\2\2\u0156")
@@ -194,8 +194,7 @@ class blackbirdParser ( Parser ):
                      "'cosh'", "'tanh'", "'arcsinh'", "'arccosh'", "'arctanh'", 
                      "'exp'", "'log'", "'.'", "','", "':'", "'\"'", "'('", 
                      "')'", "'['", "']'", "'{'", "'}'", "'|'", "'array'", 
-                     "'float'", "'complex'", "'int'", "'str'", "'bool'", 
-                     "'par'" ]
+                     "'float'", "'complex'", "'int'", "'str'", "'bool'" ]
 
     symbolicNames = [ "<INVALID>", "PLUS", "MINUS", "TIMES", "DIVIDE", "PWR", 
                       "ASSIGN", "FOR", "IN", "INT", "FLOAT", "COMPLEX", 
@@ -207,8 +206,8 @@ class blackbirdParser ( Parser ):
                       "COLON", "QUOTE", "LBRAC", "RBRAC", "LSQBRAC", "RSQBRAC", 
                       "LBRACE", "RBRACE", "APPLY", "TYPE_ARRAY", "TYPE_FLOAT", 
                       "TYPE_COMPLEX", "TYPE_INT", "TYPE_STR", "TYPE_BOOL", 
-                      "TYPE_PAR", "REGREF", "MEASURE", "NAME", "DEVICE", 
-                      "COMMENT", "ANY" ]
+                      "REGREF", "MEASURE", "NAME", "DEVICE", "COMMENT", 
+                      "ANY" ]
 
     RULE_start = 0
     RULE_metadatablock = 1
@@ -310,13 +309,12 @@ class blackbirdParser ( Parser ):
     TYPE_INT=53
     TYPE_STR=54
     TYPE_BOOL=55
-    TYPE_PAR=56
-    REGREF=57
-    MEASURE=58
-    NAME=59
-    DEVICE=60
-    COMMENT=61
-    ANY=62
+    REGREF=56
+    MEASURE=57
+    NAME=58
+    DEVICE=59
+    COMMENT=60
+    ANY=61
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -1445,9 +1443,6 @@ class blackbirdParser ( Parser ):
         def TYPE_BOOL(self):
             return self.getToken(blackbirdParser.TYPE_BOOL, 0)
 
-        def TYPE_PAR(self):
-            return self.getToken(blackbirdParser.TYPE_PAR, 0)
-
         def getRuleIndex(self):
             return blackbirdParser.RULE_vartype
 
@@ -1471,7 +1466,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 187
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.TYPE_ARRAY) | (1 << blackbirdParser.TYPE_FLOAT) | (1 << blackbirdParser.TYPE_COMPLEX) | (1 << blackbirdParser.TYPE_INT) | (1 << blackbirdParser.TYPE_STR) | (1 << blackbirdParser.TYPE_BOOL) | (1 << blackbirdParser.TYPE_PAR))) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.TYPE_ARRAY) | (1 << blackbirdParser.TYPE_FLOAT) | (1 << blackbirdParser.TYPE_COMPLEX) | (1 << blackbirdParser.TYPE_INT) | (1 << blackbirdParser.TYPE_STR) | (1 << blackbirdParser.TYPE_BOOL))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)

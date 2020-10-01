@@ -43,7 +43,7 @@ invalid             : (REGREF | reserved);
 
 reserved            : (PROGNAME | VERSION | TARGET | PROGTYPE);
 
-vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL|TYPE_PAR);
+vartype             : (TYPE_ARRAY|TYPE_FLOAT|TYPE_COMPLEX|TYPE_INT|TYPE_STR|TYPE_BOOL);
 
 nonnumeric          : (STR|BOOL);
 
@@ -177,7 +177,6 @@ TYPE_COMPLEX        : 'complex';
 TYPE_INT            : 'int';
 TYPE_STR            : 'str';
 TYPE_BOOL           : 'bool';
-TYPE_PAR            : 'par';
 
 // Variable names
 REGREF              : 'q' DIGIT;

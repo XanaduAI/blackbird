@@ -66,7 +66,6 @@ PYTHON_TYPES = {
     "int": int,
     "str": str,
     "bool": bool,
-    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird types
 to the equivalent Python/NumPy types."""
@@ -78,7 +77,6 @@ NUMPY_TYPES = {
     "int": np.int64,
     "str": np.str,
     "bool": np.bool,
-    "par": sym.Symbol,
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""
@@ -187,6 +185,24 @@ class BlackbirdListener(blackbirdListener):
 
         self._program._target["options"] = kwargs
 
+    def exitDeclaretype(self, ctx: blackbirdParser.DeclaretypeContext):
+        self._program._type["name"] = ctx.programtype().getText()
+
+        kwargs = {}
+
+        if ctx.arguments():
+            args, kwargs = _get_arguments(ctx.arguments())
+
+            if args:
+                warnings.warn(
+                    "Only keyword options of the form option=value are"
+                    "supported. All positional arguments without a named option"
+                    "will be ignored.",
+                    SyntaxWarning,
+                )
+
+        self._program._type["options"] = kwargs
+
     def exitInclude(self, ctx: blackbirdParser.IncludeContext):
         """Run after exiting include statement.
 
@@ -260,7 +276,7 @@ class BlackbirdListener(blackbirdListener):
         try:
             # assume all variables are scalar
             final_value = PYTHON_TYPES[vartype](value)
-        except:
+        except TypeError:
             try:
                 # maybe one of the variables was a NumPy array?
                 final_value = NUMPY_TYPES[vartype](value)

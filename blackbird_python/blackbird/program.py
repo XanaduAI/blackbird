@@ -98,6 +98,7 @@ class BlackbirdProgram:
         self._name = name
         self._version = version
         self._target = {"name": None, "options": dict()}
+        self._type = {"name": None, "options": dict()}
         self._operations = []
         self._parameters = []
 
@@ -143,6 +144,21 @@ class BlackbirdProgram:
             dict[str->[str, dict]]: target information
         """
         return self._target
+
+    @property
+    def programtype(self):
+        """Information regarding the type of program that is to be run on the device.
+
+        Important keys include:
+
+        * ``'name'`` (Union[str, None]): the name of the type of program that is to be run on the
+            device (e.g. 'TDM'). If no type is requested, the returned value will be ``None``.
+        * ``'options'`` (dict): a dictionary of keyword arguments for the type (e.g. 'copies')
+
+        Returns:
+            dict[str->[str, dict]]: type information
+        """
+        return self._type
 
     @property
     def operations(self):

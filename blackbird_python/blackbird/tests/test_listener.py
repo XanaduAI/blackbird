@@ -336,16 +336,6 @@ class TestParsingQuantumPrograms:
         )
         assert bb.operations == [{'op': 'MZgate', 'args': [0, 1], 'kwargs': {}, 'modes': [8, 3]}]
 
-    @pytest.mark.parametrize("arr", ["\t{phase_0}\n\t{phase_1}\n", "\t{phase_0}, {phase_1}\n"])
-    def test_parameter_idx(self, arr, parse_input_mocked_metadata):
-        """Test that parameter array indexing works inside arguments"""
-        bb = parse_input_mocked_metadata(
-            "par array phases =\n{}\nMZgate(phases[0], phases[1]) | [0, 1]".format(arr)
-        )
-        assert bb.operations == [
-            {'op': 'MZgate', 'args': [sym.Symbol("phase_0"), sym.Symbol("phase_1")], 'kwargs': {}, 'modes': [0, 1]}
-        ]
-
     @pytest.mark.parametrize("arr", ["\t1\n\t2\n\t3\n", "\t1, 2, 3\n", "\t1, 2\n\t3, 4\n"])
     def test_var_idx_in_modes(self, arr, parse_input_mocked_metadata):
         """Test that array indexing works inside modes"""
@@ -430,6 +420,22 @@ class TestParsingMetadata:
         """Test that an device with positional arguments raises a warning"""
         with pytest.warns(SyntaxWarning, match="only accept keyword options"):
             parse_input("name testname\nversion 1.0\ntarget example (6)")
+
+    def test_type_name(self, parse_input):
+        """Test that device name is extracted"""
+        bb = parse_input("name testname\nversion 1.0\ntype TDM")
+        assert bb.programtype["name"] == "TDM"
+
+    def test_type_kwarg(self, parse_input):
+        """Test that an device with keyword arguments is correctly parsed"""
+        bb = parse_input("name testname\nversion 1.0\ntarget example (6)\ntype example (copies=1000)")
+        assert bb.programtype["options"] == {"copies": 1000}
+
+    def test_type_arg(self, parse_input):
+        """Test that an device with positional arguments raises a warning"""
+        with pytest.warns(SyntaxWarning, match="Only keyword options of the form"):
+            parse_input("name testname\nversion 1.0\ntarget example (6)\ntype example (42)")
+
 
 
 class TestParsingInclude:

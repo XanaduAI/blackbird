@@ -35,7 +35,7 @@ program             : (NEWLINE | for_list += forloop | var_list+=expressionvar |
 
 expressionvar       : vartype name ASSIGN (expression | nonnumeric);
 
-arrayvar            : vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE arrayval;
+arrayvar            : vartype TYPE_ARRAY name (LSQBRAC shape RSQBRAC)? ASSIGN NEWLINE (arrayval | parameter);
 
 name                : (invalid | NAME);
 
@@ -87,8 +87,10 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | number                                    #NumberLabel
                     | (REGREF | NAME)                           #VariableLabel
                     | NAME LSQBRAC expression RSQBRAC           #ArrayIdxLabel
-                    | LBRACE NAME RBRACE                        #ParameterLabel
+                    | parameter                                 #ParameterLabel
                     ;
+
+parameter           : LBRACE NAME RBRACE;
 
 number              : (INT|FLOAT|COMPLEX|PI);
 

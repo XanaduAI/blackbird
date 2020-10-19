@@ -112,9 +112,18 @@ This indicates the device or simulator the Blackbird program targets --- that is
 you are specifying that the contained Blackbird code is compiled for the targeted
 device/simulator.
 
-The target keyword also accepts keyword options, using the syntax
-``(option1=0.32, option2=40)``. For example:
+Furthermore, the program type may be specified via the optional ``type`` keyword:
 
+.. code-block:: python
+
+    type tdm (copies=1000)
+
+where TDM would correspond to running a time-domain multiplexing experiment. If
+the program type metadata is omitted, a default gaussian boson sampling program
+is assumed.
+
+Both the target and the type keywords also accepts keyword options, using the syntax
+``(option1=0.32, option2=40)``. For example ``copies=1000`` above or:
 
 .. code-block:: python
 
@@ -139,7 +148,6 @@ with the following types supported:
 * ``complex``: ``0+5j``, ``8.1-1j``, ``0.54+0.21j``
 * ``bool``: ``True``, ``False``
 * ``str``: any ASCII string surrounded by double quotation marks, ``"hello world"``
-* ``par``: a variable name surrounded by braces, {parameter_name}
 
 .. note::
 
@@ -148,8 +156,6 @@ with the following types supported:
 
     * When using a complex, you must provide both real and imaginary parts.
       I.e., ``8`` and ``2j`` are not valid complex literals, but ``8+0j`` is.
-
-    * See `Templates`_ for more information on ``par``.
 
 Examples:
 
@@ -169,7 +175,6 @@ Examples:
 
     bool flag = True
     str name = "program1"
-    par name = {parameter_name}
 
 .. warning::
 
@@ -297,7 +302,7 @@ For-loops
 ~~~~~~~~~
 
 Similar to Python, for-loops can be declared using the ``for ... in ...`` syntax, followed by lines
-of indented statements. Notice that there is no ``:`` at the end of the for-statement. The for-loop
+of indented statements. Notice that there is no colon (``:``) at the end of the for-statement. The for-loop
 variable type must be declared followed by either a list of values, of the specified type, or a
 range using the syntax ``from:to:step``.
 
@@ -316,6 +321,15 @@ where ``phases`` could be an array declared above, or:
         MeasureX | m
 
 measuring over modes 2, 4, 6 and 8.
+
+.. note::
+
+  Currently, the following are not supported:
+
+  * Nested for-loops; only single for-loops are allowed
+
+  * Looping through arrays, e.g. ``for int i in phases``
+
 
 Templates
 ---------

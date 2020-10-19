@@ -208,7 +208,7 @@ def _expression(expr):
         return _VAR[expr.NAME().getText()].flatten()[inner_expr]
 
     if isinstance(expr, blackbirdParser.ParameterLabelContext):
-        p = Symbol(expr.NAME().getText())
+        p = Symbol(expr.parameter().NAME().getText())
         _PARAMS.append(p)
         return p
 

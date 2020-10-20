@@ -37,6 +37,7 @@ Code details
 ~~~~~~~~~~~~
 """
 import copy
+from typing import Iterable
 
 import numpy as np
 import sympy as sym
@@ -206,9 +207,10 @@ class BlackbirdProgram:
         if not self.parameters:
             raise ValueError("Program is not a template!")
 
-        prog = copy.copy(self)
+        prog = copy.deepcopy(self)
         prog._parameters = [] # pylint: disable=protected-access
 
+        # set values for args and kwargs in operations
         for op in prog._operations: # pylint: disable=protected-access
             if 'args' not in op:
                 continue
@@ -236,6 +238,42 @@ class BlackbirdProgram:
                         raise ValueError("Invalid value for free parameter provided")
 
                     op['kwargs'][k] = func(**vals)
+
+        # set values for variables and arrays
+        for k, v in prog._var.items(): # pylint: disable=protected-access
+            # it can either be an independent parameter
+            if isinstance(v, sym.Expr):
+                par = list(v.free_symbols)
+                func = sym.lambdify(par, v)
+                try:
+                    vals = {str(p): kwargs[str(p)] for p in par}
+                except KeyError:
+                    raise ValueError("Invalid value for free parameter provided")
+
+                for key, val in vals.items():
+                    if isinstance(val, Iterable):
+                        vals[key] = np.array(val)
+                        if not vals[key].ndim == 2:
+                            raise TypeError("Invalid dimension {} for array {}. Must have dimension 2.".format(vals[key].ndim, k))
+
+                prog._var[k] = func(**vals)
+            # or encapsulated in an array
+            elif isinstance(v, np.ndarray):
+                populated_array = copy.deepcopy(v)
+                for i, row in enumerate(v):
+                    for j, col in enumerate(row):
+                        if isinstance(col, sym.Expr):
+                            par = list(col.free_symbols)
+                            func = sym.lambdify(par, col)
+
+                            try:
+                                vals = {str(p): kwargs[str(p)] for p in par}
+                            except KeyError:
+                                raise ValueError("Invalid value for free parameter provided")
+
+                            populated_array[i][j] = func(**vals)
+
+                    prog._var[k] = populated_array
 
         return prog
 

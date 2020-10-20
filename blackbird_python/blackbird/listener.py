@@ -273,18 +273,21 @@ class BlackbirdListener(blackbirdListener):
         elif ctx.nonnumeric():
             value = _literal(ctx.nonnumeric())
 
-        try:
-            # assume all variables are scalar
-            final_value = PYTHON_TYPES[vartype](value)
-        except TypeError:
+        if isinstance(value, sym.Expr):
+            final_value = value
+        else:
             try:
-                # maybe one of the variables was a NumPy array?
-                final_value = NUMPY_TYPES[vartype](value)
-            except:
-                # nope
-                raise TypeError(
-                    "Var {} = {} is not of declared type {}".format(name, value, vartype)
-                ) from None
+                # assume all variables are scalar
+                final_value = PYTHON_TYPES[vartype](value)
+            except TypeError:
+                try:
+                    # maybe one of the variables was a NumPy array?
+                    final_value = NUMPY_TYPES[vartype](value)
+                except:
+                    # nope
+                    raise TypeError(
+                        "Var {} = {} is not of declared type {}".format(name, value, vartype)
+                    ) from None
 
         _VAR[name] = final_value
 
@@ -320,16 +323,21 @@ class BlackbirdListener(blackbirdListener):
             shape = tuple([int(i) for i in ctx.shape().getText().split(",")])
 
         value = []
+        parameters = []
+        rows = 0
         # loop through all children of the 'arrayval' branch
         for i in ctx.arrayval().getChildren():
             # Check if the child is an array row (this is to
             # avoid the '\n' row delimiter)
             if isinstance(i, blackbirdParser.ArrayrowContext):
-                value.append([])
+                rows += 1
                 for j in i.getChildren():
+                    # Check if child is a parameter, and save value and position
+                    if isinstance(j, blackbirdParser.ParameterLabelContext):
+                        parameters.append((len(value), _expression(j)))
                     # Check if the child is not the column delimiter ','
-                    if j.getText() != ",":
-                        value[-1].append(_expression(j))
+                    elif j.getText() != ",":
+                        value.append(_expression(j))
 
         try:
             final_value = np.array(value, dtype=NUMPY_TYPES[vartype])
@@ -342,15 +350,27 @@ class BlackbirdListener(blackbirdListener):
                 )
             )
 
-        if shape is not None:
-            actual_shape = final_value.shape
-            if actual_shape != shape:
-                line = ctx.start.line
-                col = ctx.start.column
-                raise BlackbirdSyntaxError(
-                    "Blackbird SyntaxError (line {}:{}): Array var {} has declared shape {} "
-                    "but actual shape {}".format(line, col, name, shape, actual_shape)
-                )
+        # if any elements are parameters, then change array type to object and
+        # re-insert parameters into array at the correct postion
+        if final_value.size == 0 and len(parameters) == 1:
+            final_value = parameters[0][1]
+        else:
+            if parameters:
+                final_value = final_value.astype(object)
+                for p in parameters:
+                    final_value = np.insert(final_value, p[0], p[1])
+
+            # reshape the array into the correct shape and check with declared shape
+            final_value = final_value.reshape(rows, -1)
+            if shape is not None:
+                actual_shape = final_value.shape
+                if actual_shape != shape:
+                    line = ctx.start.line
+                    col = ctx.start.column
+                    raise BlackbirdSyntaxError(
+                        "Blackbird SyntaxError (line {}:{}): Array var {} has declared shape {} "
+                        "but actual shape {}".format(line, col, name, shape, actual_shape)
+                    )
 
         _VAR[name] = final_value
 

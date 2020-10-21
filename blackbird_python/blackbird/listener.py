@@ -362,7 +362,7 @@ class BlackbirdListener(blackbirdListener):
                     )
                 )
             final_value = np.array([
-                [sym.Symbol(parameters[0][1].name + f"_{i}_{j}") for i in range(shape[0])]
+                [sym.Symbol(parameters[0][1].name + "_{}_{}".format(i, j)) for i in range(shape[0])]
                 for j in range(shape[1])
             ])
             _PARAMS.extend(final_value.flatten())

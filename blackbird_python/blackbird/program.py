@@ -252,7 +252,19 @@ class BlackbirdProgram:
 
         # set values for variables and arrays
         for k, v in prog._var.items(): # pylint: disable=protected-access
-            if isinstance(v, np.ndarray):
+            # it can either be an independent parameter for a variable
+            if isinstance(v, sym.Expr):
+                par = list(v.free_symbols)
+                func = sym.lambdify(par, v)
+
+                try:
+                    vals = {str(p): kwargs[str(p)] for p in par}
+                except KeyError:
+                    raise ValueError("Invalid value for free parameter provided")
+
+                prog._var[k] = func(**vals)
+            # or encapsulated in an array
+            elif isinstance(v, np.ndarray):
                 populated_array = copy.deepcopy(v)
                 for i, row in enumerate(v):
                     for j, col in enumerate(row):

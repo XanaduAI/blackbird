@@ -366,6 +366,7 @@ class BlackbirdListener(blackbirdListener):
                 for j in range(shape[0])
             ])
             _PARAMS.extend(final_value.flatten())
+            _PARAMS.remove(parameters[0][1])
         else:
             # if any elements are parameters, then change array type to object and
             # re-insert parameters into array at the correct postion

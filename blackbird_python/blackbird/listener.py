@@ -350,11 +350,25 @@ class BlackbirdListener(blackbirdListener):
                 )
             )
 
-        # if any elements are parameters, then change array type to object and
-        # re-insert parameters into array at the correct postion
+        # if the array is defined as a single parameter, then split it up into the correct shape and
+        # rename the paramaters to 'paramtername_i_j' for indices i and j in the array
         if final_value.size == 0 and len(parameters) == 1:
-            final_value = parameters[0][1]
+            if not ctx.shape():
+                line = ctx.start.line
+                col = ctx.start.column
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Array template var {} has no shape defined.".format(
+                        line, col, name
+                    )
+                )
+            final_value = np.array([
+                [sym.Symbol(parameters[0][1].name + f"_{i}_{j}") for i in range(shape[0])]
+                for j in range(shape[1])
+            ])
+            _PARAMS.extend(final_value.flatten())
         else:
+            # if any elements are parameters, then change array type to object and
+            # re-insert parameters into array at the correct postion
             if parameters:
                 final_value = final_value.astype(object)
                 for p in parameters:

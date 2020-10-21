@@ -22,6 +22,8 @@ import numpy as np
 import sympy as sym
 
 from blackbird.program import BlackbirdProgram, numpy_to_blackbird
+from blackbird import loads
+from blackbird.error import BlackbirdSyntaxError
 
 
 class TestNumPyToBlackbird:
@@ -403,3 +405,90 @@ class TestBlackbirdSerialize:
             """
         )
         assert res == expected
+
+
+class TestProgramIntegration:
+
+    def test_template_with_arrays(self):
+        """Test templates can be initialized with parameters inside of arrays"""
+        template=dedent(
+            """\
+            name template_tdm
+            version 1.0
+
+            float array one[1, 2] =
+                {p_one}
+
+            float array two[2, 3] =
+                1, {p_two}, 3
+                1, 2, {p_three}
+
+            int four = {p_four}
+
+            for int i in 0:2
+                Sgate(two[i], 0) | 1
+                BSgate(one[i]) | (1, 0)
+                MeasureHomodyne(four) | 0
+            """
+        )
+
+        bb = loads(template)
+
+        assert bb.parameters == {
+            'p_one_0_0', 'p_one_0_1', 'p_two', 'p_three', 'p_four'
+        }
+
+        assert bb.is_template()
+
+        bb2 = bb(p_one=[[11, 12]], p_two=22, p_three=33, p_four=44)
+        assert not bb2.parameters
+        assert not bb2.is_template()
+
+        expected = {'one': np.array([[11, 12]]), 'two': np.array([[1, 22, 3], [1, 2, 33]]), 'four': 44}
+
+        assert np.all(np.all(v == expected[k]) for k, v in bb2._var.items())
+
+        assert bb2.operations[0] == {'op': 'Sgate', 'args': [1, 0], 'kwargs': {}, 'modes': [1]}
+        assert bb2.operations[1] == {'op': 'BSgate', 'args': [11], 'kwargs': {}, 'modes': [1, 0]}
+        assert bb2.operations[2] == {'op': 'MeasureHomodyne', 'args': [44], 'kwargs': {}, 'modes': [0]}
+        assert bb2.operations[3] == {'op': 'Sgate', 'args': [22, 0], 'kwargs': {}, 'modes': [1]}
+        assert bb2.operations[4] == {'op': 'BSgate', 'args': [12], 'kwargs': {}, 'modes': [1, 0]}
+        assert bb2.operations[5] == {'op': 'MeasureHomodyne', 'args': [44], 'kwargs': {}, 'modes': [0]}
+
+
+    def test_invalid_dim_error(self):
+        """Test that an error is raised when assinging a template array with an
+        array with invalid dimension"""
+
+        template=dedent(
+            """\
+            name template_tdm
+            version 1.0
+
+            float array one[1, 2] =
+                {p_one}
+            """
+        )
+
+        bb = loads(template)
+
+        assert bb.is_template()
+
+        with pytest.raises(ValueError, match="Invalid dim for free parameter provided"):
+            bb2 = bb(p_one=[11, 12])
+
+    def test_error_no_shape_in_template_array(self):
+        """Test that an error is raised when omitting shape when defining a template array."""
+
+        template=dedent(
+            """\
+            name template_tdm
+            version 1.0
+
+            float array one =
+                {p_one}
+            """
+        )
+
+        with pytest.raises(BlackbirdSyntaxError, match="has no shape defined"):
+            bb = loads(template)

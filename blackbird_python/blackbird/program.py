@@ -210,6 +210,8 @@ class BlackbirdProgram:
         prog = copy.deepcopy(self)
         prog._parameters = [] # pylint: disable=protected-access
 
+        # extract the values in any kwarg Iterables so that these correspond to
+        # the single valued parsed parameters `parametername_i_j`
         new_kwargs = copy.deepcopy(kwargs)
         for k, v in kwargs.items():
             if isinstance(v, Iterable):
@@ -270,6 +272,8 @@ class BlackbirdProgram:
                 prog._var[k] = func(**vals)
             # or encapsulated in an array
             elif isinstance(v, np.ndarray):
+                # look through the array and, if there are any parameters,
+                # replace them with their corresponding values from kwargs
                 populated_array = copy.deepcopy(v)
                 for i, row in enumerate(v):
                     for j, col in enumerate(row):

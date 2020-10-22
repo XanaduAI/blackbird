@@ -325,7 +325,9 @@ class BlackbirdListener(blackbirdListener):
         value = []
         parameters = []
         array_rows = 0
-        # loop through all children of the 'arrayval' branch
+        # loop through all children of the 'arrayval' branch and create 2 1-d
+        # arrays with values and parameters respectively; insert the paramters
+        # into the value-array after type casting/validation and then reshape
         for i in ctx.arrayval().getChildren():
             # Check if the child is an array row (this is to
             # avoid the '\n' row delimiter)
@@ -361,10 +363,15 @@ class BlackbirdListener(blackbirdListener):
                         line, col, name
                     )
                 )
-            final_value = np.array([
-                [sym.Symbol(parameters[0][1].name + "_{}_{}".format(j, i)) for i in range(shape[1])]
-                for j in range(shape[0])
-            ])
+
+            final_value = []
+            for i in range(shape[0]):
+                final_value.append([])
+                for j in range(shape[1]):
+                    param = sym.Symbol(parameters[0][1].name + "_{}_{}".format(i, j))
+                    final_value[-1].append(param)
+            final_value = np.array(final_value)
+
             _PARAMS.extend(final_value.flatten())
             _PARAMS.remove(parameters[0][1])
         else:
@@ -377,15 +384,14 @@ class BlackbirdListener(blackbirdListener):
 
             # reshape the array into the correct shape and check with declared shape
             final_value = final_value.reshape(array_rows, -1)
-            if shape is not None:
-                actual_shape = final_value.shape
-                if actual_shape != shape:
-                    line = ctx.start.line
-                    col = ctx.start.column
-                    raise BlackbirdSyntaxError(
-                        "Blackbird SyntaxError (line {}:{}): Array var {} has declared shape {} "
-                        "but actual shape {}".format(line, col, name, shape, actual_shape)
-                    )
+            actual_shape = final_value.shape
+            if shape and actual_shape != shape:
+                line = ctx.start.line
+                col = ctx.start.column
+                raise BlackbirdSyntaxError(
+                    "Blackbird SyntaxError (line {}:{}): Array var {} has declared shape {} "
+                    "but actual shape {}".format(line, col, name, shape, actual_shape)
+                )
 
         _VAR[name] = final_value
 

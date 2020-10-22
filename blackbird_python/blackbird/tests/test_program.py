@@ -106,29 +106,35 @@ class TestBlackbirdProgram:
         assert bb2.operations[0]["kwargs"] == {'test': 2**4}
         assert bb.operations[1] == bb2.operations[1]
 
-    def test_invalid_template_call(self):
-        """Test templates raise exception if parameter values not passed"""
+    def test_invalid_template_call_args(self):
+        """Test templates raise exception if parameter operation argument values not passed"""
         bb = BlackbirdProgram(name="prog", version=0.0)
         x = sym.Symbol('x')
         hi = sym.Symbol('hi')
+
+        bb._parameters = [x, hi]
+        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
+
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
+            bb(hi=4)
+
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
+            bb(x=4)
+
+    def test_invalid_template_call_variables(self):
+        """Test templates raise exception if parameter variable values not passed"""
+        bb = BlackbirdProgram(name="prog", version=0.0)
         y = sym.Symbol('y')
         bye = sym.Symbol('bye')
 
-        bb._parameters = [x, hi, y, bye]
-        bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
+        bb._parameters = [y, bye]
         bb._var.update({"y": y, "bye": np.array([[1, 2, bye]])})
 
         with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(hi=4, bye=2, y=2)
+            bb(bye=2)
 
         with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(x=4, bye=2, y=2)
-
-        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(x=4, hi=4, bye=2)
-
-        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(x=4, hi=4, y=2)
+            bb(y=2)
 
     def test_not_template(self):
         """Test initializing a template fails if program is not a template"""
@@ -418,8 +424,10 @@ class TestBlackbirdSerialize:
 
 
 class TestProgramIntegration:
+    """Integration tests for program module"""
 
-    def test_template_with_arrays(self):
+    @pytest.mark.parametrize("iterable", [[[11, 12]], np.array([[11, 12]])])
+    def test_template_with_arrays(self, iterable):
         """Test that templates can be initialized with parameters inside of arrays"""
         template = dedent(
             """\
@@ -450,7 +458,7 @@ class TestProgramIntegration:
 
         assert bb.is_template()
 
-        bb2 = bb(p_one=[[11, 12]], p_two=22, p_three=33, p_four=44)
+        bb2 = bb(p_one=iterable, p_two=22, p_three=33, p_four=44)
         assert not bb2.parameters
         assert not bb2.is_template()
 

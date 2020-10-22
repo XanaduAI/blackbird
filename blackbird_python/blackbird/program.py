@@ -215,10 +215,15 @@ class BlackbirdProgram:
             if isinstance(v, Iterable):
                 if np.ndim(v) != 2:
                     raise ValueError("Invalid dim for free parameter provided. Must have dim 2.")
-                new_kwargs.update(
-                    {k + "_{}_{}".format(i, j): val for i, row in enumerate(v) for j, val in enumerate(row)}
-                )
+
+                added_kwargs = {
+                    k + "_{}_{}".format(i, j): val
+                    for i, row in enumerate(v)
+                    for j, val in enumerate(row)
+                }
+                new_kwargs.update(added_kwargs)
                 del new_kwargs[k]
+
         kwargs = new_kwargs
 
         # set values for args and kwargs in operations

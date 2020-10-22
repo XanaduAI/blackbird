@@ -324,13 +324,13 @@ class BlackbirdListener(blackbirdListener):
 
         value = []
         parameters = []
-        rows = 0
+        array_rows = 0
         # loop through all children of the 'arrayval' branch
         for i in ctx.arrayval().getChildren():
             # Check if the child is an array row (this is to
             # avoid the '\n' row delimiter)
             if isinstance(i, blackbirdParser.ArrayrowContext):
-                rows += 1
+                array_rows += 1
                 for j in i.getChildren():
                     # Check if child is a parameter, and save value and position
                     if isinstance(j, blackbirdParser.ParameterLabelContext):
@@ -376,7 +376,7 @@ class BlackbirdListener(blackbirdListener):
                     final_value = np.insert(final_value, p[0], p[1])
 
             # reshape the array into the correct shape and check with declared shape
-            final_value = final_value.reshape(rows, -1)
+            final_value = final_value.reshape(array_rows, -1)
             if shape is not None:
                 actual_shape = final_value.shape
                 if actual_shape != shape:

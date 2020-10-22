@@ -351,7 +351,7 @@ class BlackbirdListener(blackbirdListener):
             )
 
         # if the array is defined as a single parameter, then split it up into the correct shape and
-        # rename the paramaters to 'paramtername_i_j' for indices i and j in the array
+        # rename the parameters to 'parametername_i_j' for indices i and j in the array
         if final_value.size == 0 and len(parameters) == 1:
             if not ctx.shape():
                 line = ctx.start.line

@@ -111,14 +111,24 @@ class TestBlackbirdProgram:
         bb = BlackbirdProgram(name="prog", version=0.0)
         x = sym.Symbol('x')
         hi = sym.Symbol('hi')
-        bb._parameters = [x, hi]
+        y = sym.Symbol('y')
+        bye = sym.Symbol('bye')
+
+        bb._parameters = [x, hi, y, bye]
         bb._operations.append({"op": "Dgate", "modes": [0], "args": [0.54/x**2], "kwargs": {'test': hi**4}})
+        bb._var.update({"y": y, "bye": np.array([[1, 2, bye]])})
 
         with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(hi=4)
+            bb(hi=4, bye=2, y=2)
 
         with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
-            bb(x=4)
+            bb(x=4, bye=2, y=2)
+
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
+            bb(x=4, hi=4, bye=2)
+
+        with pytest.raises(ValueError, match="Invalid value for free parameter provided"):
+            bb(x=4, hi=4, y=2)
 
     def test_not_template(self):
         """Test initializing a template fails if program is not a template"""
@@ -411,7 +421,7 @@ class TestProgramIntegration:
 
     def test_template_with_arrays(self):
         """Test templates can be initialized with parameters inside of arrays"""
-        template=dedent(
+        template = dedent(
             """\
             name template_tdm
             version 1.0
@@ -460,7 +470,7 @@ class TestProgramIntegration:
         """Test that an error is raised when assinging a template array with an
         array with invalid dimension"""
 
-        template=dedent(
+        template = dedent(
             """\
             name template_tdm
             version 1.0

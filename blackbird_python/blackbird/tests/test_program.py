@@ -420,7 +420,7 @@ class TestBlackbirdSerialize:
 class TestProgramIntegration:
 
     def test_template_with_arrays(self):
-        """Test templates can be initialized with parameters inside of arrays"""
+        """Test that templates can be initialized with parameters inside of arrays"""
         template = dedent(
             """\
             name template_tdm

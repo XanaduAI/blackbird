@@ -274,6 +274,7 @@ class BlackbirdListener(blackbirdListener):
             value = _literal(ctx.nonnumeric())
 
         if isinstance(value, sym.Expr):
+            # If the expression is a parameter, save it in the variables list _VAR
             final_value = value
         else:
             try:

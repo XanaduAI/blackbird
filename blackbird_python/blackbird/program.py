@@ -314,24 +314,46 @@ class BlackbirdProgram:
 
         script = ["name {}".format(self.name), "version {}".format(self.version)]
 
-        if self.target["name"] is not None:
-            array_insert += 1
-            options = ""
+        # add target and type to the script
+        for n, md in [("target", self.target), ("type", self.programtype)]:
+            if md["name"] is not None:
+                array_insert += 1
+                options = ""
 
-            if self.target["options"]:
-                # if the target has options, compile them into
-                # the expected syntax
-                option_strings = [
-                    "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
-                    for k, v in self.target["options"].items()
-                ]
-                options = " ({})".format(", ".join(option_strings))
+                if md["options"]:
+                    # if the target has options, compile them into
+                    # the expected syntax
+                    option_strings = [
+                        "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
+                        for k, v in md["options"].items()
+                    ]
+                    options = " ({})".format(", ".join(option_strings))
 
-            # add target metadata
-            script.append("target {}{}".format(self.target["name"], options))
+                # add target metadata
+                script.append("{} {}{}".format(n, md["name"], options))
 
         # line break
         script.append("")
+
+        # add variables to the script (works for all type of programs, but some
+        # tests would need to be updated; if wanted, simply remove the next line)
+        if self.programtype["name"] == "tdm":
+            from .listener import NUMPY_TYPES  # pylint:disable=import-outside-toplevel
+            inv_type_map = {np.dtype(v).kind: k for k, v in NUMPY_TYPES.items()}
+
+            for k, v in self._var.items():
+                var_type = inv_type_map[np.array(v).dtype.kind]
+                array_string = ""
+                if isinstance(v, np.ndarray):
+                    for row in v:
+                        array_string += "\n\t" + "".join("{}, ".format(i) for i in row)[:-2]
+                    script.append("{} array {} ={}".format(var_type, k, array_string))
+                else:
+                    script.append("{} array {} ={}".format(var_type, k, v))
+
+
+            # line break
+            script.append("")
 
         # loop through each quantum operation
         for op in self.operations:
@@ -363,8 +385,12 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # argument is a string type
-                        args.append('"{}"'.format(v))
+                        # argument is a string type; if a p-type parameter (e.g. p0),
+                        # then simply add it as is
+                        if v[0] == "p":
+                            args.append(v)
+                        else:
+                            args.append('"{}"'.format(v))
 
                     elif isinstance(v, complex):
                         # argument is a complex type
@@ -401,7 +427,12 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        kwargs.append('{}="{}"'.format(k, v))
+                        # kwarg is a string type; if a p-type parameter (e.g. p0),
+                        # then simply add it as is
+                        if v[0] == "p":
+                            kwargs.append("{}={}".format(k, v))
+                        else:
+                            kwargs.append('{}="{}"'.format(k, v))
 
                     elif isinstance(v, complex):
                         kwargs.append(

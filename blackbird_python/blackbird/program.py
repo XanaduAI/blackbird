@@ -275,18 +275,17 @@ class BlackbirdProgram:
                 # look through the array and, if there are any parameters,
                 # replace them with their corresponding values from kwargs
                 populated_array = copy.deepcopy(v)
-                for i, row in enumerate(v):
-                    for j, col in enumerate(row):
-                        if isinstance(col, sym.Expr):
-                            par = list(col.free_symbols)
-                            func = sym.lambdify(par, col)
+                for i, j in np.ndindex(v.shape):
+                    if isinstance(v[i][j], sym.Expr):
+                        par = list(v[i][j].free_symbols)
+                        func = sym.lambdify(par, v[i][j])
 
-                            try:
-                                vals = {str(p): kwargs[str(p)] for p in par}
-                            except KeyError:
-                                raise ValueError("Invalid value for free parameter provided")
+                        try:
+                            vals = {str(p): kwargs[str(p)] for p in par}
+                        except KeyError:
+                            raise ValueError("Invalid value for free parameter provided")
 
-                            populated_array[i][j] = func(**vals)
+                        populated_array[i][j] = func(**vals)
 
                     prog._var[k] = populated_array
 

@@ -345,7 +345,7 @@ class BlackbirdProgram:
                 array_string = ""
                 if isinstance(v, np.ndarray):
                     for row in v:
-                        array_string += "\n\t" + "".join("{}, ".format(i) for i in row)[:-2]
+                        array_string += "\n    " + "".join("{}, ".format(i) for i in row)[:-2]
                     script.append("{} array {} ={}".format(var_type, k, array_string))
                 else:
                     script.append("{} array {} ={}".format(var_type, k, v))

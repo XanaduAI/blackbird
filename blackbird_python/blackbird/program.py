@@ -314,22 +314,22 @@ class BlackbirdProgram:
         script = ["name {}".format(self.name), "version {}".format(self.version)]
 
         # add target and type to the script
-        for n, md in [("target", self.target), ("type", self.programtype)]:
-            if md["name"] is not None:
+        for name, data in [("target", self.target), ("type", self.programtype)]:
+            if data["name"] is not None:
                 array_insert += 1
                 options = ""
 
-                if md["options"]:
+                if data["options"]:
                     # if the target has options, compile them into
                     # the expected syntax
                     option_strings = [
                         "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
-                        for k, v in md["options"].items()
+                        for k, v in data["options"].items()
                     ]
                     options = " ({})".format(", ".join(option_strings))
 
                 # add target metadata
-                script.append("{} {}{}".format(n, md["name"], options))
+                script.append("{} {}{}".format(name, data["name"], options))
 
         # line break
         script.append("")

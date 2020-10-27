@@ -386,7 +386,7 @@ class BlackbirdProgram:
                     elif isinstance(v, str):
                         # argument is a string type; if a p-type parameter (e.g. p0),
                         # then simply add it as is
-                        if v[0] == "p":
+                        if v[0] == "p" and self.programtype["name"] == "tdm":
                             args.append(v)
                         else:
                             args.append('"{}"'.format(v))
@@ -428,7 +428,7 @@ class BlackbirdProgram:
                     elif isinstance(v, str):
                         # kwarg is a string type; if a p-type parameter (e.g. p0),
                         # then simply add it as is
-                        if v[0] == "p":
+                        if v[0] == "p" and self.programtype["name"] == "tdm":
                             kwargs.append("{}={}".format(k, v))
                         else:
                             kwargs.append('{}="{}"'.format(k, v))

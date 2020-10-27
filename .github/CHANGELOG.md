@@ -9,10 +9,7 @@
 <h3>Bug fixes</h3>
 
 * Templates are no longer changed when calling them and replacing the parameters with actual values.
-
-  ```python
-  bb_program = bb_template(**template_variables)
-  ```
+  [(#34)](https://github.com/XanaduAI/blackbird/pull/3)
 
 <h3>Documentation</h3>
 

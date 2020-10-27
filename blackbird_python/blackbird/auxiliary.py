@@ -203,14 +203,14 @@ def _expression(expr):
 
         name = expr.getText()
         # check if expr is a p-type parameter; it must be declared as an array.
-        if name[0] == "p" and name[1:].isdigit():
+        if name in _PARAMS:
             if not isinstance(_VAR[name], np.ndarray):
                 raise TypeError(
                     "Invalid type for parameter. {} must be an array.".format(name)
                 )
             return name
-        else:
-            return _VAR[name]
+
+        return _VAR[name]
 
     if isinstance(expr, blackbirdParser.ArrayIdxLabelContext):
         inner_expr = _expression(expr.expression())
@@ -274,7 +274,6 @@ def _get_arguments(arguments):
     """
     args = []
     kwargs = {}
-
     for arg in arguments.getChildren():
         if isinstance(arg, blackbirdParser.ValContext):
             if arg.expression():

@@ -422,6 +422,42 @@ class TestBlackbirdSerialize:
         )
         assert res == expected
 
+    def test_serialize_tdmprogram(self):
+        """Test serialization of a tdm program"""
+        bb = BlackbirdProgram(name="tdm", version=1.0)
+        bb._type.update(
+            {'name': 'tdm', 'options': {'temporal_modes': 2, 'copies': 3}}
+        )
+        bb._var.update(
+            {'p0': np.array([[1, 2]]), 'p1': np.array([[3, 4]])}
+        )
+        bb._operations.extend(
+            [
+                {'kwargs': {}, 'args': [0.7, 0], 'op': 'Sgate', 'modes': [1]},
+                {'kwargs': {}, 'args': ['p0', 0.0], 'op': 'BSgate', 'modes': [0, 1]},
+                {'kwargs': {'phi': 'p1'}, 'args': [], 'op': 'MeasureHomodyne', 'modes': [0]}
+            ]
+        )
+
+        res = bb.serialize()
+        expected = dedent(
+            """\
+            name tdm
+            version 1.0
+            type tdm (temporal_modes=2, copies=3)
+
+            int array p0 =
+                1, 2
+            int array p1 =
+                3, 4
+
+            Sgate(0.7, 0) | 1
+            BSgate(p0, 0.0) | [0, 1]
+            MeasureHomodyne(phi=p1) | 0
+            """
+        )
+        assert res == expected
+
 
 class TestProgramIntegration:
     """Integration tests for program module"""

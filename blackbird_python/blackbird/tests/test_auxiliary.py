@@ -494,6 +494,16 @@ class TestExpression:
         assert isinstance(_expression(expr), sym.Symbol)
         assert str(_expression(expr)) == "q2"
 
+    def test_p_parameter_type_error(self, parser, ctx, monkeypatch):
+        """Test that an error is raised if the variable does not exist"""
+        expr = blackbirdParser.VariableLabelContext(parser, ctx)
+        expr.getText = lambda: "p0"
+        expr.start = start()
+
+        with monkeypatch.context() as m:
+            m.setattr(blackbird.auxiliary, "_VAR", {"p0": 13})
+            with pytest.raises(TypeError, match="Invalid type for parameter."):
+                _expression(expr)
 
 class TestExpressionArray:
     """Tests for the _expression function involving arrays"""

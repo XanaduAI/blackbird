@@ -334,8 +334,7 @@ class BlackbirdProgram:
         # line break
         script.append("")
 
-        # add variables to the script (works for all type of programs, but some
-        # tests would need to be updated; if wanted, simply remove the next line)
+        # add variables to the script
         if self.programtype["name"] == "tdm":
             from .listener import NUMPY_TYPES  # pylint:disable=import-outside-toplevel
             inv_type_map = {np.dtype(v).kind: k for k, v in NUMPY_TYPES.items()}

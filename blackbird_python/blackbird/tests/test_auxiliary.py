@@ -502,6 +502,7 @@ class TestExpression:
 
         with monkeypatch.context() as m:
             m.setattr(blackbird.auxiliary, "_VAR", {"p0": 13})
+            m.setattr(blackbird.auxiliary, "_PARAMS", ["p0"])
             with pytest.raises(TypeError, match="Invalid type for parameter."):
                 _expression(expr)
 

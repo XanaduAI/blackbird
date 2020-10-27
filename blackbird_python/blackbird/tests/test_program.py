@@ -425,11 +425,11 @@ class TestBlackbirdSerialize:
     def test_serialize_tdmprogram(self):
         """Test serialization of a tdm program"""
         bb = BlackbirdProgram(name="tdm", version=1.0)
-        bb._type.update(
-            {'name': 'tdm', 'options': {'temporal_modes': 2, 'copies': 3}}
+        bb._type = OrderedDict(
+            [('name', 'tdm'), ('options', OrderedDict([('temporal_modes', 2), ('copies', 3)]))]
         )
-        bb._var.update(
-            {'p0': np.array([[1, 2]]), 'p1': np.array([[3, 4]])}
+        bb._var = OrderedDict(
+            [('p0', np.array([[1, 2]])), ('p1', np.array([[3, 4]]))]
         )
         bb._operations.extend(
             [

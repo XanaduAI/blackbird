@@ -342,12 +342,12 @@ class BlackbirdProgram:
             for k, v in self._var.items():
                 var_type = inv_type_map[np.array(v).dtype.kind]
                 array_string = ""
-                if isinstance(v, np.ndarray):
+                if isinstance(v, Iterable):
                     for row in v:
                         array_string += "\n    " + "".join("{}, ".format(i) for i in row)[:-2]
                     script.append("{} array {} ={}".format(var_type, k, array_string))
                 else:
-                    script.append("{} array {} ={}".format(var_type, k, v))
+                    script.append("{} array {} =\n{}".format(var_type, k, v))
 
 
             # line break
@@ -383,9 +383,9 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # argument is a string type; if a p-type parameter (e.g. p0),
+                        # argument is a string type; if a tdm loop parameter ("BS", "M" or "R"),
                         # then simply add it as is
-                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
+                        if self.programtype["name"] == "tdm" and ["BS", "M", "R"]:
                             args.append(v)
                         else:
                             args.append('"{}"'.format(v))
@@ -425,9 +425,9 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # kwarg is a string type; if a p-type parameter (e.g. p0),
+                        # kwarg is a string type; if a tdm loop parameter ("BS", "M" or "R"),
                         # then simply add it as is
-                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
+                        if self.programtype["name"] == "tdm" and v in ["BS", "M", "R"]:
                             kwargs.append("{}={}".format(k, v))
                         else:
                             kwargs.append('{}="{}"'.format(k, v))

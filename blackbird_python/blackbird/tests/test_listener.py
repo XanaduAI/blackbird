@@ -423,8 +423,8 @@ class TestParsingMetadata:
 
     def test_type_name(self, parse_input):
         """Test that device name is extracted"""
-        bb = parse_input("name testname\nversion 1.0\ntype TDM")
-        assert bb.programtype["name"] == "TDM"
+        bb = parse_input("name testname\nversion 1.0\ntype type")
+        assert bb.programtype["name"] == "type"
 
     def test_type_kwarg(self, parse_input):
         """Test that an device with keyword arguments is correctly parsed"""

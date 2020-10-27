@@ -425,17 +425,19 @@ class TestBlackbirdSerialize:
     def test_serialize_tdmprogram(self):
         """Test serialization of a tdm program"""
         bb = BlackbirdProgram(name="tdm", version=1.0)
+
+        # OrderedDict needed for Python 3.5 support
         bb._type = OrderedDict(
             [('name', 'tdm'), ('options', OrderedDict([('temporal_modes', 2), ('copies', 3)]))]
         )
         bb._var = OrderedDict(
-            [('p0', np.array([[1, 2]])), ('p1', np.array([[3, 4]]))]
+            [('BS', np.array([[1, 2]])), ('M', np.array([[3, 4]]))]
         )
         bb._operations.extend(
             [
                 {'kwargs': {}, 'args': [0.7, 0], 'op': 'Sgate', 'modes': [1]},
-                {'kwargs': {}, 'args': ['p0', 0.0], 'op': 'BSgate', 'modes': [0, 1]},
-                {'kwargs': {'phi': 'p1'}, 'args': [], 'op': 'MeasureHomodyne', 'modes': [0]}
+                {'kwargs': {}, 'args': ['BS', 0.0], 'op': 'BSgate', 'modes': [0, 1]},
+                {'kwargs': {'phi': 'M'}, 'args': [], 'op': 'MeasureHomodyne', 'modes': [0]}
             ]
         )
 
@@ -446,14 +448,14 @@ class TestBlackbirdSerialize:
             version 1.0
             type tdm (temporal_modes=2, copies=3)
 
-            int array p0 =
+            int array BS =
                 1, 2
-            int array p1 =
+            int array M =
                 3, 4
 
             Sgate(0.7, 0) | 1
-            BSgate(p0, 0.0) | [0, 1]
-            MeasureHomodyne(phi=p1) | 0
+            BSgate(BS, 0.0) | [0, 1]
+            MeasureHomodyne(phi=M) | 0
             """
         )
         assert res == expected
@@ -467,7 +469,7 @@ class TestProgramIntegration:
         """Test that templates can be initialized with parameters inside of arrays"""
         template = dedent(
             """\
-            name template_tdm
+            name template
             version 1.0
 
             float array one[1, 2] =
@@ -516,7 +518,7 @@ class TestProgramIntegration:
 
         template = dedent(
             """\
-            name template_tdm
+            name template
             version 1.0
 
             float array one[1, 2] =
@@ -536,7 +538,7 @@ class TestProgramIntegration:
 
         template=dedent(
             """\
-            name template_tdm
+            name template
             version 1.0
 
             float array one =

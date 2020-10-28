@@ -377,7 +377,7 @@ class BlackbirdListener(blackbirdListener):
             _PARAMS.remove(parameters[0][1])
         else:
             # if any elements are parameters, then change array type to object and
-            # re-insert parameters into array at the correct postion
+            # re-insert parameters into array at the correct position
             if parameters:
                 final_value = final_value.astype(object)
                 for p in parameters:
@@ -394,6 +394,11 @@ class BlackbirdListener(blackbirdListener):
                     "but actual shape {}".format(line, col, name, shape, actual_shape)
                 )
 
+        # if a p-type parameter is used in a tdm program, it would be considered
+        # a free parameter (stored in `_PAR`) and thus shouldn't be set with a
+        # value during expression evaluation; although, since it always has an
+        # accompanying variable it also needs to be stored in `_VAR` with its
+        # corresponding value
         if self._program._type["name"] == "tdm" and name[0] == "p" and name[1:].isdigit():
             _PARAMS.append(name)
         _VAR[name] = final_value

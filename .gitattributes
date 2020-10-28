@@ -1,0 +1,4 @@
+blackbird_python/blackbird/blackbird.* linguist-generated=true
+blackbird_python/blackbird/blackbirdLexer.* linguist-generated=true
+blackbird_python/blackbird/blackbirdParser.* linguist-generated=true
+blackbird_python/blackbird/blackbirdListener.* linguist-generated=true

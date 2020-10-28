@@ -37,6 +37,7 @@ Code details
 ~~~~~~~~~~~~
 """
 import copy
+from typing import Iterable
 
 import numpy as np
 import sympy as sym
@@ -206,9 +207,28 @@ class BlackbirdProgram:
         if not self.parameters:
             raise ValueError("Program is not a template!")
 
-        prog = copy.copy(self)
+        prog = copy.deepcopy(self)
         prog._parameters = [] # pylint: disable=protected-access
 
+        # extract the values in any kwarg Iterables so that these correspond to
+        # the single valued parsed parameters `parametername_i_j`
+        new_kwargs = copy.deepcopy(kwargs)
+        for k, v in kwargs.items():
+            if isinstance(v, Iterable):
+                if np.ndim(v) != 2:
+                    raise ValueError("Invalid dim for free parameter provided. Must have dim 2.")
+
+                added_kwargs = {
+                    k + "_{}_{}".format(i, j): val
+                    for i, row in enumerate(v)
+                    for j, val in enumerate(row)
+                }
+                new_kwargs.update(added_kwargs)
+                del new_kwargs[k]
+
+        kwargs = new_kwargs
+
+        # set values for args and kwargs in operations
         for op in prog._operations: # pylint: disable=protected-access
             if 'args' not in op:
                 continue
@@ -237,6 +257,38 @@ class BlackbirdProgram:
 
                     op['kwargs'][k] = func(**vals)
 
+        # set values for variables and arrays
+        for k, v in prog._var.items(): # pylint: disable=protected-access
+            # it can either be an independent parameter for a variable
+            if isinstance(v, sym.Expr):
+                par = list(v.free_symbols)
+                func = sym.lambdify(par, v)
+
+                try:
+                    vals = {str(p): kwargs[str(p)] for p in par}
+                except KeyError:
+                    raise ValueError("Invalid value for free parameter provided")
+
+                prog._var[k] = func(**vals)
+            # or encapsulated in an array
+            elif isinstance(v, np.ndarray):
+                # look through the array and, if there are any parameters,
+                # replace them with their corresponding values from kwargs
+                populated_array = copy.deepcopy(v)
+                for i, j in np.ndindex(v.shape):
+                    if isinstance(v[i][j], sym.Expr):
+                        par = list(v[i][j].free_symbols)
+                        func = sym.lambdify(par, v[i][j])
+
+                        try:
+                            vals = {str(p): kwargs[str(p)] for p in par}
+                        except KeyError:
+                            raise ValueError("Invalid value for free parameter provided")
+
+                        populated_array[i][j] = func(**vals)
+
+                    prog._var[k] = populated_array
+
         return prog
 
     def __len__(self):
@@ -261,24 +313,48 @@ class BlackbirdProgram:
 
         script = ["name {}".format(self.name), "version {}".format(self.version)]
 
-        if self.target["name"] is not None:
-            array_insert += 1
-            options = ""
+        # add target and type to the script
+        for name, data in [("target", self.target), ("type", self.programtype)]:
+            if data["name"] is not None:
+                array_insert += 1
+                options = ""
 
-            if self.target["options"]:
-                # if the target has options, compile them into
-                # the expected syntax
-                option_strings = [
-                    "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
-                    for k, v in self.target["options"].items()
-                ]
-                options = " ({})".format(", ".join(option_strings))
+                if data["options"]:
+                    # if the target has options, compile them into
+                    # the expected syntax
+                    option_strings = []
+                    for k, v in data["options"].items():
+                        if not isinstance(v, str):
+                            option_strings.append("{}={}".format(k, v))
+                        else:
+                            option_strings.append('{}="{}"'.format(k, v))
 
-            # add target metadata
-            script.append("target {}{}".format(self.target["name"], options))
+                    options = " ({})".format(", ".join(option_strings))
+
+                # add metadata
+                script.append("{} {}{}".format(name, data["name"], options))
 
         # line break
         script.append("")
+
+        # add variables to the script
+        if self.programtype["name"] == "tdm":
+            from .listener import NUMPY_TYPES  # pylint:disable=import-outside-toplevel
+            inv_type_map = {np.dtype(v).kind: k for k, v in NUMPY_TYPES.items()}
+
+            for k, v in self._var.items():
+                var_type = inv_type_map[np.array(v).dtype.kind]
+                array_string = ""
+                if isinstance(v, Iterable):
+                    for row in v:
+                        array_string += "\n    " + "".join("{}, ".format(i) for i in row)[:-2]
+                    script.append("{} array {} ={}".format(var_type, k, array_string))
+                else:
+                    script.append("{} array {} =\n{}".format(var_type, k, v))
+
+
+            # line break
+            script.append("")
 
         # loop through each quantum operation
         for op in self.operations:
@@ -310,8 +386,12 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # argument is a string type
-                        args.append('"{}"'.format(v))
+                        # argument is a string type; if a p-type parameter (e.g. p0),
+                        # then simply add it as is
+                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
+                            args.append(v)
+                        else:
+                            args.append('"{}"'.format(v))
 
                     elif isinstance(v, complex):
                         # argument is a complex type
@@ -348,7 +428,12 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        kwargs.append('{}="{}"'.format(k, v))
+                        # kwarg is a string type; if a p-type parameter (e.g. p0),
+                        # then simply add it as is
+                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
+                            kwargs.append("{}={}".format(k, v))
+                        else:
+                            kwargs.append('{}="{}"'.format(k, v))
 
                     elif isinstance(v, complex):
                         kwargs.append(

@@ -322,13 +322,16 @@ class BlackbirdProgram:
                 if data["options"]:
                     # if the target has options, compile them into
                     # the expected syntax
-                    option_strings = [
-                        "{}={}".format(k, v) if not isinstance(v, str) else '{}="{}"'.format(k, v)
-                        for k, v in data["options"].items()
-                    ]
+                    option_strings = []
+                    for k, v in data["options"].items():
+                        if not isinstance(v, str):
+                            option_strings.append("{}={}".format(k, v))
+                        else:
+                            option_strings.append('{}="{}"'.format(k, v))
+
                     options = " ({})".format(", ".join(option_strings))
 
-                # add target metadata
+                # add metadata
                 script.append("{} {}{}".format(name, data["name"], options))
 
         # line break

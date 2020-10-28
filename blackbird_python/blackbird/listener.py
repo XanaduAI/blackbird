@@ -394,7 +394,7 @@ class BlackbirdListener(blackbirdListener):
                     "but actual shape {}".format(line, col, name, shape, actual_shape)
                 )
 
-        if self._program._type["name"] == "tdm" and name in ["BS", "M", "R"]:
+        if self._program._type["name"] == "tdm" and name[0] == "p" and name[1:].isdigit():
             _PARAMS.append(name)
         _VAR[name] = final_value
 

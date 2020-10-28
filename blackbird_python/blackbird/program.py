@@ -383,9 +383,9 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # argument is a string type; if a tdm loop parameter ("BS", "M" or "R"),
+                        # argument is a string type; if a p-type parameter (e.g. p0),
                         # then simply add it as is
-                        if self.programtype["name"] == "tdm" and ["BS", "M", "R"]:
+                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
                             args.append(v)
                         else:
                             args.append('"{}"'.format(v))
@@ -425,9 +425,9 @@ class BlackbirdProgram:
                         array_insert += len(bb_array)
 
                     elif isinstance(v, str):
-                        # kwarg is a string type; if a tdm loop parameter ("BS", "M" or "R"),
+                        # kwarg is a string type; if a p-type parameter (e.g. p0),
                         # then simply add it as is
-                        if self.programtype["name"] == "tdm" and v in ["BS", "M", "R"]:
+                        if self.programtype["name"] == "tdm" and v[0] == "p" and v[1:].isdigit():
                             kwargs.append("{}={}".format(k, v))
                         else:
                             kwargs.append('{}="{}"'.format(k, v))

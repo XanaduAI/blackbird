@@ -513,7 +513,7 @@ class TestProgramIntegration:
 
 
     def test_invalid_dim_error(self):
-        """Test that an error is raised when assinging a template array with an
+        """Test that an error is raised when assigning a template array with an
         array with invalid dimension"""
 
         template = dedent(
@@ -532,6 +532,27 @@ class TestProgramIntegration:
 
         with pytest.raises(ValueError, match="Invalid dim for free parameter provided"):
             bb2 = bb(p_one=[11, 12])
+
+    @pytest.mark.parametrize("array", [[[2, 3, 4]], [[5, 6], [3, 4]]])
+    def test_slicing_of_large_arrays(self, array):
+        """Test that assigned template arrays are correctly sliced"""
+
+        template = dedent(
+            """\
+            name template
+            version 1.0
+
+            float array one[1, 2] =
+                {p_one}
+            """
+        )
+
+        bb = loads(template)
+
+        assert bb.is_template()
+
+        bb2 = bb(p_one=array)
+        assert np.all(bb2._var["one"] == np.array(array)[:1, :2])
 
     def test_error_no_shape_in_template_array(self):
         """Test that an error is raised when omitting shape when defining a template array."""

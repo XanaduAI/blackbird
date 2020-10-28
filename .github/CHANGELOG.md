@@ -6,13 +6,14 @@
   a Blackbird template.
   [(#34)](https://github.com/XanaduAI/blackbird/pull/34)
 
-* Time-domain multiplex programs are now supported, using the syntax `type tdm
+* Time-domain multiplexing programs are now supported, using the syntax `type tdm
   (temporal_modes=3, copies=1)`.
   [(#30)](https://github.com/XanaduAI/blackbird/pull/30)
 
 * For-loops are supported inside Blackbird scripts.
+  [(#24)](https://github.com/XanaduAI/blackbird/pull/24)
 
-  They can be defined using ranges (from:to:step)
+  They can be defined using ranges via the syntax `from:to:step`:
 
   ```python
   for float v in 2:10:3
@@ -25,8 +26,6 @@
   for int m in [0, 2, 4]
     MeasureFock() | m
   ```
-
-  [(#24)](https://github.com/XanaduAI/blackbird/pull/24)
 
 * Keyword arguments are supported inside operations; for example,
   `MeasureHomodyne(select=[0, 1])` or `MeasureFock(dark_counts=[1, 0.5, 3])`

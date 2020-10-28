@@ -327,7 +327,7 @@ class BlackbirdListener(blackbirdListener):
         parameters = []
         array_rows = 0
         # loop through all children of the 'arrayval' branch and create 2 1-d
-        # arrays with values and parameters respectively; insert the paramters
+        # arrays with values and parameters respectively; insert the parameters
         # into the value-array after type casting/validation and then reshape
         for i in ctx.arrayval().getChildren():
             # Check if the child is an array row (this is to

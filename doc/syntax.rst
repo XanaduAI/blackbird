@@ -463,9 +463,9 @@ equal to the number of temporal modes, which is defined in the type options. The
 set of gates only needs to be defined one time, accompanied by arrays containing
 the parameters that are to be used in each loop.
 
-TDM programs has reserved words starting with a "p" followed by a number; e.g.,
+TDM programs has reserved words starting with a ``p`` followed by a number; e.g.,
 ``p0``, ``p1``, or ``p42``. These are placeholders for the parameters in their
-corresponding arrays (see example below).
+corresponding arrays (see script example below).
 
 .. code-block:: python
 
@@ -481,3 +481,6 @@ corresponding arrays (see example below).
     Sgate(0.7, 0) | 1
     BSgate(p0, 0.0) | [0, 1]
     MeasureHomodyne(phi=p1) | 0
+
+``copies`` determines how many times the full circuit is run, using the same
+parameter arrays each time.

@@ -1,4 +1,4 @@
-# Release 0.2.5 (development release)
+# Release 0.3.0
 
 <h3>New features since last release</h3>
 
@@ -28,24 +28,25 @@
   ```
 
 * Keyword arguments are supported inside operations; for example,
-  `MeasureHomodyne(select=[0, 1])` or `MeasureFock(dark_counts=[1, 0.5, 3])`
-  [(#22)](https://github.com/XanaduAI/blackbird/pull/23)
+  `MeasureHomodyne(select=[0, 1])` or `MeasureFock(dark_counts=[1, 0.5, 3])`.
+  [(#23)](https://github.com/XanaduAI/blackbird/pull/23)
 
 * Indexing is supported inside both modes and arguments; for example,
   `MZgate(list[2], list[0]) | [list[3], list[1]]))`. All indices allow
   expressions such as `phases[-3 + 2*2]`.
-  [(#22)](https://github.com/XanaduAI/blackbird/pull/23)
-
-<h3>Improvements</h3>
-
-<h3>Breaking changes</h3>
+  [(#23)](https://github.com/XanaduAI/blackbird/pull/23)
 
 <h3>Bug fixes</h3>
 
-* Templates are no longer changed when calling them and replacing the parameters with actual values.
+* Templates are no longer changed when calling them and replacing the parameters
+  with actual values.
   [(#34)](https://github.com/XanaduAI/blackbird/pull/34)
 
 <h3>Documentation</h3>
+
+* TDM programs, for-loops and array indexing is added to the docs, along with
+  other minor updates.
+  [(#28)](https://github.com/XanaduAI/blackbird/pull/28)
 
 This release contains contributions from (in alphabetical order):
 

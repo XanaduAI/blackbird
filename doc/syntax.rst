@@ -116,7 +116,7 @@ Furthermore, the program type may be specified via the optional ``type`` keyword
 
 .. code-block:: python
 
-    type tdm (copies=1000)
+    type tdm (temporal_modes=42, copies=1000)
 
 where TDM would correspond to running a time-domain multiplexing experiment. If
 the program type metadata is omitted, a default gaussian boson sampling program
@@ -437,3 +437,47 @@ We can now call the ``StateTeleportation`` subroutine, with ``sq=1``,
 and apply it to modes 0, 2, and 3.
 
 .. note:: Make sure to avoid **circular includes** when using the ``include`` statement.
+
+
+Program types
+-------------
+
+A program type can be define with the ``type`` keyword in the metadata. The type
+includes support for a specific set of experiments and might differ in the way
+that they are defined inside a Blackbird script. Currently, the only supported
+type is ``tdm``, which stands for time-domain multiplexing, and runs a photonic
+quantum circuit in the time domain encoding.
+
+Time-domain multiplexing (TDM)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To define a TDM program you can declare the ``tdm`` type in the metadata
+together with two different keyword arguments:
+
+.. code-block:: python
+
+    type tdm (temporal_modes=42, copies=1000)
+
+The TDM program requires a set of gates that is looped over a number of times
+equal to the number of temporal modes, which is defined in the type options. The
+set of gates only needs to be defined one time, accompanied by arrays containing
+the parameters that are to be used in each loop.
+
+TDM programs has reserved words starting with a "p" followed by a number; e.g.,
+``p0``, ``p1``, or ``p42``. These are placeholders for the parameters in their
+corresponding arrays (see example below).
+
+.. code-block:: python
+
+    name tdm
+    version 1.0
+    type tdm (temporal_modes=42, copies=3)
+
+    int array p0 =
+        1, 2
+    int array p1 =
+        3, 4
+
+    Sgate(0.7, 0) | 1
+    BSgate(p0, 0.0) | [0, 1]
+    MeasureHomodyne(phi=p1) | 0

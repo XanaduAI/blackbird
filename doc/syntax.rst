@@ -326,9 +326,9 @@ measuring over modes 2, 4, 6 and 8.
 
   Currently, the following are not supported:
 
-  * Nested for-loops; only single for-loops are allowed
+  * Nested for-loops; only single for-loops are allowed,
 
-  * Looping through arrays, e.g. ``for int i in phases``
+  * Looping through arrays, e.g. ``for int i in phases``.
 
 
 Templates

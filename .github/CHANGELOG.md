@@ -29,12 +29,12 @@
 
 * Keyword arguments are supported inside operations; for example,
   `MeasureHomodyne(select=[0, 1])` or `MeasureFock(dark_counts=[1, 0.5, 3])`.
-  [(#22)](https://github.com/XanaduAI/blackbird/pull/23)
+  [(#23)](https://github.com/XanaduAI/blackbird/pull/23)
 
 * Indexing is supported inside both modes and arguments; for example,
   `MZgate(list[2], list[0]) | [list[3], list[1]]))`. All indices allow
   expressions such as `phases[-3 + 2*2]`.
-  [(#22)](https://github.com/XanaduAI/blackbird/pull/23)
+  [(#23)](https://github.com/XanaduAI/blackbird/pull/23)
 
 <h3>Bug fixes</h3>
 

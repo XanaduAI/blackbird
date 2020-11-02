@@ -452,26 +452,32 @@ Time-domain multiplexing (TDM)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To define a TDM program you can declare the ``tdm`` type in the metadata
-together with two different keyword arguments:
+together with two different keyword arguments: ``temporal_modes``, corresponding
+to the number of time-bins used in the experiment, and ``copies`` determining
+how many times the full circuit is run, using the same parameter arrays each
+time.
 
 .. code-block:: python
 
-    type tdm (temporal_modes=42, copies=1000)
+    type tdm (temporal_modes=2, copies=1000)
 
 The TDM program requires a set of gates that is looped over a number of times
 equal to the number of temporal modes, which is defined in the type options. The
 set of gates only needs to be defined one time, accompanied by arrays containing
-the parameters that are to be used in each loop.
+the parameters that are to be used in each loop, also with a length equal to the
+number of temporal modes.
 
-TDM programs has reserved words starting with a ``p`` followed by a number; e.g.,
-``p0``, ``p1``, or ``p42``. These are placeholders for the parameters in their
-corresponding arrays (see script example below).
+TDM programs has reserved keywords starting with a ``p`` followed by a number;
+e.g., ``p0``, ``p1``, or ``p42``. These are placeholders for the parameters in
+their corresponding arrays (see script example below). Using this notation, each
+value in the array is assumed to be the gate parameter value for the temporal
+mode with the same index number.
 
 .. code-block:: python
 
     name tdm
     version 1.0
-    type tdm (temporal_modes=42, copies=3)
+    type tdm (temporal_modes=2, copies=1000)
 
     int array p0 =
         1, 2
@@ -482,5 +488,8 @@ corresponding arrays (see script example below).
     BSgate(p0, 0.0) | [0, 1]
     MeasureHomodyne(phi=p1) | 0
 
-``copies`` determines how many times the full circuit is run, using the same
-parameter arrays each time.
+In the above case, this would mean that ``BSgate`` would use the first value in
+``p0`` for the first temporal mode, and the second value in ``p0`` for the
+second temporal mode. Arrays not following this naming convention would simply
+be passed as they are directly to the gate, i.e. the parameter would be the same
+array for each temporal mode.

@@ -119,7 +119,7 @@ Furthermore, the program type may be specified via the optional ``type`` keyword
     type tdm (temporal_modes=42, copies=1000)
 
 where TDM would correspond to running a time-domain multiplexing experiment. If
-the program type metadata is omitted, a default gaussian boson sampling program
+the program type metadata is omitted, a default Gaussian boson sampling program
 is assumed.
 
 Both the target and the type keywords also accepts keyword options, using the syntax

@@ -8,8 +8,6 @@ matrix:
     after_success: codecov
   - python: 3.6
     dist: xenial
-  - python: 3.5
-    dist: xenial
 env:
   global:
     - COVERALLS_PARALLEL=true

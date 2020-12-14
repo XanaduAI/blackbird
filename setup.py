@@ -19,7 +19,7 @@ from setuptools import setup
 # from sphinx.setup_command import BuildDoc
 
 with open("blackbird_python/blackbird/_version.py") as f:
-	version = f.readlines()[-1].split()[-1].strip("\"'")
+    version = f.readlines()[-1].split()[-1].strip("\"'")
 
 requirements = [
     "numpy>=1.16",
@@ -57,7 +57,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python",
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3 :: Only',

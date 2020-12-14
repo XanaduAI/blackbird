@@ -426,7 +426,7 @@ class TestBlackbirdSerialize:
         """Test serialization of a tdm program"""
         bb = BlackbirdProgram(name="tdm", version=1.0)
 
-        # OrderedDict needed for Python 3.5 support
+        # OrderedDict needed for Python 3.5 support TODO
         bb._type = OrderedDict(
             [('name', 'tdm'), ('options', OrderedDict([('temporal_modes', 2), ('copies', 3)]))]
         )

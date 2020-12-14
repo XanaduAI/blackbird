@@ -34,7 +34,6 @@ MeasureFock() | 0
 """
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
 def test_load(tmpdir):
     """Test that a Blackbird script is deserialized from a file"""
     filename = tmpdir.join("test.xbb")
@@ -74,7 +73,6 @@ def test_loads():
     assert bb.operations == expected
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
 def test_dump(tmpdir):
     """Test that a Blackbird script is serialized to a file"""
     bb = loads(test_script)

@@ -7,6 +7,9 @@
 * Remove support for Python 3.5.
   [(#38)](https://github.com/XanaduAI/blackbird/pull/38)
 
+* Add support for Python 3.8 and 3.9.
+  [(#39)](https://github.com/XanaduAI/blackbird/pull/39)
+
 <h3>Breaking changes</h3>
 
 <h3>Bug fixes</h3>

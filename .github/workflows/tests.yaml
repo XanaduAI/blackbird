@@ -18,6 +18,8 @@ jobs:
         config:
           - {python-version: 3.6}
           - {python-version: 3.7}
+          - {python-version: 3.8}
+          - {python-version: 3.9}
 
     steps:
       - name: Cancel Previous Runs

@@ -41,8 +41,7 @@ jobs:
 
       - name: Install Blackbird
         run: |
-          python setup.py bdist_wheel
-          pip install dist/quantum_blackbird*.whl
+          pip install -e .
 
       - name: Run tests
         run: python3 -m pytest blackbird_python/blackbird/tests --cov=blackbird_python/blackbird --cov-report=term-missing --cov-report=xml -p no:warnings --tb=native

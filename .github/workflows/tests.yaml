@@ -1,0 +1,52 @@
+name: Tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  COVERALLS_PARALLEL: true
+  LOGGING: info
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        config:
+          - {python-version: 3.5}
+          - {python-version: 3.6}
+          - {python-version: 3.7}
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.config.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install wheel codecov pytest pytest-cov --upgrade
+
+      - name: Install Blackbird
+        run: |
+          pip install -e .
+
+      - name: Run tests
+        run: python3 -m pytest blackbird_python/blackbird/tests --cov=blackbird_python/blackbird --cov-report=term-missing --cov-report=xml -p no:warnings --tb=native
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml

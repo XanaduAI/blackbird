@@ -1,9 +1,9 @@
 Blackbird Quantum Assembly Language
 ###################################
 
-.. image:: https://img.shields.io/travis/com/XanaduAI/blackbird/master.svg?style=for-the-badge
-    :alt: Travis
-    :target: https://travis-ci.com/XanaduAI/blackbird/
+.. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square
+    :alt: GitHub Workflow Status (branch)
+    :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests
 
 .. image:: https://img.shields.io/codecov/c/github/xanaduai/blackbird/master.svg?style=for-the-badge
     :alt: Codecov coverage

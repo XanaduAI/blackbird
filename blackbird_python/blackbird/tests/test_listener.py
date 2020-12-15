@@ -441,7 +441,6 @@ class TestParsingMetadata:
 class TestParsingInclude:
     """Tests for the `include` statement"""
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_include_program(self, parse_input, tmpdir):
         """Test including a non-templated program"""
         program = textwrap.dedent(
@@ -477,7 +476,6 @@ class TestParsingInclude:
 
         assert bb.operations == expected
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_include_template(self, parse_input, tmpdir):
         """Test including a templated program"""
         template = textwrap.dedent(
@@ -512,7 +510,6 @@ class TestParsingInclude:
 
         assert bb.operations == expected
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_nested_include(self, parse_input, tmpdir):
         """Test nested includes"""
         template1 = textwrap.dedent(
@@ -563,7 +560,6 @@ class TestParsingInclude:
 
         assert bb.operations == expected
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_multiple_nested_include(self, parse_input, tmpdir):
         """Same as the above, but tests the case where the same file
         might be imported multiple times in different places."""
@@ -616,7 +612,6 @@ class TestParsingInclude:
 
         assert bb.operations == expected
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_mismatched_modes(self, parse_input, tmpdir):
         """Test exception raised if modes do not match between
         applied subroutine and the defined template"""
@@ -649,7 +644,6 @@ class TestParsingInclude:
         ):
             bb = parse_input(test_include, cwd=tmpdir)
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_too_many_arguments(self, parse_input, tmpdir):
         """Test exception raised if wrong number of arguments are
         passed to a custom subroutine"""
@@ -680,7 +674,6 @@ class TestParsingInclude:
         with pytest.raises(ValueError, match="CustomOperation does not accept arguments"):
             bb = parse_input(test_include, cwd=tmpdir)
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_no_arguments(self, parse_input, tmpdir):
         """Test exception raised if custom subroutine accepts
         arguments, but none are passed:"""
@@ -711,7 +704,6 @@ class TestParsingInclude:
         with pytest.raises(ValueError, match="CustomOperation missing keyword arguments"):
             bb = parse_input(test_include, cwd=tmpdir)
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_invalid_arguments(self, parse_input, tmpdir):
         """Test exception raised if wrong keyword arguments are passed to a subroutine"""
         program = textwrap.dedent(
@@ -785,7 +777,6 @@ class TestRegRefTransform:
 class TestParseFunction:
     """Tests for the `parse` convenience parsing function"""
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="tmpdir fixture requires Python >=3.6")
     def test_parse_file(self, tmpdir):
         """Test that device name is extracted"""
         filename = tmpdir.join("test.xbb")

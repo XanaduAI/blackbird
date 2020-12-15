@@ -4,6 +4,9 @@
 
 <h3>Improvements</h3>
 
+* Remove support for Python 3.5.
+  [(#38)](https://github.com/XanaduAI/blackbird/pull/38)
+
 <h3>Breaking changes</h3>
 
 <h3>Bug fixes</h3>
@@ -13,6 +16,8 @@
 <h3>Contributors</h3>
 
 This release contains contributions from (in alphabetical order):
+
+Theodor Isacsson
 
 # Release 0.3.0
 

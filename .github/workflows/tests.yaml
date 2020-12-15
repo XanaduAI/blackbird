@@ -45,7 +45,7 @@ jobs:
           pip install dist/quantum_blackbird*.whl
 
       - name: Run tests
-        run: python3 -m pytest blackbird_python/blackbird/tests --cov-report term --cov-report=html:coverage_html_report
+        run: python3 -m pytest blackbird_python/blackbird/tests --cov=blackbird_python/blackbird --cov-report=term-missing --cov-report=xml -p no:warnings --tb=native
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1

@@ -832,16 +832,16 @@ class TestParsingForLoops:
             {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[1]]},
             {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[2]]}
         ]
-        
+
     def test_for_bool(self, parse_input_mocked_metadata):
         """Test that a for-loop over a list containing bools is parsed correctly"""
         bb = parse_input_mocked_metadata(
-            "for bool b in [True, False]\n\tMeasureFock() | 0"
+            "for bool b in [True, False]\n\tUnaryGate(b, 0) | 0"
         )
         assert np.all(
             bb._forvar["b"] == np.array([True, False])
         )
-        
+
     def test_for_str(self, parse_input_mocked_metadata):
         """Test that a for-loop over a list containing strings is parsed correctly"""
         bb = parse_input_mocked_metadata(

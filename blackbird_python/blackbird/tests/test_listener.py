@@ -833,6 +833,24 @@ class TestParsingForLoops:
             {'op': 'MeasureFock', 'args': [], 'kwargs': {}, 'modes': [modes[2]]}
         ]
 
+    def test_for_bool(self, parse_input_mocked_metadata):
+        """Test that a for-loop over a list containing bools is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            "for bool b in [True, False]\n\tUnaryGate(b, 0) | 0"
+        )
+        assert np.all(
+            bb._forvar["b"] == np.array([True, False])
+        )
+
+    def test_for_str(self, parse_input_mocked_metadata):
+        """Test that a for-loop over a list containing strings is parsed correctly"""
+        bb = parse_input_mocked_metadata(
+            'for str s in ["one", "two"]\n\tMeasureFock() | 0'
+        )
+        assert np.all(
+            bb._forvar["s"] == np.array(["one", "two"])
+        )
+
     @pytest.mark.parametrize("rnge", ["2:10:3", "3:6"])
     def test_for_range(self, rnge, parse_input_mocked_metadata):
         """Test that a for-loop over a range is parsed correctly"""

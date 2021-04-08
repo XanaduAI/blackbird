@@ -521,10 +521,13 @@ class BlackbirdListener(blackbirdListener):
                 if c.getText() != ":"
             ])
         elif ctx.vallist():
-            for_var = [
-                _expression(c.expression()) for c in ctx.vallist().getChildren()
-                if isinstance(c, blackbirdParser.ValContext)
-            ]
+            for_var = []
+            for c in ctx.vallist().getChildren():
+                if isinstance(c, blackbirdParser.ValContext):
+                    if c.expression() is not None:
+                        for_var.append(_expression(c.expression()))
+                    elif c.nonnumeric() is not None:
+                        for_var.append(_literal(c.nonnumeric()))
 
         for var in for_var:
             if ctx.NAME():

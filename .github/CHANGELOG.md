@@ -14,6 +14,9 @@
 
 <h3>Bug fixes</h3>
 
+* Update the NumPy scalar types in the Blackbird listener due to being deprecated in NumPy 1.20.
+  [(#43)](https://github.com/XanaduAI/blackbird/pull/43)
+
 <h3>Documentation</h3>
 
 <h3>Contributors</h3>

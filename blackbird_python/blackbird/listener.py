@@ -75,8 +75,8 @@ NUMPY_TYPES = {
     "float": np.float64,
     "complex": np.complex128,
     "int": np.int64,
-    "str": np.str,
-    "bool": np.bool,
+    "str": np.str_,
+    "bool": np.bool_,
 }
 """dict[str->type]: Mapping from the allowed Blackbird array types
 to the equivalent NumPy data types."""

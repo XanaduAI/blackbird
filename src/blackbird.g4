@@ -90,7 +90,7 @@ expression          : LBRAC expression RBRAC                    #BracketsLabel
                     | parameter                                 #ParameterLabel
                     ;
 
-parameter           : LBRACE NAME RBRACE;
+parameter           : LBRACE (REGREF | NAME) RBRACE;
 
 number              : (INT|FLOAT|COMPLEX|PI);
 

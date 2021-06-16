@@ -217,7 +217,12 @@ def _expression(expr):
         return _VAR[expr.NAME().getText()].flatten()[inner_expr]
 
     if isinstance(expr, blackbirdParser.ParameterLabelContext):
-        p = Symbol(expr.parameter().NAME().getText())
+        if expr.parameter().NAME() is not None:
+            pname = expr.parameter().NAME().getText()
+        else:
+            pname = expr.parameter().REGREF().getText()
+
+        p = Symbol(pname)
         _PARAMS.append(p)
         return p
 

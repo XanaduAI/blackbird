@@ -1,4 +1,4 @@
-# Generated from src/blackbird.g4 by ANTLR 4.8
+# Generated from blackbird.g4 by ANTLR 4.8
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -171,8 +171,8 @@ def serializedATN():
         buf.write("\t\b\2\2\u0161\u0163\5@!\t\u0162\u0159\3\2\2\2\u0162\u015c")
         buf.write("\3\2\2\2\u0162\u015f\3\2\2\2\u0163\u0166\3\2\2\2\u0164")
         buf.write("\u0162\3\2\2\2\u0164\u0165\3\2\2\2\u0165A\3\2\2\2\u0166")
-        buf.write("\u0164\3\2\2\2\u0167\u0168\7\61\2\2\u0168\u0169\7<\2\2")
-        buf.write("\u0169\u016a\7\62\2\2\u016aC\3\2\2\2\u016b\u016c\t\13")
+        buf.write("\u0164\3\2\2\2\u0167\u0168\7\61\2\2\u0168\u0169\t\t\2")
+        buf.write("\2\u0169\u016a\7\62\2\2\u016aC\3\2\2\2\u016b\u016c\t\13")
         buf.write("\2\2\u016cE\3\2\2\2\u016d\u016e\t\f\2\2\u016eG\3\2\2\2")
         buf.write(".KRYbhkpswy\u0089\u0090\u009c\u009e\u00a6\u00af\u00b5")
         buf.write("\u00b9\u00bd\u00ca\u00d3\u00db\u00e0\u00e3\u00e7\u00eb")
@@ -2961,11 +2961,14 @@ class blackbirdParser ( Parser ):
         def LBRACE(self):
             return self.getToken(blackbirdParser.LBRACE, 0)
 
-        def NAME(self):
-            return self.getToken(blackbirdParser.NAME, 0)
-
         def RBRACE(self):
             return self.getToken(blackbirdParser.RBRACE, 0)
+
+        def REGREF(self):
+            return self.getToken(blackbirdParser.REGREF, 0)
+
+        def NAME(self):
+            return self.getToken(blackbirdParser.NAME, 0)
 
         def getRuleIndex(self):
             return blackbirdParser.RULE_parameter
@@ -2985,12 +2988,18 @@ class blackbirdParser ( Parser ):
 
         localctx = blackbirdParser.ParameterContext(self, self._ctx, self.state)
         self.enterRule(localctx, 64, self.RULE_parameter)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 357
             self.match(blackbirdParser.LBRACE)
             self.state = 358
-            self.match(blackbirdParser.NAME)
+            _la = self._input.LA(1)
+            if not(_la==blackbirdParser.REGREF or _la==blackbirdParser.NAME):
+                self._errHandler.recoverInline(self)
+            else:
+                self._errHandler.reportMatch(self)
+                self.consume()
             self.state = 359
             self.match(blackbirdParser.RBRACE)
         except RecognitionException as re:

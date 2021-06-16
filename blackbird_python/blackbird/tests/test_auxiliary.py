@@ -137,7 +137,7 @@ class TestNumber:
         number = blackbirdParser.NumberContext(parser, ctx)
         number.INT = lambda: True
         number.getText = lambda: n
-        assert _number(number) == expected
+        assert np.isclose(_number(number), expected)
 
     @pytest.mark.parametrize('n, expected', test_floats)
     def test_number_float(self, parser, ctx, n, expected):
@@ -145,7 +145,7 @@ class TestNumber:
         number = blackbirdParser.NumberContext(parser, ctx)
         number.FLOAT = lambda: True
         number.getText = lambda: n
-        assert _number(number) == expected
+        assert np.isclose(_number(number), expected)
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_number_complex(self, parser, ctx, n, expected):
@@ -153,13 +153,13 @@ class TestNumber:
         number = blackbirdParser.NumberContext(parser, ctx)
         number.COMPLEX = lambda: True
         number.getText = lambda: n
-        assert _number(number) == expected
+        assert np.isclose(_number(number), expected)
 
     def test_number_pi(self, parser, ctx):
         """Test that a Blackbird pi literal is properly converted to a Python type"""
         number = blackbirdParser.NumberContext(parser, ctx)
         number.PI = lambda: True
-        assert _number(number) == np.pi
+        assert np.isclose(_number(number), np.pi)
 
     def test_number_invalid(self, parser, ctx):
         """Test that an unknown number correctly raises and exception"""
@@ -179,7 +179,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.EXP = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.exp(expected)
+        assert np.isclose(_func(func, expression), np.exp(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_log(self, parser, ctx, n, expected, num):
@@ -187,7 +187,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.LOG = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.log(expected)
+        assert np.isclose(_func(func, expression), np.log(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_sin(self, parser, ctx, n, expected, num):
@@ -195,7 +195,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.SIN = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.sin(expected)
+        assert np.isclose(_func(func, expression), np.sin(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_cos(self, parser, ctx, n, expected, num):
@@ -203,7 +203,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.COS = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.cos(expected)
+        assert np.isclose(_func(func, expression), np.cos(expected))
 
     @pytest.mark.parametrize('n, expected', test_floats)
     def test_function_tan(self, parser, ctx, n, expected, num):
@@ -211,7 +211,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.TAN = lambda: True
         expression = num(n, num_type='float')
-        assert _func(func, expression) == np.tan(expected)
+        assert np.isclose(_func(func, expression), np.tan(expected))
 
     def test_function_arcsin(self, parser, ctx, num):
         """Test that a Blackbird arcsin function is properly called"""
@@ -221,7 +221,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCSIN = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arcsin(expected)
+        assert np.isclose(_func(func, expression), np.arcsin(expected))
 
     def test_function_arccos(self, parser, ctx, num):
         """Test that a Blackbird arccos function is properly called"""
@@ -231,7 +231,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCCOS = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arccos(expected)
+        assert np.isclose(_func(func, expression), np.arccos(expected))
 
     def test_function_arctan(self, parser, ctx, num):
         """Test that a Blackbird arctan function is properly called"""
@@ -241,7 +241,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCTAN = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arctan(expected)
+        assert np.isclose(_func(func, expression), np.arctan(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_sinh(self, parser, ctx, n, expected, num):
@@ -249,7 +249,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.SINH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.sinh(expected)
+        assert np.isclose(_func(func, expression), np.sinh(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_cosh(self, parser, ctx, n, expected, num):
@@ -257,7 +257,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.COSH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.cosh(expected)
+        assert np.isclose(_func(func, expression), np.cosh(expected))
 
     def test_function_tanh(self, parser, ctx, num):
         """Test that a Blackbird tanh function is properly called"""
@@ -267,7 +267,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.TANH = lambda: True
         expression = num(n, num_type='float')
-        assert _func(func, expression) == np.tanh(expected)
+        assert np.isclose(_func(func, expression), np.tanh(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_arcsinh(self, parser, ctx, n, expected, num):
@@ -275,7 +275,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCSINH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arcsinh(expected)
+        assert np.isclose(_func(func, expression), np.arcsinh(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_arccosh(self, parser, ctx, n, expected, num):
@@ -283,7 +283,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCCOSH = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.arccosh(expected)
+        assert np.isclose(_func(func, expression), np.arccosh(expected))
 
     def test_function_arctanh(self, parser, ctx, num):
         """Test that a Blackbird arctanh function is properly called"""
@@ -293,7 +293,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.ARCTANH = lambda: True
         expression = num(n, num_type='float')
-        assert _func(func, expression) == np.arctanh(expected)
+        assert np.isclose(_func(func, expression), np.arctanh(expected))
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_function_sqrt(self, parser, ctx, n, expected, num):
@@ -301,7 +301,7 @@ class TestFunction:
         func = blackbirdParser.FunctionContext(parser, ctx)
         func.SQRT = lambda: True
         expression = num(n)
-        assert _func(func, expression) == np.sqrt(expected)
+        assert np.isclose(_func(func, expression), np.sqrt(expected))
 
     def test_function_invalid(self, parser, ctx):
         """Test that an invalid Blackbird function raises the correct exception"""
@@ -319,7 +319,7 @@ class TestExpression:
     def test_number(self, n, expected, num):
         """Test that a Blackbird expression containing numbers evaluates"""
         expr = num(n)
-        assert _expression(expr) == expected
+        assert np.isclose(_expression(expr), expected)
 
     def test_variable(self, parser, ctx, monkeypatch):
         """Test that a Blackbird expression containing variables evaluates"""
@@ -363,7 +363,7 @@ class TestExpression:
             expression = lambda self: (DummyBracketsLabel(parser, ctx), num(2))
 
         expr = DummyPowerLabel(parser, ctx)
-        assert _expression(expr) == (n1[1]+n2[1])**2
+        assert np.isclose(_expression(expr), (n1[1]+n2[1])**2)
 
 
     @pytest.mark.parametrize('n, expected', test_complex)
@@ -376,7 +376,7 @@ class TestExpression:
 
         expr = DummySignLabel(parser, ctx)
         expr.MINUS = lambda: True
-        assert _expression(expr) == -expected
+        assert np.isclose(_expression(expr), -expected)
 
     @pytest.mark.parametrize('n, expected', test_complex)
     def test_unary_plus(self, parser, ctx, n, expected, num):
@@ -388,7 +388,7 @@ class TestExpression:
 
         expr = DummySignLabel(parser, ctx)
         expr.PLUS = lambda: True
-        assert _expression(expr) == expected
+        assert np.isclose(_expression(expr), expected)
 
     @pytest.mark.parametrize('n1', test_complex)
     @pytest.mark.parametrize('n2', test_floats)
@@ -401,7 +401,7 @@ class TestExpression:
 
         expr = DummyAddLabel(parser, ctx)
         expr.PLUS = lambda: True
-        assert _expression(expr) == n1[1] + n2[1]
+        assert np.isclose(_expression(expr), n1[1] + n2[1])
 
     @pytest.mark.parametrize('n1', test_complex)
     @pytest.mark.parametrize('n2', test_floats)
@@ -414,7 +414,7 @@ class TestExpression:
 
         expr = DummyAddLabel(parser, ctx)
         expr.MINUS = lambda: True
-        assert _expression(expr) == n1[1] - n2[1]
+        assert np.isclose(_expression(expr), n1[1] - n2[1])
 
     @pytest.mark.parametrize('n1', test_complex)
     @pytest.mark.parametrize('n2', test_floats)
@@ -427,7 +427,7 @@ class TestExpression:
 
         expr = DummyMulLabel(parser, ctx)
         expr.TIMES = lambda: True
-        assert _expression(expr) == n1[1]*n2[1]
+        assert np.isclose(_expression(expr), n1[1]*n2[1])
 
     @pytest.mark.parametrize('n1', test_complex)
     @pytest.mark.parametrize('n2', test_floats)
@@ -522,7 +522,7 @@ class TestExpressionArray:
 
             expr = DummyAddLabel(parser, ctx)
             expr.PLUS = lambda: True
-            assert np.all(_expression(expr) == n1[1] + U)
+            assert np.allclose(_expression(expr), n1[1] + U)
 
     def test_plus_array(self, parser, ctx, var, monkeypatch):
         """Test addition of two arrays"""
@@ -551,7 +551,7 @@ class TestExpressionArray:
 
             expr = DummyAddLabel(parser, ctx)
             expr.MINUS = lambda: True
-            assert np.all(_expression(expr) == n1[1] - U)
+            assert np.allclose(_expression(expr), n1[1] - U)
 
     def test_minus_array(self, parser, ctx, var, monkeypatch):
         """Test subtraction of two arrays"""
@@ -580,7 +580,7 @@ class TestExpressionArray:
 
             expr = DummyMulLabel(parser, ctx)
             expr.TIMES = lambda: True
-            assert np.all(_expression(expr) == n1[1]*U)
+            assert np.allclose(_expression(expr), n1[1]*U)
 
     def test_multiply_array_element(self, parser, ctx, var, monkeypatch):
         """Test multiplication of two arrays"""
@@ -609,7 +609,7 @@ class TestExpressionArray:
 
             expr = DummyMulLabel(parser, ctx)
             expr.DIVIDE = lambda: True
-            assert np.all(_expression(expr) == n1[1]/U)
+            assert np.allclose(_expression(expr), n1[1]/U)
 
     def test_divide_array_element(self, parser, ctx, var, monkeypatch):
         """Test division of two arrays"""

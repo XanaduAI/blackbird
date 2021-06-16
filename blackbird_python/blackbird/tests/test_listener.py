@@ -204,7 +204,7 @@ class TestParsingVariables:
         bb = parse_input_mocked_metadata(
             "float alpha = 0.32\nfloat gamma = (2.0*cos(alpha*pi)+1)**2"
         )
-        assert bb._var["gamma"] == (2.0 * np.cos(0.32 * np.pi) + 1) ** 2
+        assert np.isclose(bb._var["gamma"], (2.0 * np.cos(0.32 * np.pi) + 1) ** 2)
 
     def test_array_variable_expression(self, parse_input_mocked_metadata):
         """Test that a variable expression containing arrays is correctly parsed"""
@@ -212,7 +212,7 @@ class TestParsingVariables:
             "complex array A =\n\t-1.0+1.0j, 2.7e5+0.2e-5j\n\t-0.1-2j, 0.2-0.1j\ncomplex res = (2.0*cos(A*pi)+1)**2"
         )
         A = np.array([[-1.0 + 1.0j, 2.7e5 + 0.2e-5j], [-0.1 - 2j, 0.2 - 0.1j]])
-        assert np.all(bb._var["res"] == (2.0 * np.cos(A * np.pi) + 1) ** 2)
+        assert np.allclose(bb._var["res"], (2.0 * np.cos(A * np.pi) + 1) ** 2)
 
 
 class TestParsingQuantumPrograms:

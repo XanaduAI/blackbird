@@ -99,6 +99,7 @@ class RegRefTransform:
         * :attr:`func_str`
         """
         regref_symbols = list(expr.free_symbols)
+        self.expr = expr
         # get the Python function represented by the regref transform
         self.func = sym.lambdify(regref_symbols, expr)
         """function: Scalar function that takes one or more values corresponding

@@ -17,6 +17,10 @@
 * Update the NumPy scalar types in the Blackbird listener due to being deprecated in NumPy 1.20.
   [(#43)](https://github.com/XanaduAI/blackbird/pull/43)
 
+* Add access to the symbolic expression used when creating a `RegRefTransform`,
+  as a class attribute.
+  [(#46)](https://github.com/XanaduAI/blackbird/pull/46)
+
 <h3>Documentation</h3>
 
 <h3>Contributors</h3>

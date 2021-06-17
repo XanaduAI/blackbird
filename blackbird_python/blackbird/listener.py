@@ -90,15 +90,20 @@ class RegRefTransform:
     """
 
     def __init__(self, expr):
-        """After initialization, the RegRefTransform has three attributes
+        """After initialization, the RegRefTransform has four attributes
         which may be inspected to translate the Blackbird program to a
         simulator or quantum hardware:
 
+        * :attr:`expr`
         * :attr:`func`
         * :attr:`regrefs`
         * :attr:`func_str`
         """
         regref_symbols = list(expr.free_symbols)
+
+        self.expr = expr
+        """sympy.Expr: The input symbolic expression."""
+
         # get the Python function represented by the regref transform
         self.func = sym.lambdify(regref_symbols, expr)
         """function: Scalar function that takes one or more values corresponding

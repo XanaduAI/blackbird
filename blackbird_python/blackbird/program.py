@@ -189,6 +189,15 @@ class BlackbirdProgram:
         """
         return set([str(i) for i in self._parameters])
 
+    @property
+    def variables(self):
+        """List of variables in the Blackbird program.
+
+        Returns:
+            dict[str, float]: dictionary of variables
+        """
+        return self._var
+
     def is_template(self):
         """Returns ``True`` if there is at least one free parameter.
 

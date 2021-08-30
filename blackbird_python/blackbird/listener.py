@@ -561,7 +561,8 @@ class BlackbirdListener(blackbirdListener):
         self._program._var.update(_VAR)
         _VAR.clear()
 
-        self._program._parameters.extend(_PARAMS)
+        is_ptype = lambda p: p.name[0] == "p" and p.name[1:].isdigit()
+        self._program._parameters.extend([p for p in _PARAMS if not is_ptype(p)])
         _PARAMS.clear()
 
     def enterProgram(self, ctx: blackbirdParser.ProgramContext):

@@ -405,3 +405,56 @@ class TestTemplateMatching:
 
         with pytest.raises(TemplateError, match="matches inconsistent values"):
             match_template(template, program)
+
+    def test_multiple_match_tdm(self):
+        """test a match involving duplicated template parameters with p-type variables"""
+
+        template = loads(dedent(
+            """\
+            name template_td3_fake
+            version 1.0
+            target TD3_fake (shots=1)
+            type tdm (temporal_modes=3, copies=1)
+
+            Sgate({s}, 0.0) | 43
+            Rgate({r}) | 43
+            BSgate({bs}, 1.5707963267948966) | [42, 43]
+            Rgate({offset}) | 43
+            MeasureFock() | 0
+            """
+        ))
+
+        program = loads(dedent(
+            """\
+            name None
+            version 1.0
+            target TD3_fake (shots=1)
+            type tdm (temporal_modes=259)
+
+            float array p0 =
+                0.999, 0.965, 0.678
+            float array p1 =
+                0.211, 0.042, 0.347
+            float array p2 =
+                0.042, 0.673, 0.924
+            int array p3 =
+                4, 4, 4
+
+            Sgate(p0, 0.0) | 43
+            Rgate(p1) | 43
+            BSgate(p2, 1.5707963267948966) | [42, 43]
+            Rgate(p3) | 43
+            MeasureFock() | 0
+            """
+        ))
+
+        res = match_template(template, program)
+        expected = {
+            's': np.array([[0.999, 0.965, 0.678]]),
+            'r': np.array([[0.211, 0.042, 0.347]]),
+            'bs': np.array([[0.042, 0.673, 0.924]]),
+            'offset': np.array([[4, 4, 4]])
+        }
+
+        assert res.keys() == expected.keys()
+        assert all(np.allclose(r, e) for r, e in zip(res.values(), expected.values()))

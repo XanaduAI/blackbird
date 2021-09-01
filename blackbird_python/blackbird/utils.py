@@ -242,4 +242,9 @@ def match_template(template, program):
                 if key != "":
                     argmatch[key] = val
 
+    p_params = {
+        k: program.variables[str(v)] for k, v in argmatch.items() if str(v) in program.variables
+    }
+    argmatch.update(p_params)
+
     return argmatch

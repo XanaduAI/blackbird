@@ -11,7 +11,7 @@
   [(#39)](https://github.com/XanaduAI/blackbird/pull/39)
 
 * Add public method to retrieve Blackbird program variables via `prog.variables`.
-[(#47)](https://github.com/XanaduAI/blackbird/pull/47)
+  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
 
 * Improve `match_template` to automatically return matched parameters with their array values,
   rather than their array names (p0, p1, etc.)

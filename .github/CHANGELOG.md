@@ -10,6 +10,13 @@
 * Add support for Python 3.8 and 3.9.
   [(#39)](https://github.com/XanaduAI/blackbird/pull/39)
 
+* Add public method to retrieve Blackbird program variables via `prog.variables`.
+  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
+
+* Improve `match_template` to automatically return matched parameters with their array values,
+  rather than their array names (p0, p1, etc.)
+  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
+
 <h3>Breaking changes</h3>
 
 <h3>Bug fixes</h3>
@@ -20,6 +27,11 @@
 * Add access to the symbolic expression used when creating a `RegRefTransform`,
   as a class attribute.
   [(#46)](https://github.com/XanaduAI/blackbird/pull/46)
+
+* Remove p-type parameters from `prog.parameters` since they're only needed there internally and
+  are otherwise stored in `prog.variables`. This also changes TDM programs to not be templates
+  (`prog.is_template` now returns `False`).
+  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
 
 <h3>Documentation</h3>
 

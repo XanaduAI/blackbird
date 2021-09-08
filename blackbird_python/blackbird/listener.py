@@ -82,6 +82,11 @@ NUMPY_TYPES = {
 to the equivalent NumPy data types."""
 
 
+def is_ptype(p):
+    """Checks whether a parameter is in the form `p0`, `p1`, etc."""
+    return str(p)[0] == "p" and str(p)[1:].isdigit()
+
+
 class RegRefTransform:
     """Class to represent a classical register transform.
 
@@ -404,7 +409,7 @@ class BlackbirdListener(blackbirdListener):
         # value during expression evaluation; although, since it always has an
         # accompanying variable it also needs to be stored in `_VAR` with its
         # corresponding value
-        if self._program._type["name"] == "tdm" and name[0] == "p" and name[1:].isdigit():
+        if self._program._type["name"] == "tdm" and is_ptype(name):
             _PARAMS.append(name)
         _VAR[name] = final_value
 
@@ -561,7 +566,7 @@ class BlackbirdListener(blackbirdListener):
         self._program._var.update(_VAR)
         _VAR.clear()
 
-        self._program._parameters.extend(_PARAMS)
+        self._program._parameters.extend([p for p in _PARAMS if not is_ptype(p)])
         _PARAMS.clear()
 
     def enterProgram(self, ctx: blackbirdParser.ProgramContext):

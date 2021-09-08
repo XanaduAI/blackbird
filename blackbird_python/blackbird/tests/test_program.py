@@ -70,7 +70,7 @@ class TestBlackbirdProgram:
     def test_initialization(self):
         """Test all attributes correctly initialized"""
         bb = BlackbirdProgram(name="prog", version=0.0)
-        assert not bb._var
+        assert not bb.variables
 
         assert bb.name == "prog"
         assert bb.version == 0.0
@@ -501,7 +501,7 @@ class TestProgramIntegration:
 
         expected = {'one': np.array([[11, 12]]), 'two': np.array([[1, 22, 3], [1, 2, 33]]), 'four': 44}
 
-        assert np.all(np.all(v == expected[k]) for k, v in bb2._var.items())
+        assert np.all(np.all(v == expected[k]) for k, v in bb2.variables.items())
 
         assert bb2.operations[0] == {'op': 'Sgate', 'args': [1, 0], 'kwargs': {}, 'modes': [1]}
         assert bb2.operations[1] == {'op': 'BSgate', 'args': [11], 'kwargs': {}, 'modes': [1, 0]}
@@ -551,7 +551,7 @@ class TestProgramIntegration:
         assert bb.is_template()
 
         bb2 = bb(p_one=array)
-        assert np.all(bb2._var["one"] == np.array(array)[:1, :2])
+        assert np.all(bb2.variables["one"] == np.array(array)[:1, :2])
 
     def test_error_no_shape_in_template_array(self):
         """Test that an error is raised when omitting shape when defining a template array."""

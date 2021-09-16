@@ -1,6 +1,4 @@
-# Release 0.3.1 (development release)
-
-<h3>New features since last release</h3>
+# Release 0.4.0
 
 <h3>Improvements</h3>
 
@@ -8,7 +6,7 @@
   [(#38)](https://github.com/XanaduAI/blackbird/pull/38)
 
 * Add support for Python 3.8 and 3.9.
-  [(#39)](https://github.com/XanaduAI/blackbird/pull/39)
+  [(#40)](https://github.com/XanaduAI/blackbird/pull/39)
 
 * Add public method to retrieve Blackbird program variables via `prog.variables`.
   [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
@@ -17,9 +15,15 @@
   rather than their array names (p0, p1, etc.)
   [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
 
-<h3>Breaking changes</h3>
+* Remove p-type parameters from `prog.parameters` since they're only needed there internally and
+  are otherwise stored in `prog.variables`. This also changes TDM programs to not be templates
+  (`prog.is_template` now returns `False`).
+  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
 
 <h3>Bug fixes</h3>
+
+* Fix bool or string objects in for-loop iterators not working correctly.
+  [(#41)](https://github.com/XanaduAI/blackbird/pull/41)
 
 * Update the NumPy scalar types in the Blackbird listener due to being deprecated in NumPy 1.20.
   [(#43)](https://github.com/XanaduAI/blackbird/pull/43)
@@ -27,13 +31,6 @@
 * Add access to the symbolic expression used when creating a `RegRefTransform`,
   as a class attribute.
   [(#46)](https://github.com/XanaduAI/blackbird/pull/46)
-
-* Remove p-type parameters from `prog.parameters` since they're only needed there internally and
-  are otherwise stored in `prog.variables`. This also changes TDM programs to not be templates
-  (`prog.is_template` now returns `False`).
-  [(#47)](https://github.com/XanaduAI/blackbird/pull/47)
-
-<h3>Documentation</h3>
 
 <h3>Contributors</h3>
 

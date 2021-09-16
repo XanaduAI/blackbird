@@ -7,7 +7,8 @@ Blackbird Quantum Assembly Language
 :Release: |release|
 :Date: |today|
 
-Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.
+Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be
+used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.
 
 
 Features

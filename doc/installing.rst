@@ -23,15 +23,15 @@ Compiling the grammar
     This step is optional - Blackbird is packaged with the ANTLR grammar
     already pre-compiled, for both C++ and Python.
 
-To compile the grammar, you will need to make sure that Java version 1.6 and higher
-is installed. Once Java is installed, use the following steps to install ANTLR 4.8:
+To compile the grammar, you will need to make sure that Java version 13 and higher
+is installed. Once Java is installed, use the following steps to install ANTLR 4.11.1:
 
 .. code-block:: console
 
     $ cd /usr/local/lib
-    $ sudo wget https://www.antlr.org/download/antlr-4.8-complete.jar
-    $ export CLASSPATH=".:/usr/local/lib/antlr-4.8-complete.jar:$CLASSPATH"
-    $ alias antlr4='java -jar /usr/local/lib/antlr-4.8-complete.jar'
+    $ sudo wget https://www.antlr.org/download/antlr-4.11.1-complete.jar
+    $ export CLASSPATH=".:/usr/local/lib/antlr-4.11.1-complete.jar:$CLASSPATH"
+    $ alias antlr4='java -jar /usr/local/lib/antlr-4.11.1-complete.jar'
     $ alias grun='java org.antlr.v4.gui.TestRig'
 
 You can then autogenerate the Python and C++ base listeners and visitors by navigating to the

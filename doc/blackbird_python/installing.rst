@@ -16,7 +16,7 @@ from GitHub as follows. The Python Blackbird listener requires NumPy and the Pyt
 
 .. code-block:: console
 
-    $ pip install numpy antlr4-python3-runtime>=4.8
+    $ pip install numpy antlr4-python3-runtime==4.11.1
 
 Once this is installed, simply clone the Blackbird git repository, use pip to install:
 

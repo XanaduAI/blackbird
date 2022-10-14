@@ -1,4 +1,4 @@
-# Generated from src/blackbird.g4 by ANTLR 4.8
+# Generated from blackbird.g4 by ANTLR 4.11.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -8,178 +8,141 @@ if sys.version_info[1] > 5:
 else:
 	from typing.io import TextIO
 
-
 def serializedATN():
-    with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3?")
-        buf.write("\u0170\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
-        buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
-        buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
-        buf.write("\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31")
-        buf.write("\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36")
-        buf.write("\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\3\2\7\2J\n")
-        buf.write("\2\f\2\16\2M\13\2\3\2\3\2\7\2Q\n\2\f\2\16\2T\13\2\3\2")
-        buf.write("\3\2\7\2X\n\2\f\2\16\2[\13\2\3\2\3\2\3\3\3\3\6\3a\n\3")
-        buf.write("\r\3\16\3b\3\3\3\3\6\3g\n\3\r\3\16\3h\3\3\5\3l\n\3\3\3")
-        buf.write("\6\3o\n\3\r\3\16\3p\3\3\5\3t\n\3\3\3\3\3\7\3x\n\3\f\3")
-        buf.write("\16\3{\13\3\3\4\3\4\3\4\3\5\3\5\3\6\3\6\3\6\3\7\3\7\3")
-        buf.write("\b\3\b\3\b\5\b\u008a\n\b\3\t\3\t\3\n\3\n\3\n\5\n\u0091")
-        buf.write("\n\n\3\13\3\13\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\7\r\u009d")
-        buf.write("\n\r\f\r\16\r\u00a0\13\r\3\16\3\16\3\16\3\16\3\16\5\16")
-        buf.write("\u00a7\n\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00b0")
-        buf.write("\n\17\3\17\3\17\3\17\3\17\5\17\u00b6\n\17\3\20\3\20\5")
-        buf.write("\20\u00ba\n\20\3\21\3\21\5\21\u00be\n\21\3\22\3\22\3\23")
-        buf.write("\3\23\3\24\3\24\3\25\3\25\3\25\7\25\u00c9\n\25\f\25\16")
-        buf.write("\25\u00cc\13\25\3\26\3\26\3\26\3\26\7\26\u00d2\n\26\f")
-        buf.write("\26\16\26\u00d5\13\26\3\27\3\27\3\27\7\27\u00da\n\27\f")
-        buf.write("\27\16\27\u00dd\13\27\3\30\3\30\5\30\u00e1\n\30\3\30\5")
-        buf.write("\30\u00e4\n\30\3\30\3\30\5\30\u00e8\n\30\3\30\3\30\5\30")
-        buf.write("\u00ec\n\30\3\30\7\30\u00ef\n\30\f\30\16\30\u00f2\13\30")
-        buf.write("\3\31\3\31\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\33\5\33")
-        buf.write("\u00fe\n\33\3\33\3\33\5\33\u0102\n\33\5\33\u0104\n\33")
-        buf.write("\3\33\3\33\3\33\6\33\u0109\n\33\r\33\16\33\u010a\3\34")
-        buf.write("\3\34\3\34\3\34\7\34\u0111\n\34\f\34\16\34\u0114\13\34")
-        buf.write("\5\34\u0116\n\34\3\34\5\34\u0119\n\34\3\34\3\34\3\34\7")
-        buf.write("\34\u011e\n\34\f\34\16\34\u0121\13\34\5\34\u0123\n\34")
-        buf.write("\3\34\3\34\3\35\3\35\3\35\3\35\3\35\5\35\u012c\n\35\3")
-        buf.write("\35\5\35\u012f\n\35\3\36\3\36\5\36\u0133\n\36\3\37\3\37")
-        buf.write("\3\37\7\37\u0138\n\37\f\37\16\37\u013b\13\37\3 \3 \3 ")
-        buf.write("\3 \3 \5 \u0142\n \3!\3!\3!\3!\3!\3!\3!\3!\3!\3!\3!\3")
-        buf.write("!\3!\3!\3!\3!\3!\3!\3!\3!\5!\u0158\n!\3!\3!\3!\3!\3!\3")
-        buf.write("!\3!\3!\3!\7!\u0163\n!\f!\16!\u0166\13!\3\"\3\"\3\"\3")
-        buf.write("\"\3#\3#\3$\3$\3$\2\3@%\2\4\6\b\n\f\16\20\22\24\26\30")
-        buf.write("\32\34\36 \"$&(*,.\60\62\64\668:<>@BDF\2\r\3\2<=\3\2\25")
-        buf.write("\30\3\2\649\3\2\16\17\4\2--//\4\2..\60\60\3\2\3\4\4\2")
-        buf.write("::<<\3\2\5\6\4\2\13\r\21\21\3\2\32(\2\u0181\2K\3\2\2\2")
-        buf.write("\4^\3\2\2\2\6|\3\2\2\2\b\177\3\2\2\2\n\u0081\3\2\2\2\f")
-        buf.write("\u0084\3\2\2\2\16\u0086\3\2\2\2\20\u008b\3\2\2\2\22\u008d")
-        buf.write("\3\2\2\2\24\u0092\3\2\2\2\26\u0094\3\2\2\2\30\u009e\3")
-        buf.write("\2\2\2\32\u00a1\3\2\2\2\34\u00a8\3\2\2\2\36\u00b9\3\2")
-        buf.write("\2\2 \u00bd\3\2\2\2\"\u00bf\3\2\2\2$\u00c1\3\2\2\2&\u00c3")
-        buf.write("\3\2\2\2(\u00c5\3\2\2\2*\u00d3\3\2\2\2,\u00d6\3\2\2\2")
-        buf.write(".\u00e0\3\2\2\2\60\u00f3\3\2\2\2\62\u00f5\3\2\2\2\64\u00f7")
-        buf.write("\3\2\2\2\66\u010c\3\2\2\28\u0126\3\2\2\2:\u0132\3\2\2")
-        buf.write("\2<\u0134\3\2\2\2>\u013c\3\2\2\2@\u0157\3\2\2\2B\u0167")
-        buf.write("\3\2\2\2D\u016b\3\2\2\2F\u016d\3\2\2\2HJ\7\22\2\2IH\3")
-        buf.write("\2\2\2JM\3\2\2\2KI\3\2\2\2KL\3\2\2\2LN\3\2\2\2MK\3\2\2")
-        buf.write("\2NR\5\4\3\2OQ\7\22\2\2PO\3\2\2\2QT\3\2\2\2RP\3\2\2\2")
-        buf.write("RS\3\2\2\2SU\3\2\2\2TR\3\2\2\2UY\5\30\r\2VX\7\22\2\2W")
-        buf.write("V\3\2\2\2X[\3\2\2\2YW\3\2\2\2YZ\3\2\2\2Z\\\3\2\2\2[Y\3")
-        buf.write("\2\2\2\\]\7\2\2\3]\3\3\2\2\2^`\5\6\4\2_a\7\22\2\2`_\3")
-        buf.write("\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2cd\3\2\2\2dk\5\n\6")
-        buf.write("\2eg\7\22\2\2fe\3\2\2\2gh\3\2\2\2hf\3\2\2\2hi\3\2\2\2")
-        buf.write("ij\3\2\2\2jl\5\16\b\2kf\3\2\2\2kl\3\2\2\2ls\3\2\2\2mo")
-        buf.write("\7\22\2\2nm\3\2\2\2op\3\2\2\2pn\3\2\2\2pq\3\2\2\2qr\3")
-        buf.write("\2\2\2rt\5\22\n\2sn\3\2\2\2st\3\2\2\2ty\3\2\2\2ux\7\22")
-        buf.write("\2\2vx\5\26\f\2wu\3\2\2\2wv\3\2\2\2x{\3\2\2\2yw\3\2\2")
-        buf.write("\2yz\3\2\2\2z\5\3\2\2\2{y\3\2\2\2|}\7\25\2\2}~\5\b\5\2")
-        buf.write("~\7\3\2\2\2\177\u0080\7<\2\2\u0080\t\3\2\2\2\u0081\u0082")
-        buf.write("\7\26\2\2\u0082\u0083\5\f\7\2\u0083\13\3\2\2\2\u0084\u0085")
-        buf.write("\7\f\2\2\u0085\r\3\2\2\2\u0086\u0087\7\27\2\2\u0087\u0089")
-        buf.write("\5\20\t\2\u0088\u008a\5\66\34\2\u0089\u0088\3\2\2\2\u0089")
-        buf.write("\u008a\3\2\2\2\u008a\17\3\2\2\2\u008b\u008c\t\2\2\2\u008c")
-        buf.write("\21\3\2\2\2\u008d\u008e\7\30\2\2\u008e\u0090\5\24\13\2")
-        buf.write("\u008f\u0091\5\66\34\2\u0090\u008f\3\2\2\2\u0090\u0091")
-        buf.write("\3\2\2\2\u0091\23\3\2\2\2\u0092\u0093\7<\2\2\u0093\25")
-        buf.write("\3\2\2\2\u0094\u0095\7\31\2\2\u0095\u0096\7\16\2\2\u0096")
-        buf.write("\27\3\2\2\2\u0097\u009d\7\22\2\2\u0098\u009d\5\64\33\2")
-        buf.write("\u0099\u009d\5\32\16\2\u009a\u009d\5\34\17\2\u009b\u009d")
-        buf.write("\5.\30\2\u009c\u0097\3\2\2\2\u009c\u0098\3\2\2\2\u009c")
-        buf.write("\u0099\3\2\2\2\u009c\u009a\3\2\2\2\u009c\u009b\3\2\2\2")
-        buf.write("\u009d\u00a0\3\2\2\2\u009e\u009c\3\2\2\2\u009e\u009f\3")
-        buf.write("\2\2\2\u009f\31\3\2\2\2\u00a0\u009e\3\2\2\2\u00a1\u00a2")
-        buf.write("\5$\23\2\u00a2\u00a3\5\36\20\2\u00a3\u00a6\7\b\2\2\u00a4")
-        buf.write("\u00a7\5@!\2\u00a5\u00a7\5&\24\2\u00a6\u00a4\3\2\2\2\u00a6")
-        buf.write("\u00a5\3\2\2\2\u00a7\33\3\2\2\2\u00a8\u00a9\5$\23\2\u00a9")
-        buf.write("\u00aa\7\64\2\2\u00aa\u00af\5\36\20\2\u00ab\u00ac\7/\2")
-        buf.write("\2\u00ac\u00ad\5(\25\2\u00ad\u00ae\7\60\2\2\u00ae\u00b0")
-        buf.write("\3\2\2\2\u00af\u00ab\3\2\2\2\u00af\u00b0\3\2\2\2\u00b0")
-        buf.write("\u00b1\3\2\2\2\u00b1\u00b2\7\b\2\2\u00b2\u00b5\7\22\2")
-        buf.write("\2\u00b3\u00b6\5*\26\2\u00b4\u00b6\5B\"\2\u00b5\u00b3")
-        buf.write("\3\2\2\2\u00b5\u00b4\3\2\2\2\u00b6\35\3\2\2\2\u00b7\u00ba")
-        buf.write("\5 \21\2\u00b8\u00ba\7<\2\2\u00b9\u00b7\3\2\2\2\u00b9")
-        buf.write("\u00b8\3\2\2\2\u00ba\37\3\2\2\2\u00bb\u00be\7:\2\2\u00bc")
-        buf.write("\u00be\5\"\22\2\u00bd\u00bb\3\2\2\2\u00bd\u00bc\3\2\2")
-        buf.write("\2\u00be!\3\2\2\2\u00bf\u00c0\t\3\2\2\u00c0#\3\2\2\2\u00c1")
-        buf.write("\u00c2\t\4\2\2\u00c2%\3\2\2\2\u00c3\u00c4\t\5\2\2\u00c4")
-        buf.write("\'\3\2\2\2\u00c5\u00ca\7\13\2\2\u00c6\u00c7\7*\2\2\u00c7")
-        buf.write("\u00c9\7\13\2\2\u00c8\u00c6\3\2\2\2\u00c9\u00cc\3\2\2")
-        buf.write("\2\u00ca\u00c8\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb)\3\2")
-        buf.write("\2\2\u00cc\u00ca\3\2\2\2\u00cd\u00ce\7\23\2\2\u00ce\u00cf")
-        buf.write("\5,\27\2\u00cf\u00d0\7\22\2\2\u00d0\u00d2\3\2\2\2\u00d1")
-        buf.write("\u00cd\3\2\2\2\u00d2\u00d5\3\2\2\2\u00d3\u00d1\3\2\2\2")
-        buf.write("\u00d3\u00d4\3\2\2\2\u00d4+\3\2\2\2\u00d5\u00d3\3\2\2")
-        buf.write("\2\u00d6\u00db\5@!\2\u00d7\u00d8\7*\2\2\u00d8\u00da\5")
-        buf.write("@!\2\u00d9\u00d7\3\2\2\2\u00da\u00dd\3\2\2\2\u00db\u00d9")
-        buf.write("\3\2\2\2\u00db\u00dc\3\2\2\2\u00dc-\3\2\2\2\u00dd\u00db")
-        buf.write("\3\2\2\2\u00de\u00e1\5\60\31\2\u00df\u00e1\5\62\32\2\u00e0")
-        buf.write("\u00de\3\2\2\2\u00e0\u00df\3\2\2\2\u00e1\u00e3\3\2\2\2")
-        buf.write("\u00e2\u00e4\5\66\34\2\u00e3\u00e2\3\2\2\2\u00e3\u00e4")
-        buf.write("\3\2\2\2\u00e4\u00e5\3\2\2\2\u00e5\u00e7\7\63\2\2\u00e6")
-        buf.write("\u00e8\t\6\2\2\u00e7\u00e6\3\2\2\2\u00e7\u00e8\3\2\2\2")
-        buf.write("\u00e8\u00e9\3\2\2\2\u00e9\u00eb\5,\27\2\u00ea\u00ec\t")
-        buf.write("\7\2\2\u00eb\u00ea\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u00f0")
-        buf.write("\3\2\2\2\u00ed\u00ef\7\22\2\2\u00ee\u00ed\3\2\2\2\u00ef")
-        buf.write("\u00f2\3\2\2\2\u00f0\u00ee\3\2\2\2\u00f0\u00f1\3\2\2\2")
-        buf.write("\u00f1/\3\2\2\2\u00f2\u00f0\3\2\2\2\u00f3\u00f4\7<\2\2")
-        buf.write("\u00f4\61\3\2\2\2\u00f5\u00f6\7;\2\2\u00f6\63\3\2\2\2")
-        buf.write("\u00f7\u00f8\7\t\2\2\u00f8\u00f9\5$\23\2\u00f9\u00fa\7")
-        buf.write("<\2\2\u00fa\u0103\7\n\2\2\u00fb\u0104\5> \2\u00fc\u00fe")
-        buf.write("\t\6\2\2\u00fd\u00fc\3\2\2\2\u00fd\u00fe\3\2\2\2\u00fe")
-        buf.write("\u00ff\3\2\2\2\u00ff\u0101\5<\37\2\u0100\u0102\t\7\2\2")
-        buf.write("\u0101\u0100\3\2\2\2\u0101\u0102\3\2\2\2\u0102\u0104\3")
-        buf.write("\2\2\2\u0103\u00fb\3\2\2\2\u0103\u00fd\3\2\2\2\u0104\u0108")
-        buf.write("\3\2\2\2\u0105\u0106\7\22\2\2\u0106\u0107\7\23\2\2\u0107")
-        buf.write("\u0109\5.\30\2\u0108\u0105\3\2\2\2\u0109\u010a\3\2\2\2")
-        buf.write("\u010a\u0108\3\2\2\2\u010a\u010b\3\2\2\2\u010b\65\3\2")
-        buf.write("\2\2\u010c\u0115\7-\2\2\u010d\u0112\5:\36\2\u010e\u010f")
-        buf.write("\7*\2\2\u010f\u0111\5:\36\2\u0110\u010e\3\2\2\2\u0111")
-        buf.write("\u0114\3\2\2\2\u0112\u0110\3\2\2\2\u0112\u0113\3\2\2\2")
-        buf.write("\u0113\u0116\3\2\2\2\u0114\u0112\3\2\2\2\u0115\u010d\3")
-        buf.write("\2\2\2\u0115\u0116\3\2\2\2\u0116\u0118\3\2\2\2\u0117\u0119")
-        buf.write("\7*\2\2\u0118\u0117\3\2\2\2\u0118\u0119\3\2\2\2\u0119")
-        buf.write("\u0122\3\2\2\2\u011a\u011f\58\35\2\u011b\u011c\7*\2\2")
-        buf.write("\u011c\u011e\58\35\2\u011d\u011b\3\2\2\2\u011e\u0121\3")
-        buf.write("\2\2\2\u011f\u011d\3\2\2\2\u011f\u0120\3\2\2\2\u0120\u0123")
-        buf.write("\3\2\2\2\u0121\u011f\3\2\2\2\u0122\u011a\3\2\2\2\u0122")
-        buf.write("\u0123\3\2\2\2\u0123\u0124\3\2\2\2\u0124\u0125\7.\2\2")
-        buf.write("\u0125\67\3\2\2\2\u0126\u0127\7<\2\2\u0127\u012e\7\b\2")
-        buf.write("\2\u0128\u012f\5:\36\2\u0129\u012b\7/\2\2\u012a\u012c")
-        buf.write("\5<\37\2\u012b\u012a\3\2\2\2\u012b\u012c\3\2\2\2\u012c")
-        buf.write("\u012d\3\2\2\2\u012d\u012f\7\60\2\2\u012e\u0128\3\2\2")
-        buf.write("\2\u012e\u0129\3\2\2\2\u012f9\3\2\2\2\u0130\u0133\5&\24")
-        buf.write("\2\u0131\u0133\5@!\2\u0132\u0130\3\2\2\2\u0132\u0131\3")
-        buf.write("\2\2\2\u0133;\3\2\2\2\u0134\u0139\5:\36\2\u0135\u0136")
-        buf.write("\7*\2\2\u0136\u0138\5:\36\2\u0137\u0135\3\2\2\2\u0138")
-        buf.write("\u013b\3\2\2\2\u0139\u0137\3\2\2\2\u0139\u013a\3\2\2\2")
-        buf.write("\u013a=\3\2\2\2\u013b\u0139\3\2\2\2\u013c\u013d\7\13\2")
-        buf.write("\2\u013d\u013e\7+\2\2\u013e\u0141\7\13\2\2\u013f\u0140")
-        buf.write("\7+\2\2\u0140\u0142\7\13\2\2\u0141\u013f\3\2\2\2\u0141")
-        buf.write("\u0142\3\2\2\2\u0142?\3\2\2\2\u0143\u0144\b!\1\2\u0144")
-        buf.write("\u0145\7-\2\2\u0145\u0146\5@!\2\u0146\u0147\7.\2\2\u0147")
-        buf.write("\u0158\3\2\2\2\u0148\u0149\t\b\2\2\u0149\u0158\5@!\13")
-        buf.write("\u014a\u014b\5F$\2\u014b\u014c\7-\2\2\u014c\u014d\5@!")
-        buf.write("\2\u014d\u014e\7.\2\2\u014e\u0158\3\2\2\2\u014f\u0158")
-        buf.write("\5D#\2\u0150\u0158\t\t\2\2\u0151\u0152\7<\2\2\u0152\u0153")
-        buf.write("\7/\2\2\u0153\u0154\5@!\2\u0154\u0155\7\60\2\2\u0155\u0158")
-        buf.write("\3\2\2\2\u0156\u0158\5B\"\2\u0157\u0143\3\2\2\2\u0157")
-        buf.write("\u0148\3\2\2\2\u0157\u014a\3\2\2\2\u0157\u014f\3\2\2\2")
-        buf.write("\u0157\u0150\3\2\2\2\u0157\u0151\3\2\2\2\u0157\u0156\3")
-        buf.write("\2\2\2\u0158\u0164\3\2\2\2\u0159\u015a\f\n\2\2\u015a\u015b")
-        buf.write("\7\7\2\2\u015b\u0163\5@!\n\u015c\u015d\f\t\2\2\u015d\u015e")
-        buf.write("\t\n\2\2\u015e\u0163\5@!\n\u015f\u0160\f\b\2\2\u0160\u0161")
-        buf.write("\t\b\2\2\u0161\u0163\5@!\t\u0162\u0159\3\2\2\2\u0162\u015c")
-        buf.write("\3\2\2\2\u0162\u015f\3\2\2\2\u0163\u0166\3\2\2\2\u0164")
-        buf.write("\u0162\3\2\2\2\u0164\u0165\3\2\2\2\u0165A\3\2\2\2\u0166")
-        buf.write("\u0164\3\2\2\2\u0167\u0168\7\61\2\2\u0168\u0169\7<\2\2")
-        buf.write("\u0169\u016a\7\62\2\2\u016aC\3\2\2\2\u016b\u016c\t\13")
-        buf.write("\2\2\u016cE\3\2\2\2\u016d\u016e\t\f\2\2\u016eG\3\2\2\2")
-        buf.write(".KRYbhkpswy\u0089\u0090\u009c\u009e\u00a6\u00af\u00b5")
-        buf.write("\u00b9\u00bd\u00ca\u00d3\u00db\u00e0\u00e3\u00e7\u00eb")
-        buf.write("\u00f0\u00fd\u0101\u0103\u010a\u0112\u0115\u0118\u011f")
-        buf.write("\u0122\u012b\u012e\u0132\u0139\u0141\u0157\u0162\u0164")
-        return buf.getvalue()
-
+    return [
+        4,1,61,366,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
+        2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
+        7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,
+        2,27,7,27,2,28,7,28,2,29,7,29,2,30,7,30,2,31,7,31,2,32,7,32,2,33,
+        7,33,2,34,7,34,1,0,5,0,72,8,0,10,0,12,0,75,9,0,1,0,1,0,5,0,79,8,
+        0,10,0,12,0,82,9,0,1,0,1,0,5,0,86,8,0,10,0,12,0,89,9,0,1,0,1,0,1,
+        1,1,1,4,1,95,8,1,11,1,12,1,96,1,1,1,1,4,1,101,8,1,11,1,12,1,102,
+        1,1,3,1,106,8,1,1,1,4,1,109,8,1,11,1,12,1,110,1,1,3,1,114,8,1,1,
+        1,1,1,5,1,118,8,1,10,1,12,1,121,9,1,1,2,1,2,1,2,1,3,1,3,1,4,1,4,
+        1,4,1,5,1,5,1,6,1,6,1,6,3,6,136,8,6,1,7,1,7,1,8,1,8,1,8,3,8,143,
+        8,8,1,9,1,9,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,11,5,11,155,8,11,
+        10,11,12,11,158,9,11,1,12,1,12,1,12,1,12,1,12,3,12,165,8,12,1,13,
+        1,13,1,13,1,13,1,13,1,13,1,13,3,13,174,8,13,1,13,1,13,1,13,1,13,
+        3,13,180,8,13,1,14,1,14,3,14,184,8,14,1,15,1,15,3,15,188,8,15,1,
+        16,1,16,1,17,1,17,1,18,1,18,1,19,1,19,1,19,5,19,199,8,19,10,19,12,
+        19,202,9,19,1,20,1,20,1,20,1,20,5,20,208,8,20,10,20,12,20,211,9,
+        20,1,21,1,21,1,21,5,21,216,8,21,10,21,12,21,219,9,21,1,22,1,22,3,
+        22,223,8,22,1,22,3,22,226,8,22,1,22,1,22,3,22,230,8,22,1,22,1,22,
+        3,22,234,8,22,1,22,5,22,237,8,22,10,22,12,22,240,9,22,1,23,1,23,
+        1,24,1,24,1,25,1,25,1,25,1,25,1,25,1,25,3,25,252,8,25,1,25,1,25,
+        3,25,256,8,25,3,25,258,8,25,1,25,1,25,1,25,4,25,263,8,25,11,25,12,
+        25,264,1,26,1,26,1,26,1,26,5,26,271,8,26,10,26,12,26,274,9,26,3,
+        26,276,8,26,1,26,3,26,279,8,26,1,26,1,26,1,26,5,26,284,8,26,10,26,
+        12,26,287,9,26,3,26,289,8,26,1,26,1,26,1,27,1,27,1,27,1,27,1,27,
+        3,27,298,8,27,1,27,3,27,301,8,27,1,28,1,28,3,28,305,8,28,1,29,1,
+        29,1,29,5,29,310,8,29,10,29,12,29,313,9,29,1,30,1,30,1,30,1,30,1,
+        30,3,30,320,8,30,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,
+        31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,3,31,342,8,
+        31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,31,5,31,353,8,31,10,
+        31,12,31,356,9,31,1,32,1,32,1,32,1,32,1,33,1,33,1,34,1,34,1,34,0,
+        1,62,35,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
+        42,44,46,48,50,52,54,56,58,60,62,64,66,68,0,11,1,0,58,59,1,0,19,
+        22,1,0,50,55,1,0,12,13,2,0,43,43,45,45,2,0,44,44,46,46,1,0,1,2,2,
+        0,56,56,58,58,1,0,3,4,2,0,9,11,15,15,1,0,24,38,383,0,73,1,0,0,0,
+        2,92,1,0,0,0,4,122,1,0,0,0,6,125,1,0,0,0,8,127,1,0,0,0,10,130,1,
+        0,0,0,12,132,1,0,0,0,14,137,1,0,0,0,16,139,1,0,0,0,18,144,1,0,0,
+        0,20,146,1,0,0,0,22,156,1,0,0,0,24,159,1,0,0,0,26,166,1,0,0,0,28,
+        183,1,0,0,0,30,187,1,0,0,0,32,189,1,0,0,0,34,191,1,0,0,0,36,193,
+        1,0,0,0,38,195,1,0,0,0,40,209,1,0,0,0,42,212,1,0,0,0,44,222,1,0,
+        0,0,46,241,1,0,0,0,48,243,1,0,0,0,50,245,1,0,0,0,52,266,1,0,0,0,
+        54,292,1,0,0,0,56,304,1,0,0,0,58,306,1,0,0,0,60,314,1,0,0,0,62,341,
+        1,0,0,0,64,357,1,0,0,0,66,361,1,0,0,0,68,363,1,0,0,0,70,72,5,16,
+        0,0,71,70,1,0,0,0,72,75,1,0,0,0,73,71,1,0,0,0,73,74,1,0,0,0,74,76,
+        1,0,0,0,75,73,1,0,0,0,76,80,3,2,1,0,77,79,5,16,0,0,78,77,1,0,0,0,
+        79,82,1,0,0,0,80,78,1,0,0,0,80,81,1,0,0,0,81,83,1,0,0,0,82,80,1,
+        0,0,0,83,87,3,22,11,0,84,86,5,16,0,0,85,84,1,0,0,0,86,89,1,0,0,0,
+        87,85,1,0,0,0,87,88,1,0,0,0,88,90,1,0,0,0,89,87,1,0,0,0,90,91,5,
+        0,0,1,91,1,1,0,0,0,92,94,3,4,2,0,93,95,5,16,0,0,94,93,1,0,0,0,95,
+        96,1,0,0,0,96,94,1,0,0,0,96,97,1,0,0,0,97,98,1,0,0,0,98,105,3,8,
+        4,0,99,101,5,16,0,0,100,99,1,0,0,0,101,102,1,0,0,0,102,100,1,0,0,
+        0,102,103,1,0,0,0,103,104,1,0,0,0,104,106,3,12,6,0,105,100,1,0,0,
+        0,105,106,1,0,0,0,106,113,1,0,0,0,107,109,5,16,0,0,108,107,1,0,0,
+        0,109,110,1,0,0,0,110,108,1,0,0,0,110,111,1,0,0,0,111,112,1,0,0,
+        0,112,114,3,16,8,0,113,108,1,0,0,0,113,114,1,0,0,0,114,119,1,0,0,
+        0,115,118,5,16,0,0,116,118,3,20,10,0,117,115,1,0,0,0,117,116,1,0,
+        0,0,118,121,1,0,0,0,119,117,1,0,0,0,119,120,1,0,0,0,120,3,1,0,0,
+        0,121,119,1,0,0,0,122,123,5,19,0,0,123,124,3,6,3,0,124,5,1,0,0,0,
+        125,126,5,58,0,0,126,7,1,0,0,0,127,128,5,20,0,0,128,129,3,10,5,0,
+        129,9,1,0,0,0,130,131,5,10,0,0,131,11,1,0,0,0,132,133,5,21,0,0,133,
+        135,3,14,7,0,134,136,3,52,26,0,135,134,1,0,0,0,135,136,1,0,0,0,136,
+        13,1,0,0,0,137,138,7,0,0,0,138,15,1,0,0,0,139,140,5,22,0,0,140,142,
+        3,18,9,0,141,143,3,52,26,0,142,141,1,0,0,0,142,143,1,0,0,0,143,17,
+        1,0,0,0,144,145,5,58,0,0,145,19,1,0,0,0,146,147,5,23,0,0,147,148,
+        5,12,0,0,148,21,1,0,0,0,149,155,5,16,0,0,150,155,3,50,25,0,151,155,
+        3,24,12,0,152,155,3,26,13,0,153,155,3,44,22,0,154,149,1,0,0,0,154,
+        150,1,0,0,0,154,151,1,0,0,0,154,152,1,0,0,0,154,153,1,0,0,0,155,
+        158,1,0,0,0,156,154,1,0,0,0,156,157,1,0,0,0,157,23,1,0,0,0,158,156,
+        1,0,0,0,159,160,3,34,17,0,160,161,3,28,14,0,161,164,5,6,0,0,162,
+        165,3,62,31,0,163,165,3,36,18,0,164,162,1,0,0,0,164,163,1,0,0,0,
+        165,25,1,0,0,0,166,167,3,34,17,0,167,168,5,50,0,0,168,173,3,28,14,
+        0,169,170,5,45,0,0,170,171,3,38,19,0,171,172,5,46,0,0,172,174,1,
+        0,0,0,173,169,1,0,0,0,173,174,1,0,0,0,174,175,1,0,0,0,175,176,5,
+        6,0,0,176,179,5,16,0,0,177,180,3,40,20,0,178,180,3,64,32,0,179,177,
+        1,0,0,0,179,178,1,0,0,0,180,27,1,0,0,0,181,184,3,30,15,0,182,184,
+        5,58,0,0,183,181,1,0,0,0,183,182,1,0,0,0,184,29,1,0,0,0,185,188,
+        5,56,0,0,186,188,3,32,16,0,187,185,1,0,0,0,187,186,1,0,0,0,188,31,
+        1,0,0,0,189,190,7,1,0,0,190,33,1,0,0,0,191,192,7,2,0,0,192,35,1,
+        0,0,0,193,194,7,3,0,0,194,37,1,0,0,0,195,200,5,9,0,0,196,197,5,40,
+        0,0,197,199,5,9,0,0,198,196,1,0,0,0,199,202,1,0,0,0,200,198,1,0,
+        0,0,200,201,1,0,0,0,201,39,1,0,0,0,202,200,1,0,0,0,203,204,5,17,
+        0,0,204,205,3,42,21,0,205,206,5,16,0,0,206,208,1,0,0,0,207,203,1,
+        0,0,0,208,211,1,0,0,0,209,207,1,0,0,0,209,210,1,0,0,0,210,41,1,0,
+        0,0,211,209,1,0,0,0,212,217,3,62,31,0,213,214,5,40,0,0,214,216,3,
+        62,31,0,215,213,1,0,0,0,216,219,1,0,0,0,217,215,1,0,0,0,217,218,
+        1,0,0,0,218,43,1,0,0,0,219,217,1,0,0,0,220,223,3,46,23,0,221,223,
+        3,48,24,0,222,220,1,0,0,0,222,221,1,0,0,0,223,225,1,0,0,0,224,226,
+        3,52,26,0,225,224,1,0,0,0,225,226,1,0,0,0,226,227,1,0,0,0,227,229,
+        5,49,0,0,228,230,7,4,0,0,229,228,1,0,0,0,229,230,1,0,0,0,230,231,
+        1,0,0,0,231,233,3,42,21,0,232,234,7,5,0,0,233,232,1,0,0,0,233,234,
+        1,0,0,0,234,238,1,0,0,0,235,237,5,16,0,0,236,235,1,0,0,0,237,240,
+        1,0,0,0,238,236,1,0,0,0,238,239,1,0,0,0,239,45,1,0,0,0,240,238,1,
+        0,0,0,241,242,5,58,0,0,242,47,1,0,0,0,243,244,5,57,0,0,244,49,1,
+        0,0,0,245,246,5,7,0,0,246,247,3,34,17,0,247,248,5,58,0,0,248,257,
+        5,8,0,0,249,258,3,60,30,0,250,252,7,4,0,0,251,250,1,0,0,0,251,252,
+        1,0,0,0,252,253,1,0,0,0,253,255,3,58,29,0,254,256,7,5,0,0,255,254,
+        1,0,0,0,255,256,1,0,0,0,256,258,1,0,0,0,257,249,1,0,0,0,257,251,
+        1,0,0,0,258,262,1,0,0,0,259,260,5,16,0,0,260,261,5,17,0,0,261,263,
+        3,44,22,0,262,259,1,0,0,0,263,264,1,0,0,0,264,262,1,0,0,0,264,265,
+        1,0,0,0,265,51,1,0,0,0,266,275,5,43,0,0,267,272,3,56,28,0,268,269,
+        5,40,0,0,269,271,3,56,28,0,270,268,1,0,0,0,271,274,1,0,0,0,272,270,
+        1,0,0,0,272,273,1,0,0,0,273,276,1,0,0,0,274,272,1,0,0,0,275,267,
+        1,0,0,0,275,276,1,0,0,0,276,278,1,0,0,0,277,279,5,40,0,0,278,277,
+        1,0,0,0,278,279,1,0,0,0,279,288,1,0,0,0,280,285,3,54,27,0,281,282,
+        5,40,0,0,282,284,3,54,27,0,283,281,1,0,0,0,284,287,1,0,0,0,285,283,
+        1,0,0,0,285,286,1,0,0,0,286,289,1,0,0,0,287,285,1,0,0,0,288,280,
+        1,0,0,0,288,289,1,0,0,0,289,290,1,0,0,0,290,291,5,44,0,0,291,53,
+        1,0,0,0,292,293,5,58,0,0,293,300,5,6,0,0,294,301,3,56,28,0,295,297,
+        5,45,0,0,296,298,3,58,29,0,297,296,1,0,0,0,297,298,1,0,0,0,298,299,
+        1,0,0,0,299,301,5,46,0,0,300,294,1,0,0,0,300,295,1,0,0,0,301,55,
+        1,0,0,0,302,305,3,36,18,0,303,305,3,62,31,0,304,302,1,0,0,0,304,
+        303,1,0,0,0,305,57,1,0,0,0,306,311,3,56,28,0,307,308,5,40,0,0,308,
+        310,3,56,28,0,309,307,1,0,0,0,310,313,1,0,0,0,311,309,1,0,0,0,311,
+        312,1,0,0,0,312,59,1,0,0,0,313,311,1,0,0,0,314,315,5,9,0,0,315,316,
+        5,41,0,0,316,319,5,9,0,0,317,318,5,41,0,0,318,320,5,9,0,0,319,317,
+        1,0,0,0,319,320,1,0,0,0,320,61,1,0,0,0,321,322,6,31,-1,0,322,323,
+        5,43,0,0,323,324,3,62,31,0,324,325,5,44,0,0,325,342,1,0,0,0,326,
+        327,7,6,0,0,327,342,3,62,31,9,328,329,3,68,34,0,329,330,5,43,0,0,
+        330,331,3,62,31,0,331,332,5,44,0,0,332,342,1,0,0,0,333,342,3,66,
+        33,0,334,342,7,7,0,0,335,336,5,58,0,0,336,337,5,45,0,0,337,338,3,
+        62,31,0,338,339,5,46,0,0,339,342,1,0,0,0,340,342,3,64,32,0,341,321,
+        1,0,0,0,341,326,1,0,0,0,341,328,1,0,0,0,341,333,1,0,0,0,341,334,
+        1,0,0,0,341,335,1,0,0,0,341,340,1,0,0,0,342,354,1,0,0,0,343,344,
+        10,8,0,0,344,345,5,5,0,0,345,353,3,62,31,8,346,347,10,7,0,0,347,
+        348,7,8,0,0,348,353,3,62,31,8,349,350,10,6,0,0,350,351,7,6,0,0,351,
+        353,3,62,31,7,352,343,1,0,0,0,352,346,1,0,0,0,352,349,1,0,0,0,353,
+        356,1,0,0,0,354,352,1,0,0,0,354,355,1,0,0,0,355,63,1,0,0,0,356,354,
+        1,0,0,0,357,358,5,47,0,0,358,359,5,58,0,0,359,360,5,48,0,0,360,65,
+        1,0,0,0,361,362,7,9,0,0,362,67,1,0,0,0,363,364,7,10,0,0,364,69,1,
+        0,0,0,44,73,80,87,96,102,105,110,113,117,119,135,142,154,156,164,
+        173,179,183,187,200,209,217,222,225,229,233,238,251,255,257,264,
+        272,275,278,285,288,297,300,304,311,319,341,352,354
+    ]
 
 class blackbirdParser ( Parser ):
 
@@ -325,7 +288,7 @@ class blackbirdParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.8")
+        self.checkVersion("4.11.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -333,6 +296,7 @@ class blackbirdParser ( Parser ):
 
 
     class StartContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -379,7 +343,7 @@ class blackbirdParser ( Parser ):
             self.state = 73
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.NEWLINE:
+            while _la==16:
                 self.state = 70
                 self.match(blackbirdParser.NEWLINE)
                 self.state = 75
@@ -404,7 +368,7 @@ class blackbirdParser ( Parser ):
             self.state = 87
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.NEWLINE:
+            while _la==16:
                 self.state = 84
                 self.match(blackbirdParser.NEWLINE)
                 self.state = 89
@@ -423,6 +387,7 @@ class blackbirdParser ( Parser ):
 
 
     class MetadatablockContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -491,7 +456,7 @@ class blackbirdParser ( Parser ):
                 self.state = 96 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==blackbirdParser.NEWLINE):
+                if not (_la==16):
                     break
 
             self.state = 98
@@ -509,7 +474,7 @@ class blackbirdParser ( Parser ):
                     self.state = 102 
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==blackbirdParser.NEWLINE):
+                    if not (_la==16):
                         break
 
                 self.state = 104
@@ -529,7 +494,7 @@ class blackbirdParser ( Parser ):
                     self.state = 110 
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==blackbirdParser.NEWLINE):
+                    if not (_la==16):
                         break
 
                 self.state = 112
@@ -544,11 +509,11 @@ class blackbirdParser ( Parser ):
                     self.state = 117
                     self._errHandler.sync(self)
                     token = self._input.LA(1)
-                    if token in [blackbirdParser.NEWLINE]:
+                    if token in [16]:
                         self.state = 115
                         self.match(blackbirdParser.NEWLINE)
                         pass
-                    elif token in [blackbirdParser.INCLUDE]:
+                    elif token in [23]:
                         self.state = 116
                         localctx._include = self.include()
                         localctx.include_list.append(localctx._include)
@@ -570,6 +535,7 @@ class blackbirdParser ( Parser ):
 
 
     class DeclarenameContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -616,6 +582,7 @@ class blackbirdParser ( Parser ):
 
 
     class ProgramnameContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -656,6 +623,7 @@ class blackbirdParser ( Parser ):
 
 
     class VersionContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -702,6 +670,7 @@ class blackbirdParser ( Parser ):
 
 
     class VersionnumberContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -742,6 +711,7 @@ class blackbirdParser ( Parser ):
 
 
     class TargetContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -786,7 +756,7 @@ class blackbirdParser ( Parser ):
             self.state = 135
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.LBRAC:
+            if _la==43:
                 self.state = 134
                 self.arguments()
 
@@ -801,6 +771,7 @@ class blackbirdParser ( Parser ):
 
 
     class DeviceContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -835,7 +806,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 137
             _la = self._input.LA(1)
-            if not(_la==blackbirdParser.NAME or _la==blackbirdParser.DEVICE):
+            if not(_la==58 or _la==59):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -850,6 +821,7 @@ class blackbirdParser ( Parser ):
 
 
     class DeclaretypeContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -894,7 +866,7 @@ class blackbirdParser ( Parser ):
             self.state = 142
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.LBRAC:
+            if _la==43:
                 self.state = 141
                 self.arguments()
 
@@ -909,6 +881,7 @@ class blackbirdParser ( Parser ):
 
 
     class ProgramtypeContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -949,6 +922,7 @@ class blackbirdParser ( Parser ):
 
 
     class IncludeContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -994,6 +968,7 @@ class blackbirdParser ( Parser ):
 
 
     class ProgramContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1113,6 +1088,7 @@ class blackbirdParser ( Parser ):
 
 
     class ExpressionvarContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1166,11 +1142,11 @@ class blackbirdParser ( Parser ):
             self.state = 164
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.TAN, blackbirdParser.ARCSIN, blackbirdParser.ARCCOS, blackbirdParser.ARCTAN, blackbirdParser.SINH, blackbirdParser.COSH, blackbirdParser.TANH, blackbirdParser.ARCSINH, blackbirdParser.ARCCOSH, blackbirdParser.ARCTANH, blackbirdParser.EXP, blackbirdParser.LOG, blackbirdParser.LBRAC, blackbirdParser.LBRACE, blackbirdParser.REGREF, blackbirdParser.NAME]:
+            if token in [1, 2, 9, 10, 11, 15, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 43, 47, 56, 58]:
                 self.state = 162
                 self.expression(0)
                 pass
-            elif token in [blackbirdParser.STR, blackbirdParser.BOOL]:
+            elif token in [12, 13]:
                 self.state = 163
                 self.nonnumeric()
                 pass
@@ -1187,6 +1163,7 @@ class blackbirdParser ( Parser ):
 
 
     class ArrayvarContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1257,7 +1234,7 @@ class blackbirdParser ( Parser ):
             self.state = 173
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.LSQBRAC:
+            if _la==45:
                 self.state = 169
                 self.match(blackbirdParser.LSQBRAC)
                 self.state = 170
@@ -1273,11 +1250,11 @@ class blackbirdParser ( Parser ):
             self.state = 179
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.EOF, blackbirdParser.FOR, blackbirdParser.NEWLINE, blackbirdParser.TAB, blackbirdParser.TYPE_ARRAY, blackbirdParser.TYPE_FLOAT, blackbirdParser.TYPE_COMPLEX, blackbirdParser.TYPE_INT, blackbirdParser.TYPE_STR, blackbirdParser.TYPE_BOOL, blackbirdParser.MEASURE, blackbirdParser.NAME]:
+            if token in [-1, 7, 16, 17, 50, 51, 52, 53, 54, 55, 57, 58]:
                 self.state = 177
                 self.arrayval()
                 pass
-            elif token in [blackbirdParser.LBRACE]:
+            elif token in [47]:
                 self.state = 178
                 self.parameter()
                 pass
@@ -1294,6 +1271,7 @@ class blackbirdParser ( Parser ):
 
 
     class NameContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1329,11 +1307,11 @@ class blackbirdParser ( Parser ):
             self.state = 183
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.PROGNAME, blackbirdParser.VERSION, blackbirdParser.TARGET, blackbirdParser.PROGTYPE, blackbirdParser.REGREF]:
+            if token in [19, 20, 21, 22, 56]:
                 self.state = 181
                 self.invalid()
                 pass
-            elif token in [blackbirdParser.NAME]:
+            elif token in [58]:
                 self.state = 182
                 self.match(blackbirdParser.NAME)
                 pass
@@ -1350,6 +1328,7 @@ class blackbirdParser ( Parser ):
 
 
     class InvalidContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1385,11 +1364,11 @@ class blackbirdParser ( Parser ):
             self.state = 187
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.REGREF]:
+            if token in [56]:
                 self.state = 185
                 self.match(blackbirdParser.REGREF)
                 pass
-            elif token in [blackbirdParser.PROGNAME, blackbirdParser.VERSION, blackbirdParser.TARGET, blackbirdParser.PROGTYPE]:
+            elif token in [19, 20, 21, 22]:
                 self.state = 186
                 self.reserved()
                 pass
@@ -1406,6 +1385,7 @@ class blackbirdParser ( Parser ):
 
 
     class ReservedContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1446,7 +1426,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 189
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.PROGNAME) | (1 << blackbirdParser.VERSION) | (1 << blackbirdParser.TARGET) | (1 << blackbirdParser.PROGTYPE))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 7864320) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1461,6 +1441,7 @@ class blackbirdParser ( Parser ):
 
 
     class VartypeContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1507,7 +1488,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 191
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.TYPE_ARRAY) | (1 << blackbirdParser.TYPE_FLOAT) | (1 << blackbirdParser.TYPE_COMPLEX) | (1 << blackbirdParser.TYPE_INT) | (1 << blackbirdParser.TYPE_STR) | (1 << blackbirdParser.TYPE_BOOL))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 70931694131085312) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1522,6 +1503,7 @@ class blackbirdParser ( Parser ):
 
 
     class NonnumericContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1556,7 +1538,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 193
             _la = self._input.LA(1)
-            if not(_la==blackbirdParser.STR or _la==blackbirdParser.BOOL):
+            if not(_la==12 or _la==13):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1571,6 +1553,7 @@ class blackbirdParser ( Parser ):
 
 
     class ShapeContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1614,7 +1597,7 @@ class blackbirdParser ( Parser ):
             self.state = 200
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.COMMA:
+            while _la==40:
                 self.state = 196
                 self.match(blackbirdParser.COMMA)
                 self.state = 197
@@ -1633,6 +1616,7 @@ class blackbirdParser ( Parser ):
 
 
     class ArrayvalContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1683,7 +1667,7 @@ class blackbirdParser ( Parser ):
             self.state = 209
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.TAB:
+            while _la==17:
                 self.state = 203
                 self.match(blackbirdParser.TAB)
                 self.state = 204
@@ -1705,6 +1689,7 @@ class blackbirdParser ( Parser ):
 
 
     class ArrayrowContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1749,7 +1734,7 @@ class blackbirdParser ( Parser ):
             self.state = 217
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.COMMA:
+            while _la==40:
                 self.state = 213
                 self.match(blackbirdParser.COMMA)
                 self.state = 214
@@ -1768,6 +1753,7 @@ class blackbirdParser ( Parser ):
 
 
     class StatementContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1834,11 +1820,11 @@ class blackbirdParser ( Parser ):
             self.state = 222
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.NAME]:
+            if token in [58]:
                 self.state = 220
                 self.operation()
                 pass
-            elif token in [blackbirdParser.MEASURE]:
+            elif token in [57]:
                 self.state = 221
                 self.measure()
                 pass
@@ -1848,7 +1834,7 @@ class blackbirdParser ( Parser ):
             self.state = 225
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.LBRAC:
+            if _la==43:
                 self.state = 224
                 self.arguments()
 
@@ -1861,7 +1847,7 @@ class blackbirdParser ( Parser ):
             if la_ == 1:
                 self.state = 228
                 _la = self._input.LA(1)
-                if not(_la==blackbirdParser.LBRAC or _la==blackbirdParser.LSQBRAC):
+                if not(_la==43 or _la==45):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -1873,10 +1859,10 @@ class blackbirdParser ( Parser ):
             self.state = 233
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.RBRAC or _la==blackbirdParser.RSQBRAC:
+            if _la==44 or _la==46:
                 self.state = 232
                 _la = self._input.LA(1)
-                if not(_la==blackbirdParser.RBRAC or _la==blackbirdParser.RSQBRAC):
+                if not(_la==44 or _la==46):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -1904,6 +1890,7 @@ class blackbirdParser ( Parser ):
 
 
     class OperationContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1944,6 +1931,7 @@ class blackbirdParser ( Parser ):
 
 
     class MeasureContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1984,6 +1972,7 @@ class blackbirdParser ( Parser ):
 
 
     class ForloopContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2087,7 +2076,7 @@ class blackbirdParser ( Parser ):
                 if la_ == 1:
                     self.state = 250
                     _la = self._input.LA(1)
-                    if not(_la==blackbirdParser.LBRAC or _la==blackbirdParser.LSQBRAC):
+                    if not(_la==43 or _la==45):
                         self._errHandler.recoverInline(self)
                     else:
                         self._errHandler.reportMatch(self)
@@ -2099,10 +2088,10 @@ class blackbirdParser ( Parser ):
                 self.state = 255
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la==blackbirdParser.RBRAC or _la==blackbirdParser.RSQBRAC:
+                if _la==44 or _la==46:
                     self.state = 254
                     _la = self._input.LA(1)
-                    if not(_la==blackbirdParser.RBRAC or _la==blackbirdParser.RSQBRAC):
+                    if not(_la==44 or _la==46):
                         self._errHandler.recoverInline(self)
                     else:
                         self._errHandler.reportMatch(self)
@@ -2141,6 +2130,7 @@ class blackbirdParser ( Parser ):
 
 
     class ArgumentsContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2225,7 +2215,7 @@ class blackbirdParser ( Parser ):
             self.state = 278
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.COMMA:
+            if _la==40:
                 self.state = 277
                 self.match(blackbirdParser.COMMA)
 
@@ -2233,14 +2223,14 @@ class blackbirdParser ( Parser ):
             self.state = 288
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.NAME:
+            if _la==58:
                 self.state = 280
                 localctx._kwarg = self.kwarg()
                 localctx.kwarg_list.append(localctx._kwarg)
                 self.state = 285
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==blackbirdParser.COMMA:
+                while _la==40:
                     self.state = 281
                     self.match(blackbirdParser.COMMA)
                     self.state = 282
@@ -2264,6 +2254,7 @@ class blackbirdParser ( Parser ):
 
 
     class KwargContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2317,17 +2308,17 @@ class blackbirdParser ( Parser ):
             self.state = 300
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.STR, blackbirdParser.BOOL, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.TAN, blackbirdParser.ARCSIN, blackbirdParser.ARCCOS, blackbirdParser.ARCTAN, blackbirdParser.SINH, blackbirdParser.COSH, blackbirdParser.TANH, blackbirdParser.ARCSINH, blackbirdParser.ARCCOSH, blackbirdParser.ARCTANH, blackbirdParser.EXP, blackbirdParser.LOG, blackbirdParser.LBRAC, blackbirdParser.LBRACE, blackbirdParser.REGREF, blackbirdParser.NAME]:
+            if token in [1, 2, 9, 10, 11, 12, 13, 15, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 43, 47, 56, 58]:
                 self.state = 294
                 self.val()
                 pass
-            elif token in [blackbirdParser.LSQBRAC]:
+            elif token in [45]:
                 self.state = 295
                 self.match(blackbirdParser.LSQBRAC)
                 self.state = 297
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.PLUS) | (1 << blackbirdParser.MINUS) | (1 << blackbirdParser.INT) | (1 << blackbirdParser.FLOAT) | (1 << blackbirdParser.COMPLEX) | (1 << blackbirdParser.STR) | (1 << blackbirdParser.BOOL) | (1 << blackbirdParser.PI) | (1 << blackbirdParser.SQRT) | (1 << blackbirdParser.SIN) | (1 << blackbirdParser.COS) | (1 << blackbirdParser.TAN) | (1 << blackbirdParser.ARCSIN) | (1 << blackbirdParser.ARCCOS) | (1 << blackbirdParser.ARCTAN) | (1 << blackbirdParser.SINH) | (1 << blackbirdParser.COSH) | (1 << blackbirdParser.TANH) | (1 << blackbirdParser.ARCSINH) | (1 << blackbirdParser.ARCCOSH) | (1 << blackbirdParser.ARCTANH) | (1 << blackbirdParser.EXP) | (1 << blackbirdParser.LOG) | (1 << blackbirdParser.LBRAC) | (1 << blackbirdParser.LBRACE) | (1 << blackbirdParser.REGREF) | (1 << blackbirdParser.NAME))) != 0):
+                if ((_la) & ~0x3f) == 0 and ((1 << _la) & 360438053510102534) != 0:
                     self.state = 296
                     self.vallist()
 
@@ -2348,6 +2339,7 @@ class blackbirdParser ( Parser ):
 
 
     class ValContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2384,11 +2376,11 @@ class blackbirdParser ( Parser ):
             self.state = 304
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [blackbirdParser.STR, blackbirdParser.BOOL]:
+            if token in [12, 13]:
                 self.state = 302
                 self.nonnumeric()
                 pass
-            elif token in [blackbirdParser.PLUS, blackbirdParser.MINUS, blackbirdParser.INT, blackbirdParser.FLOAT, blackbirdParser.COMPLEX, blackbirdParser.PI, blackbirdParser.SQRT, blackbirdParser.SIN, blackbirdParser.COS, blackbirdParser.TAN, blackbirdParser.ARCSIN, blackbirdParser.ARCCOS, blackbirdParser.ARCTAN, blackbirdParser.SINH, blackbirdParser.COSH, blackbirdParser.TANH, blackbirdParser.ARCSINH, blackbirdParser.ARCCOSH, blackbirdParser.ARCTANH, blackbirdParser.EXP, blackbirdParser.LOG, blackbirdParser.LBRAC, blackbirdParser.LBRACE, blackbirdParser.REGREF, blackbirdParser.NAME]:
+            elif token in [1, 2, 9, 10, 11, 15, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 43, 47, 56, 58]:
                 self.state = 303
                 self.expression(0)
                 pass
@@ -2405,6 +2397,7 @@ class blackbirdParser ( Parser ):
 
 
     class VallistContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2449,7 +2442,7 @@ class blackbirdParser ( Parser ):
             self.state = 311
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==blackbirdParser.COMMA:
+            while _la==40:
                 self.state = 307
                 self.match(blackbirdParser.COMMA)
                 self.state = 308
@@ -2468,6 +2461,7 @@ class blackbirdParser ( Parser ):
 
 
     class RangevalContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2515,7 +2509,7 @@ class blackbirdParser ( Parser ):
             self.state = 319
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==blackbirdParser.COLON:
+            if _la==41:
                 self.state = 317
                 self.match(blackbirdParser.COLON)
                 self.state = 318
@@ -2532,6 +2526,7 @@ class blackbirdParser ( Parser ):
 
 
     class ExpressionContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2810,7 +2805,7 @@ class blackbirdParser ( Parser ):
                 _prevctx = localctx
                 self.state = 326
                 _la = self._input.LA(1)
-                if not(_la==blackbirdParser.PLUS or _la==blackbirdParser.MINUS):
+                if not(_la==1 or _la==2):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -2847,7 +2842,7 @@ class blackbirdParser ( Parser ):
                 _prevctx = localctx
                 self.state = 334
                 _la = self._input.LA(1)
-                if not(_la==blackbirdParser.REGREF or _la==blackbirdParser.NAME):
+                if not(_la==56 or _la==58):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -2911,7 +2906,7 @@ class blackbirdParser ( Parser ):
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
                         self.state = 347
                         _la = self._input.LA(1)
-                        if not(_la==blackbirdParser.TIMES or _la==blackbirdParser.DIVIDE):
+                        if not(_la==3 or _la==4):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
@@ -2929,7 +2924,7 @@ class blackbirdParser ( Parser ):
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
                         self.state = 350
                         _la = self._input.LA(1)
-                        if not(_la==blackbirdParser.PLUS or _la==blackbirdParser.MINUS):
+                        if not(_la==1 or _la==2):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
@@ -2953,6 +2948,7 @@ class blackbirdParser ( Parser ):
 
 
     class ParameterContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3003,6 +2999,7 @@ class blackbirdParser ( Parser ):
 
 
     class NumberContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3043,7 +3040,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 361
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.INT) | (1 << blackbirdParser.FLOAT) | (1 << blackbirdParser.COMPLEX) | (1 << blackbirdParser.PI))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 36352) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -3058,6 +3055,7 @@ class blackbirdParser ( Parser ):
 
 
     class FunctionContext(ParserRuleContext):
+        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3131,7 +3129,7 @@ class blackbirdParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 363
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << blackbirdParser.SQRT) | (1 << blackbirdParser.SIN) | (1 << blackbirdParser.COS) | (1 << blackbirdParser.TAN) | (1 << blackbirdParser.ARCSIN) | (1 << blackbirdParser.ARCCOS) | (1 << blackbirdParser.ARCTAN) | (1 << blackbirdParser.SINH) | (1 << blackbirdParser.COSH) | (1 << blackbirdParser.TANH) | (1 << blackbirdParser.ARCSINH) | (1 << blackbirdParser.ARCCOSH) | (1 << blackbirdParser.ARCTANH) | (1 << blackbirdParser.EXP) | (1 << blackbirdParser.LOG))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 549739036672) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)

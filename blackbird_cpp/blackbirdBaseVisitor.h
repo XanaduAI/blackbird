@@ -1,5 +1,5 @@
 
-// Generated from blackbird.g4 by ANTLR 4.7.1
+// Generated from blackbird.g4 by ANTLR 4.11.1
 
 #pragma once
 
@@ -15,119 +15,179 @@
 class  blackbirdBaseVisitor : public blackbirdVisitor {
 public:
 
-  virtual antlrcpp::Any visitStart(blackbirdParser::StartContext *ctx) override {
+  virtual std::any visitStart(blackbirdParser::StartContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVarblock(blackbirdParser::VarblockContext *ctx) override {
+  virtual std::any visitMetadatablock(blackbirdParser::MetadatablockContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx) override {
+  virtual std::any visitDeclarename(blackbirdParser::DeclarenameContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayvar(blackbirdParser::ArrayvarContext *ctx) override {
+  virtual std::any visitProgramname(blackbirdParser::ProgramnameContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitName(blackbirdParser::NameContext *ctx) override {
+  virtual std::any visitVersion(blackbirdParser::VersionContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVartype(blackbirdParser::VartypeContext *ctx) override {
+  virtual std::any visitVersionnumber(blackbirdParser::VersionnumberContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitNonnumeric(blackbirdParser::NonnumericContext *ctx) override {
+  virtual std::any visitTarget(blackbirdParser::TargetContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitShape(blackbirdParser::ShapeContext *ctx) override {
+  virtual std::any visitDevice(blackbirdParser::DeviceContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayval(blackbirdParser::ArrayvalContext *ctx) override {
+  virtual std::any visitDeclaretype(blackbirdParser::DeclaretypeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayrow(blackbirdParser::ArrayrowContext *ctx) override {
+  virtual std::any visitProgramtype(blackbirdParser::ProgramtypeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitProgram(blackbirdParser::ProgramContext *ctx) override {
+  virtual std::any visitInclude(blackbirdParser::IncludeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitDevice(blackbirdParser::DeviceContext *ctx) override {
+  virtual std::any visitProgram(blackbirdParser::ProgramContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitStatement(blackbirdParser::StatementContext *ctx) override {
+  virtual std::any visitExpressionvar(blackbirdParser::ExpressionvarContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitOperation(blackbirdParser::OperationContext *ctx) override {
+  virtual std::any visitArrayvar(blackbirdParser::ArrayvarContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMeasure(blackbirdParser::MeasureContext *ctx) override {
+  virtual std::any visitName(blackbirdParser::NameContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArguments(blackbirdParser::ArgumentsContext *ctx) override {
+  virtual std::any visitInvalid(blackbirdParser::InvalidContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitKwarg(blackbirdParser::KwargContext *ctx) override {
+  virtual std::any visitReserved(blackbirdParser::ReservedContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVal(blackbirdParser::ValContext *ctx) override {
+  virtual std::any visitVartype(blackbirdParser::VartypeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitModes(blackbirdParser::ModesContext *ctx) override {
+  virtual std::any visitNonnumeric(blackbirdParser::NonnumericContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBracketsLabel(blackbirdParser::BracketsLabelContext *ctx) override {
+  virtual std::any visitShape(blackbirdParser::ShapeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitSignLabel(blackbirdParser::SignLabelContext *ctx) override {
+  virtual std::any visitArrayval(blackbirdParser::ArrayvalContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitPowerLabel(blackbirdParser::PowerLabelContext *ctx) override {
+  virtual std::any visitArrayrow(blackbirdParser::ArrayrowContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitNumberLabel(blackbirdParser::NumberLabelContext *ctx) override {
+  virtual std::any visitStatement(blackbirdParser::StatementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVariableLabel(blackbirdParser::VariableLabelContext *ctx) override {
+  virtual std::any visitOperation(blackbirdParser::OperationContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMulLabel(blackbirdParser::MulLabelContext *ctx) override {
+  virtual std::any visitMeasure(blackbirdParser::MeasureContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFunctionLabel(blackbirdParser::FunctionLabelContext *ctx) override {
+  virtual std::any visitForloop(blackbirdParser::ForloopContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAddLabel(blackbirdParser::AddLabelContext *ctx) override {
+  virtual std::any visitArguments(blackbirdParser::ArgumentsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitNumber(blackbirdParser::NumberContext *ctx) override {
+  virtual std::any visitKwarg(blackbirdParser::KwargContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFunction(blackbirdParser::FunctionContext *ctx) override {
+  virtual std::any visitVal(blackbirdParser::ValContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitVallist(blackbirdParser::VallistContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitRangeval(blackbirdParser::RangevalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitParameterLabel(blackbirdParser::ParameterLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitBracketsLabel(blackbirdParser::BracketsLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitSignLabel(blackbirdParser::SignLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitPowerLabel(blackbirdParser::PowerLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitNumberLabel(blackbirdParser::NumberLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitVariableLabel(blackbirdParser::VariableLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitArrayIdxLabel(blackbirdParser::ArrayIdxLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitMulLabel(blackbirdParser::MulLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitFunctionLabel(blackbirdParser::FunctionLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAddLabel(blackbirdParser::AddLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitParameter(blackbirdParser::ParameterContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitNumber(blackbirdParser::NumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitFunction(blackbirdParser::FunctionContext *ctx) override {
     return visitChildren(ctx);
   }
 

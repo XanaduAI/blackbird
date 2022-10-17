@@ -1,5 +1,5 @@
 
-// Generated from blackbird.g4 by ANTLR 4.7.1
+// Generated from blackbird.g4 by ANTLR 4.9.2
 
 #pragma once
 
@@ -19,7 +19,47 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVarblock(blackbirdParser::VarblockContext *ctx) override {
+  virtual antlrcpp::Any visitMetadatablock(blackbirdParser::MetadatablockContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitDeclarename(blackbirdParser::DeclarenameContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProgramname(blackbirdParser::ProgramnameContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitVersion(blackbirdParser::VersionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitVersionnumber(blackbirdParser::VersionnumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTarget(blackbirdParser::TargetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitDevice(blackbirdParser::DeviceContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitDeclaretype(blackbirdParser::DeclaretypeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProgramtype(blackbirdParser::ProgramtypeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInclude(blackbirdParser::IncludeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProgram(blackbirdParser::ProgramContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -32,6 +72,14 @@ public:
   }
 
   virtual antlrcpp::Any visitName(blackbirdParser::NameContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvalid(blackbirdParser::InvalidContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitReserved(blackbirdParser::ReservedContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -55,14 +103,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitProgram(blackbirdParser::ProgramContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitDevice(blackbirdParser::DeviceContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitStatement(blackbirdParser::StatementContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -72,6 +112,10 @@ public:
   }
 
   virtual antlrcpp::Any visitMeasure(blackbirdParser::MeasureContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitForloop(blackbirdParser::ForloopContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -87,7 +131,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitModes(blackbirdParser::ModesContext *ctx) override {
+  virtual antlrcpp::Any visitVallist(blackbirdParser::VallistContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitRangeval(blackbirdParser::RangevalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitParameterLabel(blackbirdParser::ParameterLabelContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -111,6 +163,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitArrayIdxLabel(blackbirdParser::ArrayIdxLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitMulLabel(blackbirdParser::MulLabelContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -120,6 +176,10 @@ public:
   }
 
   virtual antlrcpp::Any visitAddLabel(blackbirdParser::AddLabelContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitParameter(blackbirdParser::ParameterContext *ctx) override {
     return visitChildren(ctx);
   }
 

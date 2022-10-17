@@ -2,6 +2,9 @@
 
 <h3>New features since last release</h3>
 
+* Rebuilds the grammar using ANTLR `v4.9.2` 
+  [(#51)](https://github.com/XanaduAI/blackbird/pull/51)
+
 <h3>Improvements</h3>
 
 <h3>Breaking changes</h3>

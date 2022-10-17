@@ -1,25 +1,24 @@
-# Release 0.5.0 (development release)
+# Release 0.5.0 (current release)
 
 <h3>New features since last release</h3>
 
-* Rebuilds the grammar using ANTLR `v4.9.2` 
+* Rebuilds the grammar using ANTLR `v4.9.2`
   [(#51)](https://github.com/XanaduAI/blackbird/pull/51)
 
-<h3>Improvements</h3>
-
-<h3>Breaking changes</h3>
-
-<h3>Bug fixes</h3>
-
 <h3>Documentation</h3>
+
+* Updates ANTLR `v4.9.2` version on the _compiling grammar_ section.
+  [(#51)](https://github.com/XanaduAI/blackbird/pull/51)
 
 <h3>Contributors</h3>
 
 This release contains contributions from (in alphabetical order):
 
+Kshitij Chhabra (@kshitijc), Sebastián Duque Mesa (@sduquemesa)
+
 ---
 
-# Release 0.4.0 (current release)
+# Release 0.4.0
 
 <h3>Improvements</h3>
 
